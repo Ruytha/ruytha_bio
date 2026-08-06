@@ -1,88 +1,89 @@
+
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>connect — ruytha</title>
+  <title>Connect — Ruytha</title>
   <meta name="description" content="Find Ruytha's blog, music, and Discord." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Manrope:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-
-  <div class="bg-glow" aria-hidden="true">
-    <span class="glow g1"></span>
-    <span class="glow g2"></span>
-    <span class="glow g3"></span>
-    <span class="glow g4"></span>
-  </div>
-  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
-
-  <header class="nav">
-    <div class="nav-inner">
-      <a href="index.html" class="brand"><span class="brand-dot" id="eggDot" title="click me"></span>ruytha</a>
-      <div class="nav-right">
-        <nav class="nav-links">
-          <a href="index.html">home</a>
-          <a href="connect.html" data-current>connect</a>
-        </nav>
-        <button class="cmdk-btn" id="cmdkBtn" type="button"><span>search</span><kbd>⌘K</kbd></button>
-      </div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="wordmark"><span class="dot"></span>@ruytha</a>
+      <nav class="links">
+        <div class="nav-indicator"></div>
+        <a href="index.html">home</a>
+        <a href="connect.html" aria-current="page">connect</a>
+      </nav>
     </div>
   </header>
 
-  <main class="page">
-    <section class="connect-hero">
-      <span class="eyebrow">// connect</span>
-      <h1 style="margin-top:10px;">Find me elsewhere</h1>
-      <p>Blog's the main one, Discord's the fastest.</p>
-    </section>
+  <main>
+    <div class="shell">
+      <section style="padding-top:48px;">
+        <div class="section-head">
+          <span class="eyebrow">// connect</span>
+          <h2>Find me elsewhere</h2>
+        </div>
+        <p>Blog's the main one, Discord's the fastest.</p>
+      </section>
 
-    <section class="connect-list" aria-label="links">
-      <a class="connect-row reveal" href="https://ruytha.blogspot.com" target="_blank" rel="noopener">
-        <div class="label"><strong>Blog</strong><span>anime & media writing</span></div>
-        <span class="go">ruytha.blogspot.com →</span>
-      </a>
-      <a class="connect-row reveal" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">
-        <div class="label"><strong>Discord</strong><span>my profile</span></div>
-        <span class="go">open →</span>
-      </a>
-      <a class="connect-row reveal" href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener">
-        <div class="label"><strong>Discord server</strong><span>come hang out</span></div>
-        <span class="go">join →</span>
-      </a>
-      <a class="connect-row reveal" href="https://open.spotify.com/user/31wqsddt5oxby3p4ta7rx52mt6nu" target="_blank" rel="noopener">
-        <div class="label"><strong>Spotify</strong><span>what I'm actually listening to</span></div>
-        <span class="go">open →</span>
-      </a>
-      <a class="connect-row reveal" href="https://spicylyrics.org/ruytha" target="_blank" rel="noopener">
-        <div class="label"><strong>Spicy Lyrics</strong><span>lyrics page</span></div>
-        <span class="go">open →</span>
-      </a>
-    </section>
+      <section style="padding-top:0;">
+        <div class="connect-list">
+
+          <a class="connect-row pressable" href="https://ruytha.blogspot.com" target="_blank" rel="noopener">
+            <div class="label">
+              <strong>Blog</strong>
+              <span>anime & media writing</span>
+            </div>
+            <span class="go">ruytha.blogspot.com →</span>
+          </a>
+
+          <a class="connect-row pressable" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">
+            <div class="label">
+              <strong>Discord</strong>
+              <span>my profile</span>
+            </div>
+            <span class="go">open →</span>
+          </a>
+
+          <a class="connect-row pressable" href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener">
+            <div class="label">
+              <strong>Discord server</strong>
+              <span>come hang out</span>
+            </div>
+            <span class="go">join →</span>
+          </a>
+
+          <a class="connect-row pressable" href="https://open.spotify.com/user/31wqsddt5oxby3p4ta7rx52mt6nu" target="_blank" rel="noopener">
+            <div class="label">
+              <strong>Spotify</strong>
+              <span>what I'm actually listening to</span>
+            </div>
+            <span class="go">open →</span>
+          </a>
+
+          <a class="connect-row pressable" href="https://spicylyrics.org/ruytha" target="_blank" rel="noopener">
+            <div class="label">
+              <strong>Spicy Lyrics</strong>
+              <span>lyrics page</span>
+            </div>
+            <span class="go">open →</span>
+          </a>
+
+        </div>
+      </section>
+    </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="page">
-      <span>built full-screen, drifting slowly.</span>
-      <span>© ruytha</span>
-    </div>
+  <footer>
+    <div class="shell">built with springs, not keyframes.</div>
   </footer>
-
-  <div class="toast" id="toast"></div>
-
-  <div class="cmdk-overlay" id="cmdkOverlay">
-    <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
-      <div class="cmdk-input-row">
-        <span>›</span>
-        <input type="text" id="cmdkInput" placeholder="jump to…" autocomplete="off" spellcheck="false" />
-        <kbd>esc</kbd>
-      </div>
-      <div class="cmdk-list" id="cmdkList"></div>
-    </div>
-  </div>
 
   <script src="js/main.js"></script>
 </body>
