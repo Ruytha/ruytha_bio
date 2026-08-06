@@ -33,7 +33,12 @@
     <div class="shell">
       <section class="hero">
         <div class="hero-main">
-          <span class="status-pill"><span class="pulse"></span>currently: VCap Motion — coming soon</span>
+          <div class="hero-identity">
+            <div class="avatar"><div class="avatar-inner">R</div></div>
+            <div>
+              <span class="status-pill"><span class="pulse"></span>currently: VCap Motion — coming soon</span>
+            </div>
+          </div>
           <h1>Hi</h1>
           <p class="lede">
             That's genuinely the whole description on my old profile, so it's staying.
@@ -49,6 +54,10 @@
             <li>Not a femboy</li>
             <li>An idiot (occasionally)</li>
           </ul>
+
+          <button class="cmdk-trigger pressable" id="cmdk-trigger" type="button">
+            <span>Quick nav</span><kbd>⌘K</kbd>
+          </button>
         </div>
 
         <div class="hero-side">
@@ -110,10 +119,29 @@
   </main>
 
   <footer>
-    <div class="shell">built with springs, not keyframes.</div>
+    <div class="shell">
+      built with springs, not keyframes.
+      <div class="social-row">
+        <a class="social-badge pressable" href="https://ruytha.blogspot.com" target="_blank" rel="noopener">blog</a>
+        <a class="social-badge pressable" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">discord</a>
+        <a class="social-badge pressable" href="https://open.spotify.com/user/31wqsddt5oxby3p4ta7rx52mt6nu" target="_blank" rel="noopener">spotify</a>
+        <a class="social-badge pressable" href="connect.html">more →</a>
+      </div>
+    </div>
   </footer>
 
   <div class="egg-toast" id="egg-toast"></div>
+
+  <div class="cmdk-overlay" id="cmdk-overlay">
+    <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+      <div class="cmdk-input-row">
+        <span class="cmdk-prompt">›</span>
+        <input type="text" id="cmdk-input" placeholder="jump to…" autocomplete="off" spellcheck="false" />
+        <kbd>esc</kbd>
+      </div>
+      <div class="cmdk-list" id="cmdk-list"></div>
+    </div>
+  </div>
 
   <script src="js/main.js"></script>
 </body>
