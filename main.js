@@ -7,7 +7,7 @@
    client-side JS — that's how last.fm's own widgets do it.
    =========================================================== */
 const LASTFM_API_KEY = "66b1d0ccfc8b9b0e51e14636dcd88fc7";   // e.g. "a1b2c3d4e5f6..."
-const LASTFM_USERNAME = "a5fd06d5fc0a669aedc0e3e08b93c943";  // your last.fm username
+const LASTFM_USERNAME = "Ruytha";  // your last.fm username
 const LASTFM_POLL_MS = 30000; // how often to refresh, in ms
 
 /* ===========================================================
@@ -356,6 +356,117 @@ function initEasterEgg() {
   });
 }
 
+/* ===========================================================
+   Command palette — ⌘K / Ctrl+K quick nav. Same items on every
+   page so it behaves like a real cross-site jump list, not a
+   per-page widget.
+   =========================================================== */
+const CMDK_ITEMS = [
+  { group: "Pages", label: "Home", href: "index.html" },
+  { group: "Pages", label: "Connect", href: "connect.html" },
+  { group: "Sections", label: "What I do", href: "index.html#what-i-do" },
+  { group: "Sections", label: "What's in motion", href: "index.html#now" },
+  { group: "Elsewhere", label: "Blog", href: "https://ruytha.blogspot.com" },
+  { group: "Elsewhere", label: "Discord — profile", href: "https://discord.com/users/690508522395402260" },
+  { group: "Elsewhere", label: "Discord — server", href: "https://discord.gg/m9veFRXxDF" },
+  { group: "Elsewhere", label: "Spotify", href: "https://open.spotify.com/user/31wqsddt5oxby3p4ta7rx52mt6nu" },
+  { group: "Elsewhere", label: "Spicy Lyrics", href: "https://spicylyrics.org/ruytha" },
+];
+
+function initCommandPalette() {
+  const trigger = document.getElementById("cmdk-trigger");
+  const overlay = document.getElementById("cmdk-overlay");
+  const input = document.getElementById("cmdk-input");
+  const list = document.getElementById("cmdk-list");
+  if (!overlay || !input || !list) return;
+
+  let filtered = CMDK_ITEMS.slice();
+  let activeIndex = 0;
+
+  function render() {
+    const q = input.value.trim().toLowerCase();
+    filtered = CMDK_ITEMS.filter((item) => item.label.toLowerCase().includes(q));
+    activeIndex = 0;
+
+    if (filtered.length === 0) {
+      list.innerHTML = `<div class="cmdk-empty">nothing here — try something else</div>`;
+      return;
+    }
+
+    let html = "";
+    let lastGroup = null;
+    filtered.forEach((item, i) => {
+      if (item.group !== lastGroup) {
+        html += `<div class="cmdk-group-label">${item.group}</div>`;
+        lastGroup = item.group;
+      }
+      html += `<div class="cmdk-item${i === activeIndex ? " is-active" : ""}" data-index="${i}">
+        <span>${item.label}</span><span class="arrow">↵</span>
+      </div>`;
+    });
+    list.innerHTML = html;
+  }
+
+  function setActive(i) {
+    const items = list.querySelectorAll(".cmdk-item");
+    if (!items.length) return;
+    activeIndex = (i + items.length) % items.length;
+    items.forEach((el) => el.classList.remove("is-active"));
+    items[activeIndex].classList.add("is-active");
+    items[activeIndex].scrollIntoView({ block: "nearest" });
+  }
+
+  function go(item) {
+    if (!item) return;
+    if (/^https?:\/\//.test(item.href)) {
+      window.open(item.href, "_blank", "noopener");
+    } else {
+      window.location.href = item.href;
+    }
+    close();
+  }
+
+  function open() {
+    overlay.classList.add("is-open");
+    input.value = "";
+    render();
+    setTimeout(() => input.focus(), 10);
+  }
+
+  function close() {
+    overlay.classList.remove("is-open");
+  }
+
+  trigger && trigger.addEventListener("click", open);
+
+  document.addEventListener("keydown", (e) => {
+    const isK = e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey);
+    if (isK) {
+      e.preventDefault();
+      overlay.classList.contains("is-open") ? close() : open();
+      return;
+    }
+    if (!overlay.classList.contains("is-open")) return;
+
+    if (e.key === "Escape") close();
+    if (e.key === "ArrowDown") { e.preventDefault(); setActive(activeIndex + 1); }
+    if (e.key === "ArrowUp") { e.preventDefault(); setActive(activeIndex - 1); }
+    if (e.key === "Enter") { e.preventDefault(); go(filtered[activeIndex]); }
+  });
+
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) close();
+  });
+
+  list.addEventListener("click", (e) => {
+    const row = e.target.closest(".cmdk-item");
+    if (!row) return;
+    go(filtered[Number(row.dataset.index)]);
+  });
+
+  input.addEventListener("input", render);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initNavIndicator();
   initFacetStack();
@@ -363,4 +474,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initLastfm();
   initSpotlight();
   initEasterEgg();
+  initCommandPalette();
 });
