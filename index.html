@@ -3,152 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ruytha</title>
+  <title>Ruytha</title>
   <meta name="description" content="Ruytha — human, learning Japanese, occasionally an idiot." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Manrope:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-
-  <div class="bg-glow" aria-hidden="true">
-    <span class="glow g1"></span>
-    <span class="glow g2"></span>
-    <span class="glow g3"></span>
-    <span class="glow g4"></span>
+  <div class="aurora" aria-hidden="true">
+    <div class="blob blob--1"></div>
+    <div class="blob blob--2"></div>
+    <div class="blob blob--3"></div>
   </div>
-  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+  <div class="spotlight" id="spotlight" aria-hidden="true"></div>
 
-  <header class="nav">
-    <div class="nav-inner">
-      <a href="index.html" class="brand"><span class="brand-dot" id="eggDot" title="click me"></span>ruytha</a>
-      <div class="nav-right">
-        <nav class="nav-links">
-          <a href="index.html" data-current>home</a>
-          <a href="connect.html">connect</a>
-        </nav>
-        <button class="cmdk-btn" id="cmdkBtn" type="button"><span>search</span><kbd>⌘K</kbd></button>
-      </div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="wordmark"><span class="dot" id="egg-dot" title="click me"></span>@ruytha</a>
+      <nav class="links">
+        <div class="nav-indicator"></div>
+        <a href="index.html" aria-current="page">home</a>
+        <a href="connect.html">connect</a>
+      </nav>
     </div>
   </header>
 
-  <main class="page">
+  <main>
+    <div class="shell">
+      <section class="hero">
+        <div class="hero-main">
+          <span class="status-pill"><span class="pulse"></span>currently: VCap Motion — coming soon</span>
+          <h1>Hi</h1>
+          <p class="lede">
+            That's genuinely the whole description on my old profile, so it's staying.
+            I make things — video, music, code, occasionally all three in the same
+            project — and I'm bad at writing bios.
+          </p>
 
-    <section class="hero">
-      <div class="orb" id="orb"><span>R</span></div>
-      <div class="hero-copy">
-        <p class="pill" id="statusPill"><span class="dot-live"></span>building VCap Motion — coming soon</p>
-        <h1>Hi.</h1>
-        <p class="sub">I make things — video, music, code, usually all three in the same project. From Australia, learning Japanese, bad at writing bios.</p>
-      </div>
-    </section>
-
-    <section class="bento" aria-label="about, projects, skills, and what I'm listening to">
-
-      <article class="card card--about reveal">
-        <h2>// about</h2>
-        <ul class="fact-list">
-          <li>Human, from Australia</li>
-          <li>Learning Japanese</li>
-          <li>Played Rec Room, 2021–2026</li>
-          <li>CEO at markdown</li>
-          <li>Not a femboy</li>
-          <li>An idiot (occasionally)</li>
-        </ul>
-      </article>
-
-      <article class="card card--music reveal">
-        <h2>// on repeat</h2>
-        <a class="np" id="npCard" href="#">
-          <div class="np-art" id="npArt"></div>
-          <div class="np-body">
-            <div class="np-status"><span class="dot-live"></span><span id="npStatus">loading last.fm…</span></div>
-            <div class="np-track" id="npTrack">—</div>
-            <div class="np-artist" id="npArtist">—</div>
-          </div>
-        </a>
-      </article>
-
-      <article class="card card--skills reveal">
-        <h2>// what I do</h2>
-        <div class="chip-row" id="chipRow">
-          <div class="chip">Blender</div>
-          <div class="chip">Editing (DaVinci Resolve)</div>
-          <div class="chip">Lighting (virtual &amp; IRL)</div>
-          <div class="chip">Music producer</div>
-          <div class="chip">Film director</div>
-          <div class="chip">Photographer</div>
-          <div class="chip">CSS, JS, HTML &amp; Python dev</div>
+          <ul class="about-list" style="margin-top:32px;">
+            <li>Human</li>
+            <li>Learning Japanese</li>
+            <li>Played Rec Room, 2021–2026</li>
+            <li>CEO at markdown</li>
+            <li>Not a femboy</li>
+            <li>An idiot (occasionally)</li>
+          </ul>
         </div>
-        <p class="hint">↑ drag one — it snaps back</p>
-      </article>
 
-      <article class="card card--projects reveal">
-        <h2>// in motion</h2>
-        <div class="project-list">
-          <div class="project-row">
+        <div class="hero-side">
+          <span class="eyebrow" style="display:block; margin-bottom:10px;">// on repeat</span>
+          <a class="glass lastfm-card is-loading pressable" id="lastfm-widget" href="#">
+            <div class="lastfm-art" id="lastfm-art"></div>
+            <div class="lastfm-body">
+              <div class="lastfm-eyebrow"><span class="live-dot"></span><span id="lastfm-status">loading last.fm…</span></div>
+              <div class="lastfm-track" id="lastfm-track">—</div>
+              <div class="lastfm-artist" id="lastfm-artist">—</div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <section id="what-i-do">
+        <div class="section-head">
+          <span class="eyebrow">// what I do</span>
+          <h2>Skills, dragged into a pile</h2>
+        </div>
+        <div class="facet-stack" aria-label="things I do, drag to rearrange">
+          <div class="facet pressable">Blender</div>
+          <div class="facet pressable">Editing (DaVinci Resolve)</div>
+          <div class="facet pressable">Lighting (virtual &amp; IRL)</div>
+          <div class="facet pressable">Music producer</div>
+          <div class="facet pressable">Film director</div>
+          <div class="facet pressable">Photographer</div>
+          <div class="facet pressable">CSS, JS, HTML &amp; Python dev</div>
+        </div>
+        <p class="facet-hint">↑ drag one, it snaps back — try pulling it past the edge</p>
+      </section>
+
+      <section id="now">
+        <div class="section-head">
+          <span class="eyebrow">// currently</span>
+          <h2>What's in motion</h2>
+        </div>
+        <div class="now-list">
+          <div class="now-row">
             <span class="name">DDFC</span>
-            <span class="status">slowed down — motivation, other projects</span>
+            <span class="status">development's underway but slowed — motivation, other projects</span>
           </div>
-          <div class="project-row">
+          <div class="now-row">
             <span class="name">VCap Motion</span>
             <span class="status">coming soon</span>
           </div>
-          <div class="project-row">
+          <div class="now-row">
             <span class="name">This website</span>
             <span class="status">rebuilt — was waiting until my web dev got good enough</span>
           </div>
-          <div class="project-row">
+          <div class="now-row">
             <span class="name">Borderline Obsession</span>
-            <span class="status">short YouTube series — VCap Motion ships first</span>
+            <span class="status">short YouTube series — might take a while, VCap Motion needs to ship first</span>
           </div>
         </div>
-      </article>
+      </section>
 
-      <article class="card card--elsewhere reveal">
-        <h2>// elsewhere</h2>
-        <div class="link-grid">
-          <a class="link-tile" href="https://ruytha.blogspot.com" target="_blank" rel="noopener">
-            <strong>Blog</strong><span>anime & media writing</span>
-          </a>
-          <a class="link-tile" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">
-            <strong>Discord</strong><span>my profile</span>
-          </a>
-          <a class="link-tile" href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener">
-            <strong>Discord server</strong><span>come hang out</span>
-          </a>
-          <a class="link-tile" href="https://open.spotify.com/user/31wqsddt5oxby3p4ta7rx52mt6nu" target="_blank" rel="noopener">
-            <strong>Spotify</strong><span>what I'm actually listening to</span>
-          </a>
-          <a class="link-tile" href="https://spicylyrics.org/ruytha" target="_blank" rel="noopener">
-            <strong>Spicy Lyrics</strong><span>lyrics page</span>
-          </a>
-        </div>
-      </article>
-
-    </section>
+    </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="page">
-      <span>built full-screen, drifting slowly.</span>
-      <span>© ruytha</span>
-    </div>
+  <footer>
+    <div class="shell">built with springs, not keyframes.</div>
   </footer>
 
-  <div class="toast" id="toast"></div>
-
-  <div class="cmdk-overlay" id="cmdkOverlay">
-    <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
-      <div class="cmdk-input-row">
-        <span>›</span>
-        <input type="text" id="cmdkInput" placeholder="jump to…" autocomplete="off" spellcheck="false" />
-        <kbd>esc</kbd>
-      </div>
-      <div class="cmdk-list" id="cmdkList"></div>
-    </div>
-  </div>
+  <div class="egg-toast" id="egg-toast"></div>
 
   <script src="js/main.js"></script>
 </body>
