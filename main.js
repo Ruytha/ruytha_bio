@@ -7,7 +7,7 @@
    blank). This is a read-only key so it's fine to ship in
    client-side JS — that's how last.fm's own widgets do it.
    =========================================================== */
-const LASTFM_API_KEY = "66b1d0ccfc8b9b0e51e14636dcd88fc7";   // e.g. "a1b2c3d4e5f6..."
+const LASTFM_API_KEY = "4ef09d994a1080380a4ddbe96e678414";   // e.g. "a1b2c3d4e5f6..."
 const LASTFM_USERNAME = "Ruytha";  // your last.fm username
 const LASTFM_POLL_MS = 300; // how often to refresh, in ms
 
