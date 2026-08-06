@@ -11,9 +11,16 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <div class="aurora" aria-hidden="true">
+    <div class="blob blob--1"></div>
+    <div class="blob blob--2"></div>
+    <div class="blob blob--3"></div>
+  </div>
+  <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+
   <header class="topbar">
     <div class="topbar-inner">
-      <a href="index.html" class="wordmark"><span class="dot"></span>@ruytha</a>
+      <a href="index.html" class="wordmark"><span class="dot" id="egg-dot" title="click me"></span>@ruytha</a>
       <nav class="links">
         <div class="nav-indicator"></div>
         <a href="index.html" aria-current="page">home</a>
@@ -25,22 +32,36 @@
   <main>
     <div class="shell">
       <section class="hero">
-        <span class="status-pill"><span class="pulse"></span>currently: VCap Motion — coming soon</span>
-        <h1>Hi</h1>
-        <p class="lede">
-          That's genuinely the whole description on my old profile, so it's staying.
-          I make things — video, music, code, occasionally all three in the same
-          project — and I'm bad at writing bios.
-        </p>
+        <div class="hero-main">
+          <span class="status-pill"><span class="pulse"></span>currently: VCap Motion — coming soon</span>
+          <h1>Hi</h1>
+          <p class="lede">
+            That's genuinely the whole description on my old profile, so it's staying.
+            I make things — video, music, code, occasionally all three in the same
+            project — and I'm bad at writing bios.
+          </p>
 
-        <ul class="about-list" style="margin-top:32px;">
-          <li>Human</li>
-          <li>Learning Japanese</li>
-          <li>Played Rec Room, 2021–2026</li>
-          <li>CEO at markdown</li>
-          <li>Not a femboy</li>
-          <li>An idiot (occasionally)</li>
-        </ul>
+          <ul class="about-list" style="margin-top:32px;">
+            <li>Human</li>
+            <li>Learning Japanese</li>
+            <li>Played Rec Room, 2021–2026</li>
+            <li>CEO at markdown</li>
+            <li>Not a femboy</li>
+            <li>An idiot (occasionally)</li>
+          </ul>
+        </div>
+
+        <div class="hero-side">
+          <span class="eyebrow" style="display:block; margin-bottom:10px;">// on repeat</span>
+          <a class="glass lastfm-card is-loading pressable" id="lastfm-widget" href="#">
+            <div class="lastfm-art" id="lastfm-art"></div>
+            <div class="lastfm-body">
+              <div class="lastfm-eyebrow"><span class="live-dot"></span><span id="lastfm-status">loading last.fm…</span></div>
+              <div class="lastfm-track" id="lastfm-track">—</div>
+              <div class="lastfm-artist" id="lastfm-artist">—</div>
+            </div>
+          </a>
+        </div>
       </section>
 
       <section id="what-i-do">
@@ -85,34 +106,14 @@
         </div>
       </section>
 
-      <section id="listening">
-        <div class="section-head">
-          <span class="eyebrow">// on repeat</span>
-          <h2>Now playing-ish</h2>
-        </div>
-        <div class="glass">
-          <div class="glass-row">
-            <div class="meta">
-              <strong>Tame Impala</strong>
-              <span>artist</span>
-            </div>
-            <a class="open pressable" href="https://open.spotify.com/artist/5INjqkS1o8h1imAzPqGZBb" target="_blank" rel="noopener">open →</a>
-          </div>
-          <div class="glass-row">
-            <div class="meta">
-              <strong>Cherry Blossom</strong>
-              <span>Empire Of The Sun · 3:28</span>
-            </div>
-            <a class="open pressable" href="https://open.spotify.com/track/7eqIZPAPLQhkjSVTzBT7UR" target="_blank" rel="noopener">open →</a>
-          </div>
-        </div>
-      </section>
     </div>
   </main>
 
   <footer>
     <div class="shell">built with springs, not keyframes.</div>
   </footer>
+
+  <div class="egg-toast" id="egg-toast"></div>
 
   <script src="js/main.js"></script>
 </body>
