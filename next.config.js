@@ -4,7 +4,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "lastfm.freetls.fastly.net" },
-      { protocol: "https", hostname: "*.lastfm.freetls.fastly.net" },
+      { protocol: "https", hostname: ".lastfm.freetls.fastly.net" },
     ],
   },
   // Minecraft build is a large static file served from /public — no special

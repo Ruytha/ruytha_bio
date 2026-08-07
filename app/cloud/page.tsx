@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { Show, SignInButton, UserButton } from "@clerk/nextjs";
 import { auth as serverAuth, clerkClient as serverClerkClient } from "@clerk/nextjs/server";
 import CloudUploader from "@/components/CloudUploader";
 import Footer from "@/components/Footer";
@@ -24,9 +24,9 @@ export default async function CloudPage() {
             <p className="text-caption text-sm text-teal">private</p>
             <h1 className="text-display mt-2 text-4xl font-bold text-ink sm:text-5xl">RuythaCloud</h1>
           </div>
-          <SignedIn>
-            <UserButton afterSignOutUrl="/cloud" />
-          </SignedIn>
+          <Show when="signed-in">
+            <UserButton />
+          </Show>
         </div>
 
         <p className="text-body mt-4 max-w-lg text-ink-dim">
@@ -35,7 +35,7 @@ export default async function CloudPage() {
         </p>
 
         <div className="mt-10">
-          <SignedOut>
+          <Show when="signed-out">
             <div className="material rounded-3xl p-8 text-center">
               <p className="text-heading text-lg font-semibold text-ink">Sign in to continue</p>
               <p className="text-body mt-2 text-sm text-ink-dim">You'll need to be on the whitelist to upload anything.</p>
@@ -45,9 +45,9 @@ export default async function CloudPage() {
                 </button>
               </SignInButton>
             </div>
-          </SignedOut>
+          </Show>
 
-          <SignedIn>
+          <Show when="signed-in">
             {allowed ? (
               <CloudUploader />
             ) : (
@@ -58,7 +58,7 @@ export default async function CloudPage() {
                 </p>
               </div>
             )}
-          </SignedIn>
+          </Show>
         </div>
       </section>
 

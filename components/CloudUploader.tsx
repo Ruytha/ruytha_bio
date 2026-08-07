@@ -48,7 +48,7 @@ export default function CloudUploader() {
           setJobs((prev) => ({ ...prev, [file.name]: { name: file.name, progress: 0, status: "uploading" } }));
           try {
             await upload(file.name, file, {
-              access: "private",
+              access: "public",
               handleUploadUrl: "/api/blob-upload",
               onUploadProgress: ({ percentage }) => {
                 setJobs((prev) => ({ ...prev, [file.name]: { name: file.name, progress: percentage, status: "uploading" } }));
