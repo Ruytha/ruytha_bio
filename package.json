@@ -1,23 +1,29 @@
 {
-  "name": "ruytha-bio",
+  "name": "ruytha-site",
   "version": "1.0.0",
-  "description": "Ruytha's personal bio website",
-  "main": "main.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "sync-cloud": "node scripts/sync-cloud.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Ruytha/ruytha_bio.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Ruytha/ruytha_bio/issues"
-  },
-  "homepage": "https://github.com/Ruytha/ruytha_bio#readme",
   "dependencies": {
-    "@vercel/speed-insights": "^2.0.0"
+    "@clerk/nextjs": "^6.5.0",
+    "@vercel/blob": "^0.27.0",
+    "motion": "^11.13.0",
+    "next": "^15.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3"
   }
 }
