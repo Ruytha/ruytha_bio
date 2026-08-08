@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>contact — ruytha</title>
+<meta name="description" content="Get in touch with ruytha." />
+<link rel="stylesheet" href="css/style.css" />
+<script src="config/config.js" defer></script>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="dot"></span> ruytha</a>
+    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">menu</button>
+    <nav class="links">
+      <a href="index.html">home</a>
+      <a href="projects.html">projects</a>
+      <a href="contact.html" aria-current="page">contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" style="padding-bottom: 24px;">
+    <div class="wrap">
+      <div class="eyebrow"><span class="pulse"></span> say hi</div>
+      <h1 class="title">get in <span class="accent">touch</span>.</h1>
+      <p class="lede">Discord's the fastest way to reach me. The form below opens your email client — nothing gets stored anywhere.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap grid cols-2" style="align-items:start;">
+      <div>
+        <h2 class="section-title">send a message</h2>
+        <form class="contact-form" id="contact-form">
+          <div class="field">
+            <label for="name">your name</label>
+            <input type="text" id="name" name="name" required autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="email">your email</label>
+            <input type="email" id="email" name="email" required autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="message">message</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+          </div>
+          <button class="btn primary" type="submit" style="align-self:flex-start;">send</button>
+          <div class="form-status" id="form-status"></div>
+        </form>
+      </div>
+
+      <div>
+        <h2 class="section-title">elsewhere</h2>
+        <div class="socials"></div>
+        <p class="section-sub" style="margin-top:20px;">
+          Replies aren't instant — I'm usually mid-render on something in Blender or Resolve.
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fine">© <span id="year"></span> ruytha — built with too many blob gradients.</div>
+    <button class="mc-btn" id="mc-launch">Minecraft</button>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('mc-launch').addEventListener('click', () => {
+    window.open('minecraft.html', '_blank', 'noopener');
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const cfg = window.RUYTHA_CONFIG;
+    const box = document.querySelector('.socials');
+    if (cfg && box) {
+      const links = [
+        ['Spotify', cfg.socials.spotify],
+        ['Discord', cfg.socials.discord],
+        ['Discord Server', cfg.socials.discordServer],
+        ['Blog', cfg.socials.blog],
+        ['Spicy Lyrics', cfg.socials.spicyLyrics],
+      ];
+      box.innerHTML = links.map(([label, href]) =>
+        `<a href="${href}" target="_blank" rel="noopener">${label}</a>`
+      ).join('');
+    }
+  });
+
+  // Opens the visitor's email client pre-filled — swap for a real backend
+  // (e.g. an /api/contact route with an email service) whenever you're ready.
+  document.getElementById('contact-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+    const subject = encodeURIComponent(`Message from ${name} via ruytha.dev`);
+    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:you@example.com?subject=${subject}&body=${body}`;
+    document.getElementById('form-status').textContent = 'opening your email client…';
+  });
+</script>
+</body>
+</html>

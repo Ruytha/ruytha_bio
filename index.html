@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ruytha</title>
+<meta name="description" content="ruytha — music producer, film director, photographer, and dev from Australia." />
+<link rel="stylesheet" href="css/style.css" />
+<script src="config/config.js" defer></script>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="dot"></span> ruytha</a>
+    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">menu</button>
+    <nav class="links">
+      <a href="index.html" aria-current="page">home</a>
+      <a href="projects.html">projects</a>
+      <a href="contact.html">contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow"><span class="pulse"></span> from Australia · learning Japanese</div>
+      <h1 class="title">hi, i'm <span class="accent">ruytha</span>.</h1>
+      <p class="lede">
+        Music producer, film director, photographer, and a person who spends
+        too much time in Blender and DaVinci Resolve. CSS, JS, HTML and
+        Python dev on the side. CEO at markdown.
+      </p>
+      <div class="hero-actions">
+        <a class="btn primary" href="projects.html">see what i'm building →</a>
+        <a class="btn" href="contact.html">get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="music" aria-label="Currently listening">
+    <div class="wrap">
+      <h2 class="section-title">currently listening</h2>
+      <p class="section-sub">Pulled live from Last.fm — refreshes every 30 seconds.</p>
+
+      <div id="nowplaying" class="nowplaying">
+        <div class="meta"><div class="track">Loading…</div><div class="artist">asking Last.fm nicely</div></div>
+      </div>
+
+      <div id="recent-list" class="recent-list"></div>
+    </div>
+  </section>
+
+  <section id="what-i-do">
+    <div class="wrap">
+      <h2 class="section-title">what i do</h2>
+      <p class="section-sub">A handful of overlapping obsessions.</p>
+      <div class="grid cols-3">
+        <div class="card"><h3>Blender</h3><p>3D, lighting, and motion work — virtual and IRL.</p></div>
+        <div class="card"><h3>Editing</h3><p>Cutting and grading in DaVinci Resolve.</p></div>
+        <div class="card"><h3>Lighting</h3><p>Virtual scene lighting and real-world rigs.</p></div>
+        <div class="card"><h3>Music Production</h3><p>Writing and producing tracks end to end.</p></div>
+        <div class="card"><h3>Film Direction</h3><p>Short-form video, from concept to final cut.</p></div>
+        <div class="card"><h3>Photography</h3><p>Stills, mostly for the projects below.</p></div>
+        <div class="card"><h3>Development</h3><p>CSS, JS, HTML and Python — including this site.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <h2 class="section-title">a few facts</h2>
+      <div class="facts">
+        <span class="fact">from Australia</span>
+        <span class="fact">played Rec Room, 2021–2026</span>
+        <span class="fact">a human</span>
+        <span class="fact">learning Japanese</span>
+        <span class="fact">not a femboy</span>
+        <span class="fact">CEO at markdown</span>
+        <span class="fact">an idot</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="socials">
+    <div class="wrap">
+      <h2 class="section-title">find me elsewhere</h2>
+      <div class="socials"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fine">© <span id="year"></span> ruytha — built with too many blob gradients.</div>
+    <button class="mc-btn" id="mc-launch">Minecraft</button>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/lastfm.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // populate socials from config.js
+  window.addEventListener('DOMContentLoaded', () => {
+    const cfg = window.RUYTHA_CONFIG;
+    const box = document.querySelector('.socials');
+    if (cfg && box) {
+      const links = [
+        ['Spotify', cfg.socials.spotify],
+        ['Discord', cfg.socials.discord],
+        ['Discord Server', cfg.socials.discordServer],
+        ['Blog', cfg.socials.blog],
+        ['Spicy Lyrics', cfg.socials.spicyLyrics],
+      ];
+      box.innerHTML = links.map(([label, href]) =>
+        `<a href="${href}" target="_blank" rel="noopener">${label}</a>`
+      ).join('');
+    }
+  });
+
+  // Minecraft button — opens minecraft.html in a new tab
+  document.getElementById('mc-launch').addEventListener('click', () => {
+    window.open('minecraft.html', '_blank', 'noopener');
+  });
+</script>
+</body>
+</html>

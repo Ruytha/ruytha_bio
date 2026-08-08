@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>projects — ruytha</title>
+<meta name="description" content="What ruytha's currently building." />
+<link rel="stylesheet" href="css/style.css" />
+<script src="config/config.js" defer></script>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="dot"></span> ruytha</a>
+    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">menu</button>
+    <nav class="links">
+      <a href="index.html">home</a>
+      <a href="projects.html" aria-current="page">projects</a>
+      <a href="contact.html">contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" style="padding-bottom: 24px;">
+    <div class="wrap">
+      <div class="eyebrow"><span class="pulse"></span> currently in progress</div>
+      <h1 class="title">what i've been <span class="accent">up to</span>.</h1>
+      <p class="lede">A running list of what's on my plate right now — some closer to done than others.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="grid cols-2">
+
+        <div class="card">
+          <span class="tag status-paused">slowed down</span>
+          <h3>DDFC</h3>
+          <p>Development is underway but has slowed down due to lack of motivation, and time going toward the other projects on this list.</p>
+        </div>
+
+        <div class="card">
+          <span class="tag status-soon">coming soon</span>
+          <h3>VCap Motion</h3>
+          <p>Coming soon. Details under wraps for now — check back or follow the socials for updates.</p>
+        </div>
+
+        <div class="card">
+          <span class="tag status-live">in progress</span>
+          <h3>This website</h3>
+          <p>Working on my web development — this site is the proof of that work in progress. Rebuilt and re-shipped as I get better at it.</p>
+        </div>
+
+        <div class="card">
+          <span class="tag status-paused">on hold</span>
+          <h3>Borderline Obsession</h3>
+          <p>A short YouTube series I'm working on. Might take a while to come out — VCap Motion needs to ship first.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2 class="section-title">tools of the trade</h2>
+      <p class="section-sub">What all of the above tends to run through.</p>
+      <div class="facts">
+        <span class="fact">Blender</span>
+        <span class="fact">DaVinci Resolve</span>
+        <span class="fact">Python</span>
+        <span class="fact">HTML / CSS / JS</span>
+        <span class="fact">real + virtual lighting rigs</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fine">© <span id="year"></span> ruytha — built with too many blob gradients.</div>
+    <button class="mc-btn" id="mc-launch">Minecraft</button>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('mc-launch').addEventListener('click', () => {
+    window.open('minecraft.html', '_blank', 'noopener');
+  });
+</script>
+</body>
+</html>
