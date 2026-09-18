@@ -416,21 +416,38 @@
   });
 
   // ---------- Favicon tool ----------
+  function faviconMimeFor(path){
+    const ext = (path.split('.').pop() || '').toLowerCase().split(/[?#]/)[0];
+    const map = { png: 'image/png', svg: 'image/svg+xml', ico: 'image/x-icon',
+      jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', webp: 'image/webp' };
+    return map[ext] || 'image/png';
+  }
+
   function updateFaviconInHtml(html, newHref){
-    const tags = html.match(/<link\b[^>]*>/gi) || [];
+    // Only look inside <head>...</head> so we never match "<link ...>"-looking
+    // text sitting inside a <script> block (e.g. this very file's own source).
+    const headMatch = html.match(/<head[^>]*>[\s\S]*?<\/head>/i);
+    const headHtml = headMatch ? headMatch[0] : '';
+    const tags = headHtml.match(/<link\b[^>]*>/gi) || [];
+    const newMime = faviconMimeFor(newHref);
     let oldTag = null;
     for(const tag of tags){
       if(/rel\s*=\s*["']?(shortcut\s+)?icon["']?/i.test(tag)){ oldTag = tag; break; }
     }
     if(oldTag){
-      let newTag;
-      if(/href\s*=\s*"[^"]*"/i.test(oldTag)) newTag = oldTag.replace(/href\s*=\s*"[^"]*"/i, 'href="' + newHref + '"');
-      else if(/href\s*=\s*'[^']*'/i.test(oldTag)) newTag = oldTag.replace(/href\s*=\s*'[^']*'/i, "href='" + newHref + "'");
-      else newTag = oldTag.replace(/<link/i, '<link href="assets/img/favicon.png"');
+      let newTag = oldTag;
+      if(/href\s*=\s*"[^"]*"/i.test(newTag)) newTag = newTag.replace(/href\s*=\s*"[^"]*"/i, 'href="' + newHref + '"');
+      else if(/href\s*=\s*'[^']*'/i.test(newTag)) newTag = newTag.replace(/href\s*=\s*'[^']*'/i, "href='" + newHref + "'");
+      else newTag = newTag.replace(/<link/i, '<link href="' + newHref + '"');
+      // Keep the declared MIME type in sync with the new file's actual extension,
+      // instead of leaving a stale type (e.g. svg+xml) pointing at a .png file.
+      if(/type\s*=\s*"[^"]*"/i.test(newTag)) newTag = newTag.replace(/type\s*=\s*"[^"]*"/i, 'type="' + newMime + '"');
+      else if(/type\s*=\s*'[^']*'/i.test(newTag)) newTag = newTag.replace(/type\s*=\s*'[^']*'/i, "type='" + newMime + "'");
+      else newTag = newTag.replace(/<link/i, '<link type="' + newMime + '"');
       if(newTag === oldTag) return {newText: html, changeType:'unchanged', oldTag, newTag};
       return {newText: html.replace(oldTag, newTag), changeType:'updated', oldTag, newTag};
     } else {
-      const newTag = '<link rel="icon" type="image/png" href="' + newHref + '">';
+      const newTag = '<link rel="icon" type="' + newMime + '" href="' + newHref + '">';
       let newHtml;
       if(/<\/head>/i.test(html)) newHtml = html.replace(/<\/head>/i, '  ' + newTag + '\n</head>');
       else if(/<head[^>]*>/i.test(html)) newHtml = html.replace(/<head[^>]*>/i, m => m + '\n  ' + newTag);
@@ -666,3 +683,4 @@
 </script>
 </body>
 </html>
+
