@@ -438,7 +438,7 @@
       let newTag = oldTag;
       if(/href\s*=\s*"[^"]*"/i.test(newTag)) newTag = newTag.replace(/href\s*=\s*"[^"]*"/i, 'href="' + newHref + '"');
       else if(/href\s*=\s*'[^']*'/i.test(newTag)) newTag = newTag.replace(/href\s*=\s*'[^']*'/i, "href='" + newHref + "'");
-      else newTag = newTag.replace(/<link/i, '<link href="' + newHref + '"');
+      else newTag = newTag.replace(/<link/i, '<link href="assets/img/favicon.png"');
       // Keep the declared MIME type in sync with the new file's actual extension,
       // instead of leaving a stale type (e.g. svg+xml) pointing at a .png file.
       if(/type\s*=\s*"[^"]*"/i.test(newTag)) newTag = newTag.replace(/type\s*=\s*"[^"]*"/i, 'type="' + newMime + '"');
