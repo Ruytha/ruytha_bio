@@ -1,25 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>404 — ruytha</title>
-<link rel="stylesheet" href="css/style.css" />
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+<title>404 · Not Found</title>
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+  display: flex;
+  justify-content: center; 
+  align-items: center;   
+  height: 100vh;     
+  margin: 0;
+  font-family: Bricolage Grotesque, Outfit, Arial, sans-serif; 
+  background: radial-gradient(ellipse at bottom, #1b0a4a 0%, #0a0022 60%, #05000f 100%);
+  overflow: hidden;
+  position: relative;
+}
+
+canvas#stars {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+}
+
+.btn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #000000;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: Bricolage Grotesque, Outfit, Arial, sans-serif; 
+  transition: all 0.4s ease;
+}
+
+.btn:hover {
+    transform: scale(1.09);
+}
+
+</style>
+
 </head>
-<body style="display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
-<div class="wrap" style="max-width:520px;">
-  <div class="eyebrow" style="justify-content:center;"><span class="pulse"></span> 404</div>
-  <h1 class="title" style="font-size:2.4rem;">even <span class="accent">i'm</span> lost.</h1>
-  <p class="lede" style="margin:0 auto;">Nothing's here. Probably an idot moved it. Try one of the real pages instead.</p>
-  <div class="hero-actions" style="justify-content:center;">
-    <a class="btn primary" href="/">← back home</a>
-    <a class="btn" href="/projects">projects</a>
-  </div>
-</div>
-<script src="js/main.js"></script>
+<body>
+    <canvas id="stars"></canvas>
+
+    <div class="content">  
+        <h1 style="color: #ffffff; font-size: 48px; text-align: center;">404 · Not Found</h1>
+        <p style="color: #ffffff; font-size: 24px; text-align: center;">sorry, that page doesn't exist.</p>
+        <button class="btn" onclick="window.location.href='index.html'">Go Back Home</button>
+    </div>
+
+    <script>
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let w, h, stars, shootingStars;
+
+    function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function initStars() {
+        stars = [];
+        const count = Math.floor((w * h) / 3000);
+        for (let i = 0; i < count; i++) {
+            stars.push({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                r: Math.random() * 1.4 + 0.3,
+                baseAlpha: Math.random() * 0.6 + 0.3,
+                twinkleSpeed: Math.random() * 0.02 + 0.005,
+                phase: Math.random() * Math.PI * 2
+            });
+        }
+    }
+    initStars();
+
+    shootingStars = [];
+    function spawnShootingStar() {
+        shootingStars.push({
+            x: Math.random() * w * 0.7,
+            y: Math.random() * h * 0.3,
+            len: Math.random() * 120 + 80,
+            speed: Math.random() * 8 + 6,
+            angle: Math.PI / 4,
+            life: 1
+        });
+    }
+    setInterval(spawnShootingStar, 3500);
+
+    function draw() {
+        ctx.clearRect(0, 0, w, h);
+
+        stars.forEach(s => {
+            s.phase += s.twinkleSpeed;
+            const alpha = s.baseAlpha + Math.sin(s.phase) * 0.3;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,${Math.max(0, alpha)})`;
+            ctx.fill();
+        });
+
+        shootingStars.forEach((s, i) => {
+            const dx = Math.cos(s.angle) * s.len;
+            const dy = Math.sin(s.angle) * s.len;
+            const grad = ctx.createLinearGradient(s.x, s.y, s.x - dx, s.y - dy);
+            grad.addColorStop(0, `rgba(255,255,255,${s.life})`);
+            grad.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(s.x, s.y);
+            ctx.lineTo(s.x - dx, s.y - dy);
+            ctx.stroke();
+
+            s.x += Math.cos(s.angle) * s.speed;
+            s.y += Math.sin(s.angle) * s.speed;
+            s.life -= 0.012;
+        });
+        shootingStars = shootingStars.filter(s => s.life > 0 && s.x < w + 100 && s.y < h + 100);
+
+        requestAnimationFrame(draw);
+    }
+    draw();
+    </script>
 </body>
 </html>

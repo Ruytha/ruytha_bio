@@ -1,64 +1,60 @@
-// ============================================================================
-// /api/lastfm — Vercel serverless function.
-// Reads secrets from environment variables (set in the Vercel dashboard, or
-// in a local .env file — see .env.example). The API key is NEVER sent to
-// the browser: the client only ever calls this same-origin route.
-// ============================================================================
+/**
+ * GET /api/lastfm?limit=8
+ *
+ * Proxies Last.fm's user.getrecenttracks so the API key never reaches the
+ * browser. Set these in Vercel → Project → Settings → Environment Variables:
+ *
+ *   LASTFM_API_KEY   your key from https://www.last.fm/api/account/create
+ *   LASTFM_USER      your Last.fm username
+ *
+ * Responses are cached at the edge for 45s, so refreshing the page a lot
+ * won't burn through the rate limit.
+ */
 
-export default async function handler(req, res) {
-  const apiKey = process.env.LASTFM_API_KEY;
-  const username = process.env.LASTFM_USERNAME;
+module.exports = async function handler(req, res) {
+  const key  = process.env.LASTFM_API_KEY;
+  const user = process.env.LASTFM_USER;
 
-  if (!apiKey || !username) {
-    res.status(500).json({
-      error: 'Missing LASTFM_API_KEY or LASTFM_USERNAME env vars. See .env.example.',
+  if (!key || !user) {
+    res.status(503).json({
+      error: 'not_configured',
+      message: 'Set LASTFM_API_KEY and LASTFM_USER in your Vercel environment variables.'
     });
     return;
   }
 
-  const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${encodeURIComponent(username)}&api_key=${apiKey}&format=json&limit=8`;
+  const limit = Math.min(parseInt(req.query.limit, 10) || 8, 20);
+
+  const url =
+    'https://ws.audioscrobbler.com/2.0/' +
+    '?method=user.getrecenttracks' +
+    '&user=' + encodeURIComponent(user) +
+    '&api_key=' + encodeURIComponent(key) +
+    '&format=json' +
+    '&limit=' + limit +
+    '&extended=0';
 
   try {
-    const upstream = await fetch(url);
+    const upstream = await fetch(url, {
+      headers: { 'user-agent': 'ruytha-site/1.0 (+https://github.com)' }
+    });
+
     if (!upstream.ok) {
-      res.status(upstream.status).json({ error: 'Last.fm upstream error' });
+      res.status(502).json({
+        error: 'upstream_error',
+        message: 'Last.fm returned ' + upstream.status
+      });
       return;
     }
-    const json = await upstream.json();
-    const tracks = (json.recenttracks && json.recenttracks.track) || [];
-    const list = Array.isArray(tracks) ? tracks : [tracks];
 
-    const mapped = list.map((t) => ({
-      name: t.name,
-      artist: t.artist && (t.artist['#text'] || t.artist.name),
-      image: pickImage(t.image),
-      nowPlaying: !!(t['@attr'] && t['@attr'].nowplaying === 'true'),
-      when: t.date ? relativeTime(parseInt(t.date.uts, 10) * 1000) : null,
-    }));
+    const data = await upstream.json();
 
-    const nowPlaying = mapped.find((t) => t.nowPlaying) || null;
-    const recent = mapped.filter((t) => !t.nowPlaying).slice(0, 6);
-
-    res.setHeader('Cache-Control', 's-maxage=20, stale-while-revalidate=40');
-    res.status(200).json({ nowPlaying, recent });
+    res.setHeader('cache-control', 's-maxage=45, stale-while-revalidate=300');
+    res.status(200).json(data);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to reach Last.fm', detail: String(err) });
+    res.status(502).json({
+      error: 'fetch_failed',
+      message: err && err.message ? err.message : 'Could not reach Last.fm'
+    });
   }
-}
-
-function pickImage(imageArr) {
-  if (!Array.isArray(imageArr) || imageArr.length === 0) return null;
-  const large = imageArr.find((i) => i.size === 'extralarge') || imageArr[imageArr.length - 1];
-  return (large && large['#text']) || null;
-}
-
-function relativeTime(ms) {
-  const diff = Date.now() - ms;
-  const min = Math.floor(diff / 60000);
-  if (min < 1) return 'just now';
-  if (min < 60) return `${min}m ago`;
-  const hr = Math.floor(min / 60);
-  if (hr < 24) return `${hr}h ago`;
-  const d = Math.floor(hr / 24);
-  return `${d}d ago`;
-}
+};

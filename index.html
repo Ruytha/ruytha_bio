@@ -1,134 +1,265 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ruytha</title>
-<meta name="description" content="ruytha — music producer, film director, photographer, and dev from Australia." />
-<link rel="stylesheet" href="css/style.css" />
-<script src="config/config.js" defer></script>
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
-</head>
-<body>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ruytha · About me</title>
+<meta name="description" content="Ruytha — director, editor, lighting and developer from Australia. Blender, DaVinci Resolve, music, and a lot of half-finished projects.">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)">
 
-<header class="site-nav">
-  <div class="wrap">
-    <a class="brand" href="index.html"><span class="dot"></span> ruytha</a>
-    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">menu</button>
-    <nav class="links">
-      <a href="index.html" aria-current="page">home</a>
-      <a href="projects.html">projects</a>
-      <a href="contact.html">contact</a>
-    </nav>
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ruytha">
+<meta property="og:description" content="Director, editor, lighting and developer from Australia.">
+<meta property="og:url" content="https://ruytha.vercel.app/">
+<meta property="og:image" content="/assets/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ruytha">
+<meta name="twitter:description" content="Director, editor, lighting and developer from Australia.">
+<meta name="twitter:image" content="/assets/img/og.png">
+
+<link rel="icon" href="assets/img/favicon.png" type="image/png+xml">
+<link rel="apple-touch-icon" href="assets/img/avatar.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/styles.css">
+
+<script>
+(function(){try{
+  var s=localStorage.getItem('ruytha-theme');
+  var m=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+  document.documentElement.setAttribute('data-theme', s||m);
+}catch(e){}})();
+</script>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="#top">Ruytha</a>
+    <ul class="nav-links">
+      <li><a href="#music">Music</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#links">Links</a></li>
+    </ul>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch to light appearance">
+      <svg class="icon-moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M16.3 11.9A6.8 6.8 0 0 1 8.1 3.7a.6.6 0 0 0-.8-.7 8 8 0 1 0 9.7 9.7.6.6 0 0 0-.7-.8Z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 13.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2Zm0-9.1a.8.8 0 0 1-.8-.8V2a.8.8 0 0 1 1.6 0v1.7a.8.8 0 0 1-.8.8Zm0 12.8a.8.8 0 0 0-.8.8V18a.8.8 0 0 0 1.6 0v-1.9a.8.8 0 0 0-.8-.8Zm8-6.5h-1.7a.8.8 0 0 0 0 1.6H18a.8.8 0 0 0 0-1.6Zm-14.3 0H2a.8.8 0 0 0 0 1.6h1.7a.8.8 0 0 0 0-1.6Zm11.9-5a.8.8 0 0 0-1.1 0l-1.2 1.2a.8.8 0 0 0 1.1 1.1l1.2-1.2a.8.8 0 0 0 0-1.1ZM5.6 13.3a.8.8 0 0 0-1.1 0l-1.2 1.2a.8.8 0 1 0 1.1 1.1l1.2-1.2a.8.8 0 0 0 0-1.1Zm9.1 0a.8.8 0 0 0-1.1 1.1l1.2 1.2a.8.8 0 0 0 1.1-1.1Zm-9.1-6.6a.8.8 0 0 0 1.1-1.1L5.5 4.4a.8.8 0 0 0-1.1 1.1Z"/></svg>
+    </button>
   </div>
+</nav>
+
+<main id="main">
+
+<header class="hero" id="top">
+  <div class="pool" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+    <img class="avatar" id="avatar" src="assets/img/avatar.png" alt="Ruytha" width="132" height="132" decoding="async">
+    <h1 class="hero-name">Ruytha</h1>
+    <p class="hero-sub">Hi, I'm Ruytha!</p>
+
+    <a class="pill" id="pill" href="#music" data-state="loading">
+      <span class="pill-art" id="pillArt" aria-hidden="true"></span>
+      <span class="pill-text">
+        <span class="pill-label" id="pillLabel">Checking what's playing</span>
+        <span class="pill-track" id="pillTrack">one sec…</span>
+      </span>
+      <span class="pill-bars" id="pillBars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    </a>
+  </div>
+
+  <a class="scroll-cue" href="#music" aria-label="Scroll down">
+    <svg viewBox="0 0 24 14" aria-hidden="true"><path d="M2 2l10 10L22 2" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
 </header>
 
-<main>
-  <section class="hero">
-    <div class="wrap">
-      <div class="eyebrow"><span class="pulse"></span> from Australia · learning Japanese</div>
-      <h1 class="title">hi, i'm <span class="accent">ruytha</span>.</h1>
-      <p class="lede">
-        Music producer, film director, photographer, and a person who spends
-        too much time in Blender and DaVinci Resolve. CSS, JS, HTML and
-        Python dev on the side. CEO at markdown.
-      </p>
-      <div class="hero-actions">
-        <a class="btn primary" href="projects.html">see what i'm building →</a>
-        <a class="btn" href="contact.html">get in touch</a>
-      </div>
+<section class="section" id="music">
+  <div class="wrap">
+    <h2 class="h2">Recent Streams</h2>
+    <p class="lede">some straight <strong>BANGERS</strong></p>
+
+    <ol class="tracks" id="tracks" aria-live="polite" aria-busy="true">
+      <li class="track track-skeleton"><span class="track-art"></span><span class="track-body"><span class="sk sk-a"></span><span class="sk sk-b"></span></span></li>
+      <li class="track track-skeleton"><span class="track-art"></span><span class="track-body"><span class="sk sk-a"></span><span class="sk sk-b"></span></span></li>
+      <li class="track track-skeleton"><span class="track-art"></span><span class="track-body"><span class="sk sk-a"></span><span class="sk sk-b"></span></span></li>
+      <li class="track track-skeleton"><span class="track-art"></span><span class="track-body"><span class="sk sk-a"></span><span class="sk sk-b"></span></span></li>
+    </ol>
+
+    <p class="tracks-note" id="tracksNote"></p>
+
+    <div class="faves">
+      <article class="fave">
+        <p class="fave-kicker">Featured Artist</p>
+        <h3 class="fave-title">Tame Impala</h3>
+        <p class="fave-sub">This has to be one of the best artists oat.</p>
+        <a class="link" href="https://open.spotify.com/artist/5INjqkS1o8h1imAzPqGZBb" target="_blank" rel="noopener">Open in Spotify <span class="chev">›</span></a>
+      </article>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="music" aria-label="Currently listening">
-    <div class="wrap">
-      <h2 class="section-title">currently listening</h2>
-      <p class="section-sub">Pulled live from Last.fm — refreshes every 30 seconds.</p>
+<section class="section section-alt" id="work">
+  <div class="wrap">
+    <h2 class="h2">What I do</h2>
+    <p class="lede">This is the things that I am mostly good at</p>
 
-      <div id="nowplaying" class="nowplaying">
-        <div class="meta"><div class="track">Loading…</div><div class="artist">asking Last.fm nicely</div></div>
-      </div>
+    <ul class="grid">
+      <li class="card">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6 21 7.8v8.4L12 21.4 3 16.2V7.8Z"/><path d="M3 7.8 12 13l9-5.2M12 13v8.4"/></svg>
+        <h3>Blender</h3><p>I mostly do Animation and rigging</p>
+      </li>
+      <li class="card">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.6" y="5" width="18.8" height="14" rx="2.6"/><path d="M7 5v14M17 5v14M2.6 12h18.8"/></svg>
+        <h3>Editing</h3><p>I use DaVinci Resolve, Premiere and After Effects for editing. DM me on Discord for collaboration opportunities.</p>
+      </li>
+      <li class="card">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6v2.6M4.9 5.6l1.8 1.8M19.1 5.6l-1.8 1.8M2.8 12.4h2.6M18.6 12.4h2.6"/><path d="M12 7.6a4.8 4.8 0 0 1 2.9 8.6v1.5H9.1v-1.5A4.8 4.8 0 0 1 12 7.6Z"/><path d="M9.8 20.4h4.4"/></svg>
+        <h3>Lighting</h3><p>I do lighting virtual and irl.</p>
+      </li>
+      <li class="card">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5.4l11-2v12.2"/><circle cx="6.4" cy="18" r="2.6"/><circle cx="17.4" cy="15.6" r="2.6"/></svg>
+        <h3>Music production</h3><p>Sometimes I open FL and close it 5 minustes later, but I sometimes make some remixes.</p>
+      </li>
+      <li class="card">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.2 8.4V5.6a2.4 2.4 0 0 1 2.4-2.4h2.8M15.6 3.2h2.8a2.4 2.4 0 0 1 2.4 2.4v2.8M20.8 15.6v2.8a2.4 2.4 0 0 1-2.4 2.4h-2.8M8.4 20.8H5.6a2.4 2.4 0 0 1-2.4-2.4v-2.8"/><circle cx="12" cy="12" r="2.3"/></svg>
+        <h3>Directing</h3><p>I make short films and music videos.</p>
+      </li>
+      <li class="card">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.4 8.2A2 2 0 0 1 5.4 6.2h2l1.4-2.2h6.4l1.4 2.2h2a2 2 0 0 1 2 2v8.4a2 2 0 0 1-2 2H5.4a2 2 0 0 1-2-2Z"/><circle cx="12" cy="12.4" r="3.6"/></svg>
+        <h3>Photography</h3><p>I use a iPhone 12 and a Canon EOS 7D for my photography.</p>
+      </li>
+      <li class="card card-wide">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.6 8 4.4 12l4.2 4M15.4 8l4.2 4-4.2 4M13.4 5l-2.8 14"/></svg>
+        <div>
+          <h3>Development</h3>
+          <p>HTML, CSS, JavaScript and Python.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
 
-      <div id="recent-list" class="recent-list"></div>
+<section class="section" id="projects">
+  <div class="wrap">
+    <h2 class="h2">Current projects</h2>
+    <p class="lede">Some Projects I am working on.</p>
+
+    <div class="projects">
+      <article class="proj">
+        <div class="proj-media"><img src="assets/img/project-ddfc.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="proj-body">
+          <span class="badge badge-build">On going</span>
+          <h3>TTMLS</h3>
+          <p>I have been syncing songs for Spicy Lyrics for a while and ig this is a project.</p>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-media"><img src="assets/img/project-vcap.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="proj-body">
+          <span class="badge badge-soon">Coming soon</span>
+          <h3>VCap Motion</h3>
+          <p>Working on a VR motion capture project.</p>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-media"><img src="assets/img/project-website.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="proj-body">
+          <span class="badge badge-build">In progress</span>
+          <h3>This website</h3>
+          <p>ig this is a project, but Claude is doing most of the work lol.</p>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-media"><img src="assets/img/project-bo.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="proj-body">
+          <span class="badge badge-queue">In the queue</span>
+          <h3>Borderline Obsession</h3>
+          <p>A short YouTube series, written and edited by me. This one becomes in production once a stable version of VCap Motion is completed.</p>
+        </div>
+      </article>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="what-i-do">
-    <div class="wrap">
-      <h2 class="section-title">what i do</h2>
-      <p class="section-sub">A handful of overlapping obsessions.</p>
-      <div class="grid cols-3">
-        <div class="card"><h3>Blender</h3><p>3D, lighting, and motion work — virtual and IRL.</p></div>
-        <div class="card"><h3>Editing</h3><p>Cutting and grading in DaVinci Resolve.</p></div>
-        <div class="card"><h3>Lighting</h3><p>Virtual scene lighting and real-world rigs.</p></div>
-        <div class="card"><h3>Music Production</h3><p>Writing and producing tracks end to end.</p></div>
-        <div class="card"><h3>Film Direction</h3><p>Short-form video, from concept to final cut.</p></div>
-        <div class="card"><h3>Photography</h3><p>Stills, mostly for the projects below.</p></div>
-        <div class="card"><h3>Development</h3><p>CSS, JS, HTML and Python — including this site.</p></div>
-      </div>
+<section class="section section-alt" id="about">
+  <div class="wrap about-wrap">
+    <div class="about-main">
+      <h2 class="h2">About me</h2>
+      <p class="about-lead">Hi, I'm Ruytha!</p>
+      <p class="about-body">I am a content creator and developer, passionate about storytelling and technology. I am from Australia. I am learning Japanese and web development. I also sync and review TTMLs (synced songs) for Spicy Lyrics.</p>
+      <p class="about-body">If you want to know more about me, feel free to reach out! (@ruytha on Discord and in the links below)</p>
     </div>
-  </section>
 
-  <section id="about">
-    <div class="wrap">
-      <h2 class="section-title">a few facts</h2>
-      <div class="facts">
-        <span class="fact">from Australia</span>
-        <span class="fact">played Rec Room, 2021–2026</span>
-        <span class="fact">a human</span>
-        <span class="fact">learning Japanese</span>
-        <span class="fact">not a femboy</span>
-        <span class="fact">CEO at markdown</span>
-        <span class="fact">an idot</span>
-      </div>
-    </div>
-  </section>
+    <dl class="facts">
+      <div><dt>Based</dt><dd>Australia</dd></div>
+      <div><dt>Played Rec Room</dt><dd>2021 – 2026</dd></div>
+      <div><dt>Learning</dt><dd>Japanese and web development</dd></div>
+      <div><dt>Fav LLM</dt><dd>Claude</dd></div>
+      <div><dt>Femboy</dt><dd>I <strong>AM</strong> a femboy</dd></div>
+    </dl>
+  </div>
+</section>
 
-  <section id="socials">
-    <div class="wrap">
-      <h2 class="section-title">find me elsewhere</h2>
-      <div class="socials"></div>
-    </div>
-  </section>
+<section class="section" id="links">
+  <div class="wrap">
+    <h2 class="h2">Find me</h2>
+    <p class="lede">Anywhere on this list is fine. The Discord server is where I'm most active tho.</p>
+
+    <ul class="links">
+      <li><a href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">
+        <svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.3 5.6A16 16 0 0 0 15.4 4.4l-.3.5a12 12 0 0 0-6.2 0l-.3-.5a16 16 0 0 0-3.9 1.2C2.3 9.2 1.6 12.7 2 16.1a16 16 0 0 0 4.8 2.4l.9-1.4a10 10 0 0 1-1.6-.8l.4-.3a11.4 11.4 0 0 0 9.8 0l.4.3a10 10 0 0 1-1.6.8l.9 1.4a16 16 0 0 0 4.8-2.4c.5-4-.7-7.4-2.5-10.5ZM8.9 14.1c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Zm6.2 0c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Z"/></svg>
+        <span class="link-text"><span class="link-name">Discord</span><span class="link-sub">@ruytha</span></span><span class="chev">›</span></a></li>
+
+      <li><a href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener">
+        <svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19.6a6.2 6.2 0 0 1 12.4 0"/><path d="M16.2 5.2a3.2 3.2 0 0 1 0 5.9M18.4 19.6a6.3 6.3 0 0 0-2.1-4.7"/></svg>
+        <span class="link-text"><span class="link-name">Discord server</span><span class="link-sub">come say something</span></span><span class="chev">›</span></a></li>
+
+      <li><a href="https://open.spotify.com/user/31wqsddt5oxby3p4ta7rx52mt6nu" target="_blank" rel="noopener">
+        <svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.4"/><path d="M7.2 9.6a12 12 0 0 1 9.4 1.2M7.8 12.8a9.4 9.4 0 0 1 7.4.9M8.4 15.7a7 7 0 0 1 5.6.7"/></svg>
+        <span class="link-text"><span class="link-name">Spotify</span><span class="link-sub">the actual evidence</span></span><span class="chev">›</span></a></li>
+
+      <li><a href="https://spicylyrics.org/ruytha" target="_blank" rel="noopener">
+        <svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.4h9M4 11h13M4 15.6h7"/><path d="M17.6 14.2V7.4l3.4-.8"/><circle cx="16.2" cy="16.6" r="2"/></svg>
+        <span class="link-text"><span class="link-name">Spicy Lyrics</span><span class="link-sub">my TTML profile</span></span><span class="chev">›</span></a></li>
+
+      <li><a href="https://ruytha.blogspot.com" target="_blank" rel="noopener">
+        <svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3.4h8.6L19 8.8v11.8H5Z"/><path d="M13.4 3.4v5.4H19M8 13h8M8 16.6h5.4"/></svg>
+        <span class="link-text"><span class="link-name">Blog</span><span class="link-sub">anime and other opinions</span></span><span class="chev">›</span></a></li>
+
+      <li><a href="https://yoursit.ee/ruytha" target="_blank" rel="noopener">
+        <svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.4"/><path d="M2.8 12h18.4M12 2.6a14.4 14.4 0 0 1 0 18.8 14.4 14.4 0 0 1 0-18.8"/></svg>
+        <span class="link-text"><span class="link-name">Sitee profile</span><span class="link-sub">yoursit.ee/ruytha</span></span><span class="chev">›</span></a></li>
+
+             <li><a href="https://ko-fi.com/ruytha" target="_blank" rel="noopener">
+        <svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.4"/><path d="M2.8 12h18.4M12 2.6a14.4 14.4 0 0 1 0 18.8 14.4 14.4 0 0 1 0-18.8"/></svg>
+        <span class="link-text"><span class="link-name">Ko-fi</span><span class="link-sub">support my work</span></span><span class="chev">›</span></a></li>
+    </ul>
+  </div>
+</section>
+
 </main>
 
-<footer>
-  <div class="wrap">
-    <div class="fine">© <span id="year"></span> ruytha — built with too many blob gradients.</div>
-    <button class="mc-btn" id="mc-launch">Minecraft</button>
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <p>Thx Claude for cooking up some heat</p>
+    <p class="footer-dim"><span id="year">2026</span> · Ruytha  ·  ruytha.dev</p>
   </div>
 </footer>
 
-<script src="js/main.js"></script>
-<script src="js/lastfm.js"></script>
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  // populate socials from config.js
-  window.addEventListener('DOMContentLoaded', () => {
-    const cfg = window.RUYTHA_CONFIG;
-    const box = document.querySelector('.socials');
-    if (cfg && box) {
-      const links = [
-        ['Spotify', cfg.socials.spotify],
-        ['Discord', cfg.socials.discord],
-        ['Discord Server', cfg.socials.discordServer],
-        ['Blog', cfg.socials.blog],
-        ['Spicy Lyrics', cfg.socials.spicyLyrics],
-      ];
-      box.innerHTML = links.map(([label, href]) =>
-        `<a href="${href}" target="_blank" rel="noopener">${label}</a>`
-      ).join('');
-    }
-  });
-
-  // Minecraft button — opens minecraft.html in a new tab
-  document.getElementById('mc-launch').addEventListener('click', () => {
-    window.open('minecraft.html', '_blank', 'noopener');
-  });
-</script>
+<script src="assets/config.js"></script>
+<script src="assets/main.js" defer></script>
 </body>
 </html>
