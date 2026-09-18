@@ -426,7 +426,7 @@
       let newTag;
       if(/href\s*=\s*"[^"]*"/i.test(oldTag)) newTag = oldTag.replace(/href\s*=\s*"[^"]*"/i, 'href="' + newHref + '"');
       else if(/href\s*=\s*'[^']*'/i.test(oldTag)) newTag = oldTag.replace(/href\s*=\s*'[^']*'/i, "href='" + newHref + "'");
-      else newTag = oldTag.replace(/<link/i, '<link href="' + newHref + '"');
+      else newTag = oldTag.replace(/<link/i, '<link href="assets/img/favicon.png"');
       if(newTag === oldTag) return {newText: html, changeType:'unchanged', oldTag, newTag};
       return {newText: html.replace(oldTag, newTag), changeType:'updated', oldTag, newTag};
     } else {
