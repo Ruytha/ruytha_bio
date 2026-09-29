@@ -1,110 +1,163 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Terms of Service</title>
-<link rel="icon" type="image/png" href="assets/img/favicon.png">
-<style>
-  :root {
-    --bg: #0f1115;
-    --card: #171a21;
-    --text: #e7e9ee;
-    --muted: #9aa1ad;
-    --accent: #7c9cff;
-    --border: #262a33;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.6;
-  }
-  .wrap {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 48px 24px 96px;
-  }
-  h1 { font-size: 2rem; margin-bottom: 4px; }
-  .updated { color: var(--muted); font-size: 0.9rem; margin-bottom: 40px; }
-  h2 { font-size: 1.25rem; margin-top: 40px; margin-bottom: 12px; color: var(--accent); }
-  p, li { color: var(--text); }
-  ul { padding-left: 1.2rem; }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-    margin-top: 32px;
-  }
-  a { color: var(--accent); }
-  footer {
-    margin-top: 56px;
-    color: var(--muted);
-    font-size: 0.85rem;
-    border-top: 1px solid var(--border);
-    padding-top: 24px;
-  }
-</style>
-  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Terms of Service · Ruytha</title>
+<meta name="description" content="The rules for using ruytha.dev, quote pages, and donations.">
+<meta name="theme-color" content="#030718">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="/assets/img/favicon.png" type="image/png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/styles.css">
 </head>
+
 <body>
-<div class="wrap">
+<canvas class="stars" id="stars" aria-hidden="true"></canvas>
+<a class="skip" href="#main">Skip to content</a>
+
+<main class="legal" id="main">
+  <a class="legal-back" href="/">← ruytha.dev</a>
+
   <h1>Terms of Service</h1>
-  <p class="updated">Last updated: September 18, 2026</p>
+  <p class="legal-date">Last updated: September 30, 2026</p>
 
-  <p>This website (ruytha.dev, "the Site") is a personal project run by me, an individual — not a company. By using the Site or getting a quote page, you agree to these Terms.</p>
-
-  <div class="card">
-    <h2 style="margin-top:0;">1. Quote Pages</h2>
-    <p>If you get a quote page featured on the Site, I'll collect and display your <strong>username, profile picture, and quote</strong>. See the Privacy Policy for how that information is used and stored.</p>
+  <div class="legal-tldr legal-glass">
+    <h2>The short version</h2>
+    <ul>
+      <li>The Site is free to use. Be decent and don't try to break it.</li>
+      <li>A quote page lasts 12 months. You can renew it for another 12 months with $1 or more on Ko-fi.</li>
+      <li>Payments go through Ko-fi and generally aren't refundable.</li>
+      <li>This is a personal, donation-funded project, so it's provided as-is and could change or go offline.</li>
+    </ul>
   </div>
 
-  <div class="card">
-    <h2 style="margin-top:0;">2. Quote Page Duration &amp; Renewal</h2>
-    <p>A quote page lasts for a total of <strong>12 months</strong> from the date it's purchased or last renewed. After 12 months, the quote page expires and is taken down unless renewed.</p>
-    <p>To renew a quote page for another 12 months, you'll need to pay <strong>$1 or more via my Ko-fi</strong>. Renewal isn't automatic — if it isn't renewed, the quote page (and its associated content) may be removed from the Site.</p>
+  <nav class="legal-toc" aria-label="On this page">
+    <a href="#agree">Agreement</a>
+    <a href="#using">Using the Site</a>
+    <a href="#quotes">Quote pages</a>
+    <a href="#payments">Payments</a>
+    <a href="#rules">Acceptable use</a>
+    <a href="#asis">No warranty</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <section id="agree">
+    <h2><span>1</span>Agreement</h2>
+    <p>ruytha.dev (“the Site”) is a personal project run by me, Ruytha, an individual in Australia. It's not a company. By using the Site, getting a quote page or donating, you agree to these Terms and the <a href="/legal/privacy-policy">Privacy Policy</a>. If you don't agree, please don't use the Site.</p>
+    <p>TextFlag has its own <a href="/tools/textflag/terms">TextFlag Terms of Service</a>, which apply when you use it.</p>
+  </section>
+
+  <section id="using">
+    <h2><span>2</span>Using the Site</h2>
+    <p>Everything on the Site is free to look at and use, including the games and tools like the boykisser clicker. Progress in games and tools is saved in your own browser. It can be lost if you clear your browser data or switch devices, and I can't recover it.</p>
+    <p>My writing, images, videos, projects and the Site's design belong to me unless noted otherwise. Please don't reuse them as your own without asking. Links to other websites are there for convenience; I don't control those sites and I'm not responsible for them.</p>
+  </section>
+
+  <section id="quotes">
+    <h2><span>3</span>Quote pages</h2>
+    <p>A quote page shows your <strong>username, profile picture and quote</strong> on its own page of the Site. See the <a href="/legal/privacy-policy#quotes">Privacy Policy</a> for how that's handled.</p>
+    <ul>
+      <li><strong>Duration:</strong> a quote page lasts <strong>12 months</strong> from when it's purchased or last renewed.</li>
+      <li><strong>Renewal:</strong> to keep it for another 12 months, send <strong>$1 or more through my Ko-fi</strong>. Renewal isn't automatic. If it isn't renewed, the quote page and its content may be removed.</li>
+      <li><strong>Your content:</strong> only submit a username, picture and quote that are yours to share, or that you have permission to use. Quotes can't be hateful, harassing, sexually explicit, illegal, or meant to impersonate or embarrass someone.</li>
+      <li><strong>My call:</strong> I can refuse, edit for formatting, or remove any quote page that breaks these rules.</li>
+    </ul>
+    <div class="legal-note legal-glass"><b>Custom domains</b>If a custom or vanity domain is set up for a quote page, it's only guaranteed for <strong>12 months</strong>. After that it may expire or stop pointing to the Site. The quote page will still be at its normal ruytha.dev address while it's active.</div>
+  </section>
+
+  <section id="payments">
+    <h2><span>4</span>Payments and donations</h2>
+    <p>The Site is kept running by donations and quote page purchases and renewals made through <strong>Ko-fi</strong>. I don't run ads or take sponsorships. Payments are handled entirely by Ko-fi under <a href="https://more.ko-fi.com/terms" target="_blank" rel="noopener">its own terms</a>, and I never see your payment details.</p>
+    <p>Payments are <strong>non-refundable</strong>, except where the law says otherwise. Donations are gifts to support the Site. They don't buy any product, feature or guarantee unless I've clearly said so.</p>
+  </section>
+
+  <section id="rules">
+    <h2><span>5</span>Acceptable use</h2>
+    <p>When using the Site, please don't:</p>
+    <ul>
+      <li>try to hack, overload, scrape heavily or otherwise disrupt the Site;</li>
+      <li>try to get into the admin area or any part of the Site that isn't meant for you;</li>
+      <li>use the Site for anything illegal, or to harass or harm anyone;</li>
+      <li>impersonate someone else, or submit someone else's name, picture or words as a quote page without their permission.</li>
+    </ul>
+  </section>
+
+  <section id="asis">
+    <h2><span>6</span>No warranty</h2>
+    <p>The Site, its tools and every quote page are provided <strong>“as is”</strong>. Because it's a personal, donation-funded project, I can't promise it will always be online, error-free, maintained, or kept in its current form.</p>
+  </section>
+
+  <section id="liability">
+    <h2><span>7</span>Limitation of liability</h2>
+    <p>As far as the law allows, I'm not liable for any indirect or consequential loss from using the Site. That includes a quote page expiring or being removed, lost game or tool progress, or the Site or a custom domain going offline.</p>
+    <p>Nothing in these Terms removes rights you have under the <strong>Australian Consumer Law</strong> or other laws that can't legally be excluded.</p>
+  </section>
+
+  <section id="changes">
+    <h2><span>8</span>Changes</h2>
+    <p>I may change, pause or shut down the Site or any part of it at any time. I may also update these Terms. The date at the top shows the latest version, and using the Site after an update means you accept it.</p>
+  </section>
+
+  <section id="law">
+    <h2><span>9</span>Governing law</h2>
+    <p>These Terms are governed by the laws of Western Australia, Australia, unless the law where you live says a different law has to apply.</p>
+  </section>
+
+  <section id="contact">
+    <h2><span>10</span>Contact</h2>
+    <p>Message <strong>@ruytha</strong> on <a href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">Discord</a>, or ask in <a href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener">my Discord server</a>.</p>
+  </section>
+
+  <p class="legal-foot">Written for a small personal website run by one person. It isn't legal advice.</p>
+</main>
+
+<footer class="footer">
+  <nav class="wrap sitemap" aria-label="Site map">
+    <div>
+      <h2>Site</h2>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/#music">Recent streams</a></li>
+        <li><a href="/#projects">Projects</a></li>
+        <li><a href="/#about">About me</a></li>
+        <li><a href="/#links">Find me</a></li>
+        <li><a href="/boykisser">Boykisser clicker</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>TextFlag</h2>
+      <ul>
+        <li><a href="/tools/textflag">Open TextFlag</a></li>
+        <li><a href="/tools/textflag/guide">Guide</a></li>
+        <li><a href="/tools/textflag/privacy">Privacy Policy</a></li>
+        <li><a href="/tools/textflag/terms">Terms of Service</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Legal</h2>
+      <ul>
+        <li><a href="/legal/privacy-policy">Privacy Policy</a></li>
+        <li><a href="/legal/terms-of-service">Terms of Service</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Elsewhere</h2>
+      <ul>
+        <li><a href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener">Discord server</a></li>
+        <li><a href="https://ko-fi.com/ruytha" target="_blank" rel="noopener">Ko-fi</a></li>
+        <li><a href="https://spicylyrics.org/ruytha" target="_blank" rel="noopener">Spicy Lyrics</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="wrap footer-inner">
+    <p class="footer-dim">2026 · Ruytha · ruytha.dev</p>
   </div>
+</footer>
 
-  <div class="card">
-    <h2 style="margin-top:0;">3. Funding &amp; Availability</h2>
-    <p>The Site is kept running through donations and quote page purchases/renewals made via <strong>Ko-fi</strong>. I don't run ads or accept sponsorships. Because the Site is a personal, donation-funded project, I <strong>don't guarantee it will stay online, accessible, or maintained</strong> — it could go offline or be discontinued at any time.</p>
-  </div>
-
-  <h2>4. Custom Domain</h2>
-  <p>If a custom "quote" or vanity domain is offered, it's only active for <strong>12 months</strong> from when it's set up. After that, the custom domain may expire or stop resolving to the Site, and renewal beyond 12 months isn't guaranteed.</p>
-
-  <h2>5. Acceptable Use</h2>
-  <p>When using the Site, please don't:</p>
-  <ul>
-    <li>Try to disrupt, overload, or gain unauthorized access to the Site.</li>
-    <li>Use the Site for anything unlawful.</li>
-    <li>Impersonate someone else or submit a quote/profile that isn't yours to submit.</li>
-  </ul>
-
-  <h2>6. Payments</h2>
-  <p>All payments (quote page purchases, renewals, and donations) are made through Ko-fi and are non-refundable. Payments are processed entirely by Ko-fi under its own terms — I never see your payment details.</p>
-
-  <h2>7. No Warranty</h2>
-  <p>The Site and any quote page on it are provided "as is," without any warranty of uninterrupted access, uptime, or error-free operation.</p>
-
-  <h2>8. Limitation of Liability</h2>
-  <p>To the fullest extent allowed by law, I'm not liable for any indirect or consequential damages arising from your use of the Site, including your quote page expiring, being removed, or the Site or its custom domain going offline.</p>
-
-  <h2>9. Changes</h2>
-  <p>I may change, pause, or discontinue the Site (or any quote page) at any time. I may also update these Terms — continuing to use the Site after changes means you accept the updated Terms.</p>
-
-  <h2>10. Governing Law</h2>
-  <p>These Terms are governed by the laws of Western Australia, Australia, unless a different law applies to you by default.</p>
-
-  <h2>11. Contact</h2>
-  <p>Questions? Reach out using the contact details listed on the Site.</p>
-
-  <footer>
-    These Terms of Service are for a small, personal website run by an individual, and aren't a substitute for legal advice.
-  </footer>
-</div>
+<script src="/assets/starfield.js" defer></script>
 </body>
 </html>

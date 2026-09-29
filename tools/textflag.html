@@ -215,7 +215,21 @@ blockquote{margin:0 0 1rem;padding:.2rem 0 .2rem .9rem;border-left:3px solid var
 .chips button[aria-pressed=true]{background:var(--ac);color:#fff}
 textarea{width:100%;min-height:96px;resize:vertical;padding:.7rem .9rem;border:1px solid var(--ln);border-radius:14px;background:var(--bg)}
 .row{display:flex;justify-content:flex-end;gap:.5rem;margin-top:1rem}
-#timing{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.9rem}.seg{display:inline-flex;padding:2px;border-radius:980px;background:var(--glass);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}.seg button{background:none;padding:.3rem .85rem;font-size:.88rem;box-shadow:none}.seg button[aria-pressed=true]{background:var(--sf);box-shadow:0 1px 4px rgba(0,0,0,.22)}.cu .x{margin-left:.3rem;padding:0 .2rem;opacity:.55}.cu .x:hover{opacity:1}#pr{display:flex;gap:.5rem;margin-top:.7rem}#pr input{flex:1;min-width:0;border:1px solid var(--ln);border-radius:980px;padding:.4rem .9rem;background:var(--bg)}
+/* flag form: issue type grid, timing panel, presets, note */
+.fsec{margin-bottom:1rem}
+.flabel{display:block;margin:0 0 .45rem;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--mu)}
+.types{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:.45rem}
+@media(max-width:400px){.types{grid-template-columns:1fr 1fr}}
+.types button{display:flex;align-items:center;gap:.55rem;padding:.6rem .75rem;border-radius:14px;font-size:.88rem;line-height:1.2;text-align:left;background:var(--ln);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none}
+.types .ti{flex-shrink:0;width:1.25em;text-align:center;font-size:1rem}
+.types button[aria-pressed=true]{background:var(--ac);color:#fff;box-shadow:0 4px 14px -6px color-mix(in srgb,var(--ac) 70%,transparent)}
+.tpanel{display:grid;gap:.6rem;margin:-.35rem 0 1rem;padding:.75rem .85rem;border-radius:16px;background:color-mix(in srgb,var(--ac) 9%,transparent);border:1px solid color-mix(in srgb,var(--ac) 28%,transparent);animation:riseIn .35s var(--ease)}
+.trow{display:flex;align-items:center;justify-content:space-between;gap:.5rem .75rem;flex-wrap:wrap}
+.trow .flabel{margin:0}
+#pchips{margin:0}
+.row .ghost{margin-right:auto;padding-left:.2rem;padding-right:.2rem;background:none;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;color:var(--ac);font-size:.9rem}
+#pr{margin-top:-.3rem}
+.seg{display:inline-flex;padding:2px;border-radius:980px;background:var(--glass);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}.seg button{background:none;padding:.3rem .85rem;font-size:.88rem;box-shadow:none}.seg button[aria-pressed=true]{background:var(--sf);box-shadow:0 1px 4px rgba(0,0,0,.22)}.cu .x{margin-left:.3rem;padding:0 .2rem;opacity:.55}.cu .x:hover{opacity:1}#pr{display:flex;gap:.5rem;margin-top:.7rem}#pr input{flex:1;min-width:0;border:1px solid var(--ln);border-radius:980px;padding:.4rem .9rem;background:var(--bg)}
 .tag{display:inline-block;padding:.15rem .7rem;border-radius:980px;background:var(--fl);font-size:.85rem;margin-bottom:.8rem}
 #vn{white-space:pre-wrap;margin:0}
 #ov{position:fixed;inset:10px;z-index:20;display:grid;place-items:center;border:2px dashed var(--ac);border-radius:32px;background:color-mix(in srgb,var(--bg) 70%,transparent);-webkit-backdrop-filter:blur(32px);backdrop-filter:blur(32px);box-shadow:inset 0 1px 0 var(--glass-hi);pointer-events:none;opacity:0;transition:opacity .25s}
@@ -282,7 +296,7 @@ button:active{transform:scale(.92);transition-duration:.12s}
 #cnt{display:inline-block}
 #cnt.bump{animation:bump .5s ease-out}
 @keyframes bump{0%{scale:.4}60%{scale:1.35}100%{scale:1}}
-.chips button[aria-pressed=true]{animation:chipPop .45s ease-out}
+.chips button[aria-pressed=true],.types button[aria-pressed=true]{animation:chipPop .45s ease-out}
 @keyframes chipPop{0%{scale:.85}60%{scale:1.08}100%{scale:1}}
 .sheet{transition:transform .6s var(--spring)}
 #pill{transition:transform .5s var(--spring),opacity .2s,left .3s var(--ease),top .3s var(--ease)}
@@ -293,6 +307,16 @@ button:active{transform:scale(.92);transition-duration:.12s}
 @keyframes ovBreath{50%{border-color:color-mix(in srgb,var(--ac) 35%,transparent)}}
 #ov.on div{animation:floaty 2.4s ease-in-out infinite}
 [hidden]{display:none!important}
+/* ── site map (matches the main site's footer) ── */
+.sitemap-wrap{margin-top:5rem}
+.sitemap{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:28px 0;margin-bottom:18px;border-top:1px solid var(--ln);border-bottom:1px solid var(--ln)}
+@media(max-width:720px){.sitemap{grid-template-columns:repeat(2,1fr)}}
+.sitemap h2{margin:0 0 10px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--mu)}
+.sitemap ul{list-style:none;margin:0;padding:0}
+.sitemap li+li{margin-top:6px}
+.sitemap a{font-size:13.5px;color:var(--tx);text-decoration:none;opacity:.82;transition:opacity .2s}
+.sitemap a:hover{opacity:1;color:var(--ac)}
+.sitemap-dim{margin:0;font-size:12.5px;color:var(--mu);opacity:.72}
 @media(prefers-reduced-motion:reduce){.bgfx::before{animation:none!important}.blobs i{animation:none!important}#empty{transform:none!important}*{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}.sheet,#pill,#toast,#ov div{transform:none!important}#pill{translate:-50% 0}#toast{translate:-50% 0}}
 @media(prefers-reduced-transparency:reduce){.bar,#ov,#scrim,#player,.morepop{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--bg)}.sheet,#empty{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--sf)}#toast,#pill{-webkit-backdrop-filter:none;backdrop-filter:none}button{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--ln)}button.primary{background:var(--ac)}.bgfx,.bar::before,.bar::after,#player::before,#player::after,.morepop::before,.morepop::after,.sheet::after{display:none}.blobs,#empty::after{display:none}}
 @media(prefers-contrast:more){.sheet,.bar{border:1px solid var(--tx)}.bgfx,.blobs{display:none}}
@@ -337,13 +361,50 @@ button:active{transform:scale(.92);transition-duration:.12s}
     <h1 id="ttl"></h1><p class="cred" id="cred"></p><p class="stat" id="stat"></p>
     <div id="lines"></div>
   </article>
+  <footer class="sitemap-wrap">
+  <nav class="sitemap" aria-label="Site map">
+    <div><h2>Site</h2><ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/#music">Recent streams</a></li>
+      <li><a href="/#projects">Projects</a></li>
+      <li><a href="/#about">About me</a></li>
+      <li><a href="/#links">Find me</a></li>
+      <li><a href="/boykisser">Boykisser clicker</a></li>
+    </ul></div>
+    <div><h2>TextFlag</h2><ul>
+      <li><a href="/tools/textflag">Open TextFlag</a></li>
+      <li><a href="/tools/textflag/guide">Guide</a></li>
+      <li><a href="/tools/textflag/privacy">Privacy Policy</a></li>
+      <li><a href="/tools/textflag/terms">Terms of Service</a></li>
+    </ul></div>
+    <div><h2>Legal</h2><ul>
+      <li><a href="/legal/privacy-policy">Privacy Policy</a></li>
+      <li><a href="/legal/terms-of-service">Terms of Service</a></li>
+    </ul></div>
+    <div><h2>Elsewhere</h2><ul>
+      <li><a href="https://discord.gg/zEFeW55aeh" target="_blank" rel="noopener">Discord server</a></li>
+      <li><a href="https://ko-fi.com/ruytha" target="_blank" rel="noopener">Ko-fi</a></li>
+      <li><a href="https://toxiplays.github.io/textflag/" target="_blank" rel="noopener">Original Text Flag</a></li>
+    </ul></div>
+  </nav>
+  <p class="sitemap-dim">2026 · Ruytha · ruytha.dev</p>
+  </footer>
 </main>
 <button id="pill">Raise Flag</button>
 <div id="ov"><div>Release to open<br><span style="font-size:1rem;font-weight:500;color:var(--mu)">.ttml or .xml</span></div></div>
 <div id="scrim"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh">
   <h2 id="sh"></h2><blockquote id="q"></blockquote>
-  <div id="form"><div class="chips" id="chips"></div><div id="timing" hidden><div class="seg" id="wh"></div><div class="seg" id="wn"></div></div><textarea id="notes" placeholder="How should this be fixed?"></textarea>
-    <div id="pr" hidden><input id="pn" placeholder="Preset name" maxlength="40"><button id="pk">Add</button></div><div class="row"><button id="mkp" style="margin-right:auto">Save as preset</button><button id="cancel">Cancel</button><button id="save" class="primary">Save</button></div></div>
+  <div id="form">
+    <div class="fsec"><span class="flabel" id="typesLbl">What's wrong?</span><div class="types" id="chips" role="group" aria-labelledby="typesLbl"></div></div>
+    <div id="timing" class="tpanel" hidden>
+      <div class="trow"><span class="flabel">Which part</span><div class="seg" id="wh"></div></div>
+      <div class="trow"><span class="flabel">Direction</span><div class="seg" id="wn"></div></div>
+    </div>
+    <div class="fsec" id="psec" hidden><span class="flabel" id="presetsLbl">Your presets</span><div class="chips" id="pchips" role="group" aria-labelledby="presetsLbl"></div></div>
+    <div class="fsec"><label class="flabel" for="notes">Note</label><textarea id="notes" placeholder="How should this be fixed?"></textarea></div>
+    <div id="pr" hidden><input id="pn" placeholder="Preset name" maxlength="40" aria-label="Preset name"><button id="pk">Add</button></div>
+    <div class="row"><button id="mkp" class="ghost" title="Save this note as a reusable preset">＋ Save as preset</button><button id="cancel">Cancel</button><button id="save" class="primary">Save</button></div>
+  </div>
   <div id="view"><span class="tag" id="vt"></span><p id="vn"></p>
     <div class="row"><button id="del" class="danger">Delete</button><button id="ed">Edit</button><button id="close" class="primary">Close</button></div></div>
 </div></div>
@@ -551,22 +612,25 @@ function form(f){cur=f;$('#sh').textContent=f.id?'Edit flag':'Raise Flag';$('#q'
   $('#form').hidden=false;$('#view').hidden=true;$('#notes').value=f.notes;cur.auto=dflt(f);
   chips();$('#pr').hidden=true;
   upd(true);scrim.classList.add('on');setTimeout(()=>$('#notes').focus({preventScroll:true}),60)}
-function chips(){const c=$('#chips');c.textContent='';
-  const add=(t,p)=>{const b=el('button',p?'cu':'',t);b.dataset.t=t;
+// icon + shorter display name per built-in; the stored template name stays the same so old flags still match
+const TMETA={'Timing':['⏱','Timing'],'Suggest syllable split':['✂️','Syllable split'],'Spelling':['🔤','Spelling'],'Line break':['↩️','Line break'],'Background vocals':['🎤','Background vocals'],'Punctuation':['❝','Punctuation'],'Other':['💬','Other']};
+function chips(){const c=$('#chips'),pc=$('#pchips');c.textContent='';pc.textContent='';
+  const add=(t,p)=>{const m=TMETA[t],b=el('button',p?'cu':'',p?t:null);b.type='button';b.dataset.t=t;
+    if(m)b.append(el('span','ti',m[0]),el('span','',m[1]));
     b.onclick=()=>{cur.tpl=cur.tpl===t?'':t;if(cur.tpl==='Timing'){cur.where=cur.where||'sync';cur.when=cur.when||'early'}upd()};
     if(p){const x=el('span','x','×');x.title='Delete preset';x.onclick=e=>{e.stopPropagation();presets=presets.filter(q=>q!==p);savePre();if(cur.tpl===t)cur.tpl='';chips();upd(true);
       toast('Preset deleted','Undo',()=>{presets.push(p);savePre();chips();upd(true)})};b.append(x)}
-    c.append(b)};
-  TPL.forEach(t=>add(t));presets.forEach(p=>add(p.n,p))}
+    (p?pc:c).append(b)};
+  TPL.forEach(t=>add(t));presets.forEach(p=>add(p.n,p));$('#psec').hidden=!presets.length}
 $('#mkp').onclick=()=>{$('#pr').hidden=false;$('#pn').value=TPL.includes(cur.tpl)?'':cur.tpl||'';$('#pn').focus()};
 const addPre=()=>{const n=$('#pn').value.trim();if(!n)return;if(TPL.includes(n))return toast('That name is built in. Pick another.');
   const p={n,d:$('#notes').value.trim()};presets=presets.filter(q=>q.n!==n).concat(p);savePre();cur.tpl=n;cur.auto=p.d;$('#pr').hidden=true;chips();upd(true);toast(`Preset "${n}" saved`)};
 $('#pk').onclick=addPre;$('#pn').onkeydown=e=>{if(e.key==='Enter')addPre()};
 function seg(id,opts,k){const g=$(id);g.textContent='';opts.forEach(([v,t])=>{const b=el('button','',t);b.setAttribute('aria-pressed',cur[k]===v);b.onclick=()=>{cur[k]=v;upd()};g.append(b)})}
 function upd(keep){
-  [...$('#chips').children].forEach(x=>x.setAttribute('aria-pressed',x.dataset.t===cur.tpl));
+  document.querySelectorAll('#chips>button,#pchips>button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.t===cur.tpl));
   const tm=cur.tpl==='Timing';$('#timing').hidden=!tm;
-  if(tm){seg('#wh',[['sync','Sync'],['start','Starts'],['end','Ends']],'where');seg('#wn',[['early','Too early'],['late','Too late']],'when')}
+  if(tm){seg('#wh',[['sync','Whole sync'],['start','Start'],['end','End']],'where');seg('#wn',[['early','Too early'],['late','Too late']],'when')}
   if(keep)return;const n=$('#notes');
   if(!n.value.trim()||n.value===cur.auto){cur.auto=n.value=dflt(cur);
     if(cur.tpl==='Suggest syllable split'){n.focus();n.setSelectionRange(n.value.length-2,n.value.length-2)}}}

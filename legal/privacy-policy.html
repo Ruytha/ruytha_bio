@@ -1,104 +1,170 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privacy Policy</title>
-<style>
-  :root {
-    --bg: #0f1115;
-    --card: #171a21;
-    --text: #e7e9ee;
-    --muted: #9aa1ad;
-    --accent: #7c9cff;
-    --border: #262a33;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.6;
-  }
-  .wrap {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 48px 24px 96px;
-  }
-  h1 { font-size: 2rem; margin-bottom: 4px; }
-  .updated { color: var(--muted); font-size: 0.9rem; margin-bottom: 40px; }
-  h2 { font-size: 1.25rem; margin-top: 40px; margin-bottom: 12px; color: var(--accent); }
-  p, li { color: var(--text); }
-  ul { padding-left: 1.2rem; }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-    margin-top: 32px;
-  }
-  a { color: var(--accent); }
-  footer {
-    margin-top: 56px;
-    color: var(--muted);
-    font-size: 0.85rem;
-    border-top: 1px solid var(--border);
-    padding-top: 24px;
-  }
-</style>
-  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy Policy · Ruytha</title>
+<meta name="description" content="What ruytha.dev collects, what it doesn't, and who else is involved.">
+<meta name="theme-color" content="#030718">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="/assets/img/favicon.png" type="image/png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/styles.css">
 </head>
+
 <body>
-<div class="wrap">
+<canvas class="stars" id="stars" aria-hidden="true"></canvas>
+<a class="skip" href="#main">Skip to content</a>
+
+<main class="legal" id="main">
+  <a class="legal-back" href="/">← ruytha.dev</a>
+
   <h1>Privacy Policy</h1>
-  <p class="updated">Last updated: September 18, 2026</p>
+  <p class="legal-date">Last updated: September 30, 2026</p>
 
-  <p>This website (ruytha.dev, "the Site") is run by me personally — it is not a company or business. This Privacy Policy explains what information I collect from you and how I use it if you get a quote page featured on the Site.</p>
-
-  <div class="card">
-    <h2 style="margin-top:0;">1. What I Collect</h2>
-    <p>If you submit a quote to be featured on the Site, I collect:</p>
+  <div class="legal-tldr legal-glass">
+    <h2>The short version</h2>
     <ul>
-      <li>Your <strong>username</strong></li>
-      <li>Your <strong>profile picture</strong></li>
-      <li>Your <strong>quote</strong> (the text you want displayed)</li>
+      <li>There are no visitor accounts, no analytics and no ads, and I don't sell anything about you.</li>
+      <li>The only personal info I keep is what you give me for a quote page: your username, profile picture and quote.</li>
+      <li>Games and tools save your progress in your own browser. I can't see it.</li>
+      <li>A few outside services (Vercel, Ko-fi, Google Fonts, Last.fm) help run the site and have their own policies.</li>
     </ul>
-    <p>This information is used only to display your quote page on the Site.</p>
   </div>
 
-  <div class="card">
-    <h2 style="margin-top:0;">2. How Long I Keep It</h2>
-    <p>Your username, profile picture, and quote are kept <strong>forever</strong> for as long as your quote page stays active — I don't automatically delete this information. It's displayed publicly on your quote page.</p>
-    <p>See the Terms of Service for how long a quote page stays active and how to renew it.</p>
+  <nav class="legal-toc" aria-label="On this page">
+    <a href="#who">Who I am</a>
+    <a href="#quotes">Quote pages</a>
+    <a href="#browser">Your browser</a>
+    <a href="#services">Outside services</a>
+    <a href="#payments">Payments</a>
+    <a href="#rights">Removing your info</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <section id="who">
+    <h2><span>1</span>Who I am</h2>
+    <p>ruytha.dev (“the Site”) is a personal website run by me, Ruytha, an individual in Australia. It's not a company. This policy covers every page on the Site, including the quote pages and the boykisser clicker.</p>
+    <p>TextFlag has its own, more detailed <a href="/tools/textflag/privacy">TextFlag Privacy Policy</a>. It works the same way: everything stays in your browser.</p>
+  </section>
+
+  <section id="quotes">
+    <h2><span>2</span>Quote pages</h2>
+    <p>If you get a quote page on the Site, I collect and publish:</p>
+    <ul>
+      <li>your <strong>username</strong></li>
+      <li>your <strong>profile picture</strong></li>
+      <li>your <strong>quote</strong></li>
+    </ul>
+    <p>That's used only to build your quote page, which anyone can see. It stays up while your quote page is active (see the <a href="/legal/terms-of-service#quotes">Terms of Service</a>). Once a quote page expires, I may take it down and delete what was on it. You can ask me to remove it sooner at any time.</p>
+  </section>
+
+  <section id="browser">
+    <h2><span>3</span>What's saved in your browser</h2>
+    <p>Some parts of the Site remember things using your browser's local storage. This data stays on your device and is never sent to me:</p>
+    <ul>
+      <li><strong>Boykisser clicker:</strong> your kisses, upgrades and stats, so your progress is still there next time.</li>
+      <li><strong>TextFlag:</strong> your flags, presets and display settings.</li>
+    </ul>
+    <p>You can clear it at any time by deleting this site's data in your browser settings, or with “wipe save” in the clicker. The public site doesn't set any cookies.</p>
+    <div class="legal-note legal-glass"><b>The admin page</b>The admin page is only for me to update the Site. It uses <a href="https://clerk.com/legal/privacy" target="_blank" rel="noopener">Clerk</a> for sign-in, which uses its own cookies. Visitors never need to sign in.</div>
+  </section>
+
+  <section id="services">
+    <h2><span>4</span>Outside services</h2>
+    <p>When you load a page, your browser also connects to a few other services. Each of them can see normal connection info, like your IP address and browser type, under its own privacy policy:</p>
+    <ul>
+      <li><strong>Vercel</strong> hosts the Site and may keep basic request logs to deliver and protect it. <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">Vercel Privacy Policy</a></li>
+      <li><strong>Google Fonts</strong> serves the site's font. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a></li>
+      <li><strong>Ko-fi</strong> serves the “Support this website” button on the home page. <a href="https://more.ko-fi.com/privacy-policy" target="_blank" rel="noopener">Ko-fi Privacy Policy</a></li>
+      <li><strong>Last.fm</strong> provides my “Recent Streams” list and its album art. It shows what <em>I've</em> been listening to, not you. <a href="https://www.last.fm/legal/privacy" target="_blank" rel="noopener">Last.fm Privacy Policy</a></li>
+    </ul>
+    <p>Links to other sites (Discord, Spotify, Spicy Lyrics, my blog and others) take you somewhere I don't control, so their own policies apply there. If you share a link to the Site on Discord, Discord fetches the page to build its preview.</p>
+  </section>
+
+  <section id="payments">
+    <h2><span>5</span>Payments and donations</h2>
+    <p>Donations and quote page purchases or renewals go through <strong>Ko-fi</strong>. Ko-fi and its payment providers handle the payment, and I never see or store your card or bank details. I only see what Ko-fi shows me, like your name, any message you leave and the amount.</p>
+  </section>
+
+  <section id="none">
+    <h2><span>6</span>What I don't do</h2>
+    <ul>
+      <li>No analytics, tracking pixels or ads.</li>
+      <li>No selling, renting or trading information about anyone.</li>
+      <li>No mailing list, and no emails you didn't ask for.</li>
+    </ul>
+  </section>
+
+  <section id="rights">
+    <h2><span>7</span>Removing or checking your info</h2>
+    <p>You can ask me at any time what I have about you, to fix it, or to take it down. That's usually just your quote page. Message me (details below) and I'll sort it out as soon as I can.</p>
+  </section>
+
+  <section id="kids">
+    <h2><span>8</span>Children</h2>
+    <p>The Site isn't aimed at children under 13, and I don't knowingly collect personal info from them. If you think a child has sent me their info for a quote page, let me know and I'll remove it.</p>
+  </section>
+
+  <section id="changes">
+    <h2><span>9</span>Changes</h2>
+    <p>If the way the Site handles information changes, I'll update this page and the date at the top.</p>
+  </section>
+
+  <section id="contact">
+    <h2><span>10</span>Contact</h2>
+    <p>Message <strong>@ruytha</strong> on <a href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">Discord</a>, or ask in <a href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener">my Discord server</a>.</p>
+  </section>
+
+  <p class="legal-foot">Written for a small personal website run by one person. It isn't legal advice.</p>
+</main>
+
+<footer class="footer">
+  <nav class="wrap sitemap" aria-label="Site map">
+    <div>
+      <h2>Site</h2>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/#music">Recent streams</a></li>
+        <li><a href="/#projects">Projects</a></li>
+        <li><a href="/#about">About me</a></li>
+        <li><a href="/#links">Find me</a></li>
+        <li><a href="/boykisser">Boykisser clicker</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>TextFlag</h2>
+      <ul>
+        <li><a href="/tools/textflag">Open TextFlag</a></li>
+        <li><a href="/tools/textflag/guide">Guide</a></li>
+        <li><a href="/tools/textflag/privacy">Privacy Policy</a></li>
+        <li><a href="/tools/textflag/terms">Terms of Service</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Legal</h2>
+      <ul>
+        <li><a href="/legal/privacy-policy">Privacy Policy</a></li>
+        <li><a href="/legal/terms-of-service">Terms of Service</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Elsewhere</h2>
+      <ul>
+        <li><a href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener">Discord server</a></li>
+        <li><a href="https://ko-fi.com/ruytha" target="_blank" rel="noopener">Ko-fi</a></li>
+        <li><a href="https://spicylyrics.org/ruytha" target="_blank" rel="noopener">Spicy Lyrics</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="wrap footer-inner">
+    <p class="footer-dim">2026 · Ruytha · ruytha.dev</p>
   </div>
+</footer>
 
-  <div class="card">
-    <h2 style="margin-top:0;">3. Funding (Ko-fi)</h2>
-    <p>This Site is kept online through donations and quote page purchases/renewals made via <strong>Ko-fi</strong>. I don't run ads or sell your information to anyone. If you pay through Ko-fi, that payment is handled entirely by Ko-fi under its own <a href="https://more.ko-fi.com/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a> — I never see or store your payment details, only what Ko-fi shares with me (like your username/message).</p>
-  </div>
-
-  <h2>4. Custom Domain Notice</h2>
-  <p>If the Site is reachable via a custom quote/vanity domain, that custom domain is only guaranteed to stay active for <strong>12 months</strong>. After that, it may stop working and the Site may only be reachable at its default URL.</p>
-
-  <h2>5. Removing Your Information</h2>
-  <p>If you want your username, profile picture, or quote taken down, just contact me using the details on the Site and I'll remove it. Otherwise it stays up for as long as your quote page is active.</p>
-
-  <h2>6. Third-Party Services</h2>
-  <p>The Site relies on third-party services (hosting, domain registrar, Ko-fi) to run. Each has its own privacy practices outside of my control — I'd recommend checking their policies too.</p>
-
-  <h2>7. Children's Privacy</h2>
-  <p>The Site isn't aimed at children under 13, and I don't knowingly collect information from children.</p>
-
-  <h2>8. Changes to This Policy</h2>
-  <p>I may update this Privacy Policy if how the Site works changes. The "Last updated" date at the top reflects the latest version.</p>
-
-  <h2>9. Contact</h2>
-  <p>Questions about this Privacy Policy? Reach out using the contact details listed on the Site.</p>
-
-  <footer>
-    This Privacy Policy is for a small, personal website run by an individual, and isn't a substitute for legal advice.
-  </footer>
-</div>
+<script src="/assets/starfield.js" defer></script>
 </body>
 </html>

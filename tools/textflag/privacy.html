@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>TextFlag — Guide</title>
+<title>TextFlag — Privacy Policy</title>
 <link rel="icon" type="image/svg+xml" href="/assets/img/favicon-textflag.svg">
 <style>
 :root{--bg:#f5f5f7;--sf:#fff;--tx:#1d1d1f;--mu:#6e6e73;--ln:rgba(0,0,0,.09);--ac:#0071e3;--fl:rgba(255,159,10,.3);--bar:rgba(245,245,247,.72);--ease:cubic-bezier(.32,.72,0,1);
@@ -85,63 +85,59 @@ h2:target{animation:hl 1.4s var(--ease)}
   <a href="https://ruytha.dev/tools/textflag">← Back to the tool</a>
 </header>
 <main>
-  <h1>Guide</h1>
-  <p class="lede">TextFlag turns a TTML lyrics file into an annotated review — flag lines with sync or wording problems, jot notes, and export it all as Markdown. Everything runs in your browser; nothing is uploaded anywhere.</p>
+  <h1>Privacy Policy</h1>
+  <p class="lede">Short version: TextFlag runs entirely in your browser. Your lyrics, audio and flags never get sent to me.</p>
+  <p style="color:var(--mu);font-size:.9rem;margin-top:-2rem">Last updated: September 30, 2026</p>
 
   <nav class="toc">
-    <a href="#load">Loading a file</a>
-    <a href="#layout">Reading the layout</a>
-    <a href="#flags">Raising flags</a>
-    <a href="#timing">Timing flags</a>
-    <a href="#presets">Custom presets</a>
-    <a href="#export">Exporting</a>
-    <a href="#keys">Shortcuts</a>
+    <a href="#files">Your files</a>
+    <a href="#stored">What's stored</a>
+    <a href="#links">Loading from a link</a>
+    <a href="#hosting">Hosting</a>
+    <a href="#none">What I don't do</a>
+    <a href="#contact">Contact</a>
   </nav>
 
-  <h2 id="load">Loading a file</h2>
-  <p>Three ways in, pick whichever's easiest:</p>
+  <p>This policy covers TextFlag at <a href="/tools/textflag">ruytha.dev/tools/textflag</a> and its guide. It's run by me, Ruytha, as a personal project, not a company.</p>
+
+  <h2 id="files">Your files <span>TTML lyrics and audio</span></h2>
+  <p>When you drop in or choose a TTML file or an audio track, your browser reads it on your own device. It isn't uploaded to me or to anyone else. Audio plays from a temporary local link that goes away when you close the tab.</p>
+  <div class="card"><b>Nothing to upload, nothing to leak</b><span>TextFlag has no server side. There's no database, no account and no upload endpoint behind it.</span></div>
+
+  <h2 id="stored">What's stored on your device <span>Your browser's local storage</span></h2>
+  <p>To remember your work between visits, TextFlag saves a few things in your browser's local storage:</p>
   <ul>
-    <li><b>Drag and drop</b> a <code>.ttml</code> or <code>.xml</code> file anywhere on the page — a full-screen zone appears while you drag.</li>
-    <li><b>Choose File</b> opens your system's file picker.</li>
-    <li><b>Paste a link</b> to a TTML file and press Load. Some hosts block this; if it fails, download the file and drop it in instead.</li>
+    <li><b>Your flags</b> for each file, saved under that file's name, so they're still there when you reopen it.</li>
+    <li><b>Your custom presets</b>: the name and note text for each one.</li>
+    <li><b>Display settings</b>: text size, wide mode, romaji and line numbers.</li>
   </ul>
-  <div class="card"><b>Your flags are saved automatically</b><span>Reopen the same file later — by name — and any flags you raised are still there, stored locally in your browser.</span></div>
+  <p>This data stays in your browser and I can't see it. It's kept until you clear it. You can delete it any time by clearing this site's data in your browser settings. TextFlag doesn't use cookies.</p>
+  <p>When you press <b>Export</b>, TextFlag writes your review to your clipboard. It never reads from your clipboard.</p>
 
-  <h2 id="layout">Reading the layout <span>Background vocals and duets</span></h2>
-  <p>Each lyric line shows its start time on the left. Where a line has background vocals, they appear as a smaller, italic line just underneath, and can be flagged on their own.</p>
-  <p>Duet files line up by singer:</p>
-  <p><span class="swatch"><span class="dot" style="background:var(--tx)"></span>Singer 1 — left</span><span class="swatch"><span class="dot" style="background:var(--tx)"></span>Singer 2 — right</span><span class="swatch"><span class="dot" style="background:var(--tx)"></span>Both together — centered</span></p>
+  <h2 id="links">Loading from a link <span>Pasting a TTML URL</span></h2>
+  <p>If you paste a link (or open TextFlag with a <code>?src=</code> link), your browser downloads the file straight from that website. That website will see the request like any other visit, including your IP address and browser details, under its own privacy policy. The request doesn't go through me.</p>
 
-  <h2 id="flags">Raising a flag <span>Select, tap, save</span></h2>
+  <h2 id="hosting">Hosting <span>Vercel</span></h2>
+  <p>The site is hosted on <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a>. Like any web host, Vercel may keep basic request logs (IP address, browser, the page requested and when) to deliver the site and keep it secure. That's handled under <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">Vercel's Privacy Policy</a>.</p>
+  <p>If you share a TextFlag link on Discord, Discord fetches the page to build its link preview. That's covered by Discord's own policies.</p>
+
+  <h2 id="none">What I don't do</h2>
   <ul>
-    <li>Select a word, a few words, or a whole line — a <b>Raise Flag</b> button appears above your selection.</li>
-    <li>Pick a template (Timing, Spelling, Line break, and so on) or leave it blank, then add a note.</li>
-    <li>A flagged word gets a soft highlight. Click any highlighted word afterward to view, edit, or delete that flag.</li>
+    <li>No analytics or tracking scripts.</li>
+    <li>No ads, and I don't sell or share data. There's no data for me to sell anyway.</li>
+    <li>No accounts, sign-ups or emails.</li>
   </ul>
 
-  <h2 id="timing">Timing flags <span>Two switches, one label</span></h2>
-  <p>Choosing the <span class="pill">Timing</span> template shows two switches: <b>Sync / Starts / Ends</b>, and <b>Too early / Too late</b>. Together they label the flag — "Starts too early," "Ends too late," and so on — and fill in a matching note you can still edit.</p>
+  <h2 id="kids">Children</h2>
+  <p>TextFlag isn't aimed at children under 13, and it doesn't collect personal information from anyone.</p>
 
-  <h2 id="presets">Custom presets <span>Save your own wording</span></h2>
-  <p>Write a note the way you like to phrase it, then press <b>Save as preset</b> and give it a name. It shows up as its own chip next to the built-in templates from then on — click the <b>×</b> on a chip to remove it.</p>
+  <h2 id="changes">Changes</h2>
+  <p>If TextFlag changes in a way that affects your privacy, I'll update this page and the date at the top.</p>
 
-  <h2 id="export">Exporting your review <span>Copy or download</span></h2>
-  <ul>
-    <li><b>Export</b> copies the whole review as Markdown to your clipboard, quoting each flagged line with the flagged words in bold and the note underneath.</li>
-    <li><b>⬇ Download as .md</b>, in the <b>⋯</b> menu, saves the same text as a <code>.md</code> file instead.</li>
-    <li>Turn on <b>Line #</b> (also in the <b>⋯</b> menu) to add each line's number alongside its timestamp, if that's easier for whoever reads the review to work from.</li>
-  </ul>
-  <div class="card"><b>Every export ends with a small credit line</b><span>Linking back to this tool, so anyone reading the review can find it too.</span></div>
+  <h2 id="contact">Contact</h2>
+  <p>Questions? Message <b>@ruytha</b> on Discord or ask in <a href="https://discord.gg/zEFeW55aeh" target="_blank" rel="noopener">the Discord server</a>.</p>
 
-  <h2 id="keys">Keyboard shortcuts</h2>
-  <ul>
-    <li><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd> — save the flag you're writing, without leaving the notes field.</li>
-    <li><kbd>J</kbd> / <kbd>K</kbd> — jump to the next or previous flag in the song.</li>
-    <li><kbd>Esc</kbd> — close whatever's open.</li>
-  </ul>
-  <p>There's also a text-size slider in the <b>⋯</b> menu if the lyrics are too small or too large to read comfortably — it remembers your setting next time.</p>
-
-  <footer>TextFlag is a free tool by Ruytha. <a href="https://ruytha.dev/tools/textflag">Open the tool →</a> · <a href="/tools/textflag/privacy">Privacy</a> · <a href="/tools/textflag/terms">Terms</a></footer>
+  <footer>TextFlag is a free tool by Ruytha. <a href="/tools/textflag">Open the tool</a> · <a href="/tools/textflag/guide">Guide</a> · <a href="/tools/textflag/privacy">Privacy</a> · <a href="/tools/textflag/terms">Terms</a><br>Written for a small personal project, not legal advice.</footer>
 </main>
 <script>
 const reduceMo=matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Boykisser Clicker · Ruytha</title>
+<meta name="description" content="you like kissing boys, don't you? click the boykisser.">
+<meta name="theme-color" content="#030718">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="assets/img/favicon.png" type="image/png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/styles.css">
+
+<style>
+  :root { --pink: #ff8fc7; --pink-2: #ff5fa8; }
+
+  .bk {
+    position: relative; z-index: 1;
+    max-width: 1100px; margin: 0 auto;
+    padding: 28px var(--gut) 48px;
+    display: grid; gap: 20px;
+    grid-template-columns: 1fr 360px;
+    min-height: 100vh; min-height: 100dvh;
+  }
+  @media (max-width: 860px) { .bk { grid-template-columns: 1fr; } }
+
+  .glass {
+    background: var(--glass);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-edge);
+    box-shadow: var(--glass-shine), var(--glass-drop);
+    border-radius: var(--r-xl);
+  }
+
+  .stage {
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; padding: 28px 20px 32px;
+    position: relative; overflow: hidden;
+  }
+  .back { position: absolute; left: 18px; top: 16px; color: var(--muted); font-size: 13px; }
+  .back:hover { color: var(--text); }
+
+  .count { font-size: clamp(34px, 7vw, 54px); font-weight: 700; letter-spacing: -0.03em; margin-top: 18px; font-variant-numeric: tabular-nums; }
+  .count small { display: block; font-size: 14px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+  .rate { color: var(--pink); font-size: 14px; font-weight: 600; margin-top: 6px; }
+
+  .kisser {
+    margin: 26px 0 18px; padding: 0; border: 0; background: none; cursor: pointer;
+    width: min(300px, 70vw); aspect-ratio: 1;
+    border-radius: 50%;
+    filter: drop-shadow(0 0 40px rgba(255, 143, 199, .35));
+    transition: transform .12s var(--ease);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .kisser:hover { transform: scale(1.04); }
+  .kisser:active { transform: scale(0.93); }
+  .kisser svg { width: 100%; height: 100%; display: block; }
+  .kisser.bump { animation: bump .18s var(--ease); }
+  @keyframes bump { 50% { transform: scale(0.94) rotate(-2deg); } }
+
+  .quote { font-size: 17px; font-weight: 600; min-height: 1.5em; color: var(--text); transition: opacity .3s; }
+
+  .float {
+    position: fixed; pointer-events: none; z-index: 5;
+    font-weight: 700; color: var(--pink); font-size: 18px;
+    text-shadow: 0 2px 10px rgba(0,0,0,.5);
+    animation: rise 1s ease-out forwards;
+  }
+  @keyframes rise { to { transform: translate(var(--dx), -90px) scale(1.2); opacity: 0; } }
+
+  .side { display: flex; flex-direction: column; gap: 14px; }
+  .panel { padding: 16px; }
+  .panel h2 { margin: 2px 4px 12px; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+
+  .shop { display: grid; gap: 8px; }
+  .item {
+    display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center;
+    width: 100%; text-align: left; font: inherit; color: inherit;
+    padding: 10px 12px; border-radius: var(--r-md);
+    background: var(--fill); border: 1px solid var(--line);
+    cursor: pointer; transition: background .15s, transform .15s var(--ease), opacity .15s;
+  }
+  .item:hover:not(:disabled) { background: var(--fill-2); transform: translateY(-1px); }
+  .item:disabled { opacity: .42; cursor: not-allowed; }
+  .item .ico { font-size: 26px; text-align: center; }
+  .item b { display: block; font-size: 14px; }
+  .item span { display: block; font-size: 12px; color: var(--muted); }
+  .item .cost { color: var(--pink); font-weight: 600; font-size: 13px; }
+  .item .own { font-size: 20px; font-weight: 700; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+
+  .stats { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: 13px; padding: 0 4px; }
+  .stats dt { color: var(--muted); }
+  .stats dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+  .reset { margin-top: 12px; background: none; border: 0; color: var(--muted); font: inherit; font-size: 12px; cursor: pointer; text-decoration: underline; padding: 0 4px; }
+  .reset:hover { color: var(--a3); }
+
+  .golden {
+    position: fixed; z-index: 6; width: 64px; height: 64px;
+    font-size: 48px; line-height: 64px; text-align: center;
+    border: 0; background: none; cursor: pointer; padding: 0;
+    filter: drop-shadow(0 0 14px gold);
+    animation: glow 1.2s ease-in-out infinite alternate;
+  }
+  @keyframes glow { to { transform: scale(1.2) rotate(8deg); } }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; z-index: 7;
+    transform: translate(-50%, 120px); transition: transform .4s var(--ease);
+    padding: 12px 18px; font-weight: 600; font-size: 14px; max-width: calc(100vw - 32px);
+  }
+  .toast.show { transform: translate(-50%, 0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kisser.bump, .golden { animation: none; }
+  }
+</style>
+</head>
+
+<body>
+<canvas class="stars" id="stars" aria-hidden="true"></canvas>
+
+<main class="bk">
+  <section class="stage glass">
+    <a class="back" href="/">← home</a>
+
+    <div class="count"><span id="count">0</span><small>kisses</small></div>
+    <div class="rate" id="rate">0 per second</div>
+
+    <button class="kisser" id="kisser" aria-label="Kiss the boykisser">
+      <!-- the boykisser: white cat, pink ears, blushing, :3 -->
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <g stroke="#1b1b22" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M42 92 L34 26 L86 62 Z" fill="#fff"/>
+          <path d="M158 92 L166 26 L114 62 Z" fill="#fff"/>
+          <path d="M46 78 L42 40 L72 62 Z" fill="#ffb3d6" stroke="none"/>
+          <path d="M154 78 L158 40 L128 62 Z" fill="#ffb3d6" stroke="none"/>
+          <ellipse cx="100" cy="112" rx="72" ry="62" fill="#fff"/>
+          <path d="M70 60 Q76 48 84 58 M100 54 Q104 42 112 54" fill="none" stroke-width="3.5"/>
+        </g>
+        <ellipse cx="58" cy="128" rx="17" ry="9" fill="#ff8fc7" opacity=".75"/>
+        <ellipse cx="142" cy="128" rx="17" ry="9" fill="#ff8fc7" opacity=".75"/>
+        <g stroke="#ff5fa8" stroke-width="2" stroke-linecap="round" opacity=".8">
+          <path d="M48 126 l5 -6 M56 128 l5 -6 M64 130 l5 -6"/>
+          <path d="M132 126 l5 -6 M140 128 l5 -6 M148 130 l5 -6"/>
+        </g>
+        <ellipse cx="74" cy="106" rx="8" ry="12" fill="#1b1b22"/>
+        <ellipse cx="126" cy="106" rx="8" ry="12" fill="#1b1b22"/>
+        <circle cx="76" cy="101" r="3.2" fill="#fff"/>
+        <circle cx="128" cy="101" r="3.2" fill="#fff"/>
+        <path d="M84 132 Q92 142 100 132 Q108 142 116 132" fill="none" stroke="#1b1b22" stroke-width="4" stroke-linecap="round"/>
+        <path d="M112 142 q10 -4 14 4 q-2 8 -10 6" fill="none" stroke="#ff5fa8" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <p class="quote" id="quote">you like kissing boys, don't you?</p>
+  </section>
+
+  <aside class="side">
+    <section class="panel glass">
+      <h2>Kiss shop</h2>
+      <div class="shop" id="shop"></div>
+    </section>
+    <section class="panel glass">
+      <h2>Stats</h2>
+      <dl class="stats">
+        <dt>Per click</dt><dd id="sClick">1</dd>
+        <dt>All-time kisses</dt><dd id="sTotal">0</dd>
+        <dt>Clicks</dt><dd id="sClicks">0</dd>
+        <dt>Golden :3s caught</dt><dd id="sGold">0</dd>
+      </dl>
+      <button class="reset" id="reset">wipe save</button>
+    </section>
+  </aside>
+</main>
+
+<div class="toast glass" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/starfield.js" defer></script>
+<script>
+(function () {
+  'use strict';
+
+  var SAVE_KEY = 'boykisser-clicker-v1';
+
+  // kind "click" adds to each click, kind "auto" adds per second
+  var ITEMS = [
+    { id: 'lips',   ico: '💋', name: 'Stronger smooch',    desc: '+1 per click',      kind: 'click', amt: 1,    base: 15 },
+    { id: 'cat',    ico: '🐱', name: 'Silly :3 cat',       desc: '+0.2 kisses/sec',   kind: 'auto',  amt: 0.2,  base: 20 },
+    { id: 'kisser', ico: '😳', name: 'Another boykisser',  desc: '+1 kiss/sec',       kind: 'auto',  amt: 1,    base: 110 },
+    { id: 'socks',  ico: '🧦', name: 'Programmer socks',   desc: '+8 kisses/sec',     kind: 'auto',  amt: 8,    base: 1200 },
+    { id: 'mwah',   ico: '💞', name: 'Mwah technology',    desc: '+25 per click',     kind: 'click', amt: 25,   base: 6000 },
+    { id: 'disc',   ico: '💬', name: 'Discord server',     desc: '+47 kisses/sec',    kind: 'auto',  amt: 47,   base: 13000 },
+    { id: 'parade', ico: '🏳️‍🌈', name: 'Pride parade',      desc: '+260 kisses/sec',   kind: 'auto',  amt: 260,  base: 140000 },
+    { id: 'planet', ico: '🪐', name: 'Boykisser planet',   desc: '+1.4K kisses/sec',  kind: 'auto',  amt: 1400, base: 2000000 }
+  ];
+
+  var QUOTES = [
+    "you like kissing boys, don't you?",
+    'mwah :3',
+    'hehe',
+    '*blushes*',
+    "it's okay, i won't tell",
+    'one more kiss?',
+    'you kissed me AGAIN??',
+    'boykisser moment',
+    ':3',
+    'the boys are being kissed',
+    'you can stop anytime (you won’t)',
+    'mrrp!'
+  ];
+
+  var MILESTONES = [100, 1000, 10000, 100000, 1e6, 1e7, 1e8, 1e9];
+
+  var state = load();
+
+  var $ = function (id) { return document.getElementById(id); };
+  var els = {
+    count: $('count'), rate: $('rate'), kisser: $('kisser'), quote: $('quote'),
+    shop: $('shop'), sClick: $('sClick'), sTotal: $('sTotal'), sClicks: $('sClicks'),
+    sGold: $('sGold'), toast: $('toast'), reset: $('reset')
+  };
+
+  function fresh() { return { kisses: 0, total: 0, clicks: 0, gold: 0, owned: {}, milestone: 0 }; }
+
+  function load() {
+    try {
+      var s = JSON.parse(localStorage.getItem(SAVE_KEY));
+      if (s && typeof s.kisses === 'number') return Object.assign(fresh(), s);
+    } catch (e) {}
+    return fresh();
+  }
+  function save() {
+    state.savedAt = Date.now();
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function owned(id) { return state.owned[id] || 0; }
+  function cost(item) { return Math.ceil(item.base * Math.pow(1.15, owned(item.id))); }
+  function perClick() {
+    return ITEMS.reduce(function (n, it) { return it.kind === 'click' ? n + it.amt * owned(it.id) : n; }, 1);
+  }
+  function perSec() {
+    return ITEMS.reduce(function (n, it) { return it.kind === 'auto' ? n + it.amt * owned(it.id) : n; }, 0);
+  }
+
+  function fmt(n) {
+    if (n < 1000) return n < 10 && n % 1 ? n.toFixed(1) : String(Math.floor(n));
+    var units = ['K', 'M', 'B', 'T', 'Qa', 'Qi'];
+    var i = -1;
+    while (n >= 1000 && i < units.length - 1) { n /= 1000; i++; }
+    return n.toFixed(n < 10 ? 2 : n < 100 ? 1 : 0) + units[i];
+  }
+
+  function gain(n) {
+    state.kisses += n;
+    state.total += n;
+    while (state.milestone < MILESTONES.length && state.total >= MILESTONES[state.milestone]) {
+      toast('💋 ' + fmt(MILESTONES[state.milestone]) + ' kisses! you really do like kissing boys');
+      state.milestone++;
+    }
+  }
+
+  // shop
+  ITEMS.forEach(function (it) {
+    var b = document.createElement('button');
+    b.className = 'item';
+    b.innerHTML = '<div class="ico">' + it.ico + '</div>' +
+      '<div><b>' + it.name + '</b><span>' + it.desc + '</span><span class="cost"></span></div>' +
+      '<div class="own"></div>';
+    b.addEventListener('click', function () {
+      var c = cost(it);
+      if (state.kisses < c) return;
+      state.kisses -= c;
+      state.owned[it.id] = owned(it.id) + 1;
+      render();
+      save();
+    });
+    it.el = b;
+    it.costEl = b.querySelector('.cost');
+    it.ownEl = b.querySelector('.own');
+    els.shop.appendChild(b);
+  });
+
+  function render() {
+    els.count.textContent = fmt(state.kisses);
+    els.rate.textContent = fmt(perSec()) + ' per second';
+    els.sClick.textContent = fmt(perClick());
+    els.sTotal.textContent = fmt(state.total);
+    els.sClicks.textContent = fmt(state.clicks);
+    els.sGold.textContent = state.gold;
+    document.title = fmt(state.kisses) + ' kisses · Boykisser Clicker';
+    ITEMS.forEach(function (it) {
+      var c = cost(it);
+      it.costEl.textContent = fmt(c) + ' kisses';
+      it.ownEl.textContent = owned(it.id) || '';
+      it.el.disabled = state.kisses < c;
+    });
+  }
+
+  function floatText(x, y, text) {
+    var f = document.createElement('div');
+    f.className = 'float';
+    f.textContent = text;
+    f.style.left = x + 'px';
+    f.style.top = y + 'px';
+    f.style.setProperty('--dx', (Math.random() * 60 - 30) + 'px');
+    document.body.appendChild(f);
+    setTimeout(function () { f.remove(); }, 1000);
+  }
+
+  var toastTimer;
+  function toast(msg) {
+    els.toast.textContent = msg;
+    els.toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { els.toast.classList.remove('show'); }, 3200);
+  }
+
+  // clicking
+  els.kisser.addEventListener('click', function (e) {
+    var n = perClick();
+    state.clicks++;
+    gain(n);
+    var r = els.kisser.getBoundingClientRect();
+    var x = e.clientX || r.left + r.width / 2;
+    var y = e.clientY || r.top + r.height / 2;
+    floatText(x - 14, y - 20, (Math.random() < 0.5 ? '💋 +' : '💕 +') + fmt(n));
+    els.kisser.classList.remove('bump');
+    void els.kisser.offsetWidth;
+    els.kisser.classList.add('bump');
+    if (Math.random() < 0.12) {
+      els.quote.textContent = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+    }
+    render();
+  });
+
+  // golden :3 — shows up every so often, click it for a big bonus
+  function spawnGolden() {
+    var g = document.createElement('button');
+    g.className = 'golden';
+    g.textContent = '💛';
+    g.setAttribute('aria-label', 'Golden kiss bonus');
+    g.style.left = (16 + Math.random() * (window.innerWidth - 96)) + 'px';
+    g.style.top = (16 + Math.random() * (window.innerHeight - 96)) + 'px';
+    g.addEventListener('click', function (e) {
+      var bonus = Math.max(50, perSec() * 60, perClick() * 30);
+      gain(bonus);
+      state.gold++;
+      floatText(e.clientX - 20, e.clientY - 20, '✨ +' + fmt(bonus));
+      toast('golden :3 caught! +' + fmt(bonus) + ' kisses');
+      g.remove();
+      render();
+      save();
+    });
+    document.body.appendChild(g);
+    setTimeout(function () { g.remove(); }, 9000);
+    setTimeout(spawnGolden, 45000 + Math.random() * 75000);
+  }
+  setTimeout(spawnGolden, 30000 + Math.random() * 30000);
+
+  // passive income, ticked 10x a second
+  var last = performance.now();
+  setInterval(function () {
+    var now = performance.now();
+    var dt = (now - last) / 1000;
+    last = now;
+    var ps = perSec();
+    if (ps > 0) { gain(ps * dt); render(); }
+  }, 100);
+
+  setInterval(save, 5000);
+  window.addEventListener('beforeunload', save);
+  document.addEventListener('visibilitychange', function () { if (document.hidden) save(); });
+
+  // offline earnings, capped at 8 hours
+  if (state.savedAt && perSec() > 0) {
+    var away = Math.min((Date.now() - state.savedAt) / 1000, 8 * 3600);
+    var earned = perSec() * away;
+    if (earned >= 1) {
+      gain(earned);
+      setTimeout(function () { toast('while you were gone the boykissers made ' + fmt(earned) + ' kisses'); }, 600);
+    }
+  }
+
+  els.reset.addEventListener('click', function () {
+    if (els.reset.dataset.armed) {
+      state = fresh();
+      try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
+      els.reset.textContent = 'wipe save';
+      delete els.reset.dataset.armed;
+      toast('save wiped. start kissing again');
+      render();
+      return;
+    }
+    els.reset.dataset.armed = '1';
+    els.reset.textContent = 'click again to really wipe';
+    setTimeout(function () {
+      delete els.reset.dataset.armed;
+      els.reset.textContent = 'wipe save';
+    }, 3000);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
