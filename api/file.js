@@ -2,7 +2,7 @@ const { requireAuth } = require('../lib/auth');
 const { getFile, putFile } = require('../lib/github');
 
 module.exports = async (req, res) => {
-  if (!requireAuth(req, res)) return;
+  if (!(await requireAuth(req, res))) return;
 
   if (req.method === 'GET') {
     const path = req.query.path;

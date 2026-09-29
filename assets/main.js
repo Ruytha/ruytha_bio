@@ -7,37 +7,9 @@
   var CFG = window.RUYTHA_CONFIG || {};
   var $  = function (id) { return document.getElementById(id); };
 
-  /* ---------- 1. appearance ---------- */
-  var root = document.documentElement;
-  var btn  = $('themeBtn');
-
-  function readStored() {
-    try { return localStorage.getItem('ruytha-theme'); } catch (e) { return null; }
-  }
-  function store(v) {
-    try { localStorage.setItem('ruytha-theme', v); } catch (e) { /* private mode */ }
-  }
-
-  var stored = readStored();
-  var startTheme = stored ||
-    (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-  setTheme(startTheme);
-
-  function setTheme(v) {
-    root.setAttribute('data-theme', v);
-    if (btn) {
-      btn.setAttribute('aria-label',
-        v === 'dark' ? 'Switch to light appearance' : 'Switch to dark appearance');
-    }
-  }
-
-  if (btn) {
-    btn.addEventListener('click', function () {
-      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      setTheme(next);
-      store(next);
-    });
-  }
+  /* ---------- 1. appearance (dark only) ---------- */
+  document.documentElement.setAttribute('data-theme', 'dark');
+  try { localStorage.removeItem('ruytha-theme'); } catch (e) { /* private mode */ }
 
   /* ---------- 2. nav ---------- */
   var nav = $('nav');
@@ -67,7 +39,7 @@
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (!reduced && 'IntersectionObserver' in window) {
-    var targets = document.querySelectorAll('.section .h2, .section .lede, .tracks, .faves, .grid, .projects, .about-main, .facts, .links');
+    var targets = document.querySelectorAll('.section .h2, .section .lede, .tracks, .faves, .grid, .projects, .about-main, .facts, .links, .media-h, .media-grid');
     targets.forEach(function (el) { el.classList.add('reveal'); });
 
     var io = new IntersectionObserver(function (entries, obs) {

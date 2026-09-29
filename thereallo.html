@@ -1,25 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<yes yes="yes">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>yes.</title>
+    <meta property="og:type" content="website">
+<meta property="og:title" content="yes">
+<meta property="og:description" content="yes">
     <style>
-.parent {
+.yes {
   display: flex;
   justify-content: center; 
   align-items: center;   
   height: 100vh;     
-  font-family: Arial, sans-serif;      
+  font-family: Arial, sans-serif, yes;   
+}
+.wrap {
+    cursor: pointer;
 }
         </style>
   <link rel="icon" type="image/png" href="assets/img/favicon.png">
 </head>
 <body>
-    <div class="parent">
+    <div class="yes">
         <div class="wrap">
-            <h1>yes.</h1>
+            <h1 class="yess">yes</h1>
         </div>
     </div>
+
+	<script>
+		function yes(yes) {
+			prompt("Yes?");
+			return yes;
+		}
+
+		document.querySelector(".yess").addEventListener("click", () => {
+			yes("yes");
+		})
+		
+		for (let i = 0; i < 100; i++) {
+			console.table(["yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes"]);
+		}
+	</script>
 </body>
 </html>

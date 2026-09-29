@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ruytha · About me</title>
 <meta name="description" content="Ruytha — director, editor, lighting and developer from Australia. Blender, DaVinci Resolve, music, and a lot of half-finished projects.">
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#030718">
+<meta name="color-scheme" content="dark">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Ruytha">
@@ -26,43 +26,17 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="assets/styles.css">
 
-<script>
-(function(){try{
-  var s=localStorage.getItem('ruytha-theme');
-  var m=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
-  document.documentElement.setAttribute('data-theme', s||m);
-}catch(e){}})();
-</script>
 </head>
 
 <body>
+<canvas class="stars" id="stars" aria-hidden="true"></canvas>
 <a class="skip" href="#main">Skip to content</a>
-
-<nav class="nav" id="nav">
-  <div class="nav-inner">
-    <a class="nav-mark" href="#top">Ruytha</a>
-    <ul class="nav-links">
-      <li><a href="#music">Music</a></li>
-      <li><a href="#work">Work</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#links">Links</a></li>
-    </ul>
-    <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch to light appearance">
-      <svg class="icon-moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M16.3 11.9A6.8 6.8 0 0 1 8.1 3.7a.6.6 0 0 0-.8-.7 8 8 0 1 0 9.7 9.7.6.6 0 0 0-.7-.8Z"/></svg>
-      <svg class="icon-sun" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 13.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2Zm0-9.1a.8.8 0 0 1-.8-.8V2a.8.8 0 0 1 1.6 0v1.7a.8.8 0 0 1-.8.8Zm0 12.8a.8.8 0 0 0-.8.8V18a.8.8 0 0 0 1.6 0v-1.9a.8.8 0 0 0-.8-.8Zm8-6.5h-1.7a.8.8 0 0 0 0 1.6H18a.8.8 0 0 0 0-1.6Zm-14.3 0H2a.8.8 0 0 0 0 1.6h1.7a.8.8 0 0 0 0-1.6Zm11.9-5a.8.8 0 0 0-1.1 0l-1.2 1.2a.8.8 0 0 0 1.1 1.1l1.2-1.2a.8.8 0 0 0 0-1.1ZM5.6 13.3a.8.8 0 0 0-1.1 0l-1.2 1.2a.8.8 0 1 0 1.1 1.1l1.2-1.2a.8.8 0 0 0 0-1.1Zm9.1 0a.8.8 0 0 0-1.1 1.1l1.2 1.2a.8.8 0 0 0 1.1-1.1Zm-9.1-6.6a.8.8 0 0 0 1.1-1.1L5.5 4.4a.8.8 0 0 0-1.1 1.1Z"/></svg>
-    </button>
-  </div>
-</nav>
 
 <main id="main">
 
 <header class="hero" id="top">
-  <div class="pool" aria-hidden="true"></div>
-  <div class="grain" aria-hidden="true"></div>
-
   <div class="hero-inner">
-    <img class="avatar" id="avatar" src="assets/img/avatar.png" alt="Ruytha" width="132" height="132" decoding="async">
+    <img class="avatar" id="avatar" src="assets/img/avatar.png" alt="Ruytha" width="88" height="88" decoding="async">
     <h1 class="hero-name">Ruytha</h1>
     <p class="hero-sub">Hi, I'm Ruytha!</p>
 
@@ -76,9 +50,6 @@
     </a>
   </div>
 
-  <a class="scroll-cue" href="#music" aria-label="Scroll down">
-    <svg viewBox="0 0 24 14" aria-hidden="true"><path d="M2 2l10 10L22 2" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </a>
 </header>
 
 <section class="section" id="music">
@@ -211,7 +182,20 @@
   </div>
 </section>
 
-<section class="section" id="links">
+<section class="section" id="favourites">
+  <div class="wrap">
+    <h2 class="h2">Favourites</h2>
+    <p class="lede">Anime and games I keep going back to. Click one to read more.</p>
+
+    <h3 class="media-h">Anime</h3>
+    <ul class="media-grid media-grid-anime" id="animeGrid"></ul>
+
+    <h3 class="media-h">Games</h3>
+    <ul class="media-grid media-grid-games" id="gamesGrid"></ul>
+  </div>
+</section>
+
+<section class="section section-alt" id="links">
   <div class="wrap">
     <h2 class="h2">Find me</h2>
     <p class="lede">Anywhere on this list is fine. The Discord server is where I'm most active tho.</p>
@@ -244,22 +228,50 @@
              <li><a href="https://ko-fi.com/ruytha" target="_blank" rel="noopener">
         <svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.4"/><path d="M2.8 12h18.4M12 2.6a14.4 14.4 0 0 1 0 18.8 14.4 14.4 0 0 1 0-18.8"/></svg>
         <span class="link-text"><span class="link-name">Ko-fi</span><span class="link-sub">support my work</span></span><span class="chev">›</span></a></li>
+
     </ul>
   </div>
-</section>
+</section> 
 
 </main>
 
 <footer class="footer">
   <div class="wrap footer-inner">
-    <p>Thx Claude for cooking up some heat</p>
+    <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support this website', '#000000', 'J3J71ME1G2');kofiwidget2.draw();</script> 
     <p class="footer-dim"><span id="year">2026</span> · Ruytha  ·  ruytha.dev</p>
   </div>
 </footer>
+
+<dialog class="sheet" id="sheet" aria-labelledby="sheetTitle" aria-describedby="sheetBody">
+  <div class="sheet-dim" id="sheetDim" aria-hidden="true"></div>
+  <div class="sheet-bg" id="sheetBg" aria-hidden="true">
+    <div class="sheet-cover cover" id="sheetCover"></div>
+    <div class="sheet-scrim" id="sheetScrim"></div>
+  </div>
+
+  <div class="sheet-scroll" id="sheetScroll">
+    <div class="sheet-inner">
+      <div class="art sheet-poster" id="sheetPoster" aria-hidden="true"><span class="cover" id="posterCover"></span></div>
+      <div class="sheet-text" id="sheetText">
+        <span class="badge" id="sheetBadge"></span>
+        <h2 class="sheet-title" id="sheetTitle"></h2>
+        <p class="sheet-sub" id="sheetSub"></p>
+        <p class="sheet-meta" id="sheetMeta"></p>
+        <div class="sheet-body" id="sheetBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="sheet-close" id="sheetClose" type="button" aria-label="Close">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="assets/config.js"></script>
 <script src="assets/main.js" defer></script>
+<script src="assets/favourites.js" defer></script>
+<script src="assets/starfield.js" defer></script>
 </body>
 </html>

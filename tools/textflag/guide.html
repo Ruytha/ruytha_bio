@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TextFlag — Guide</title>
+<link rel="icon" type="image/svg+xml" href="/assets/img/favicon-textflag.svg">
+<style>
+:root{--bg:#f5f5f7;--sf:#fff;--tx:#1d1d1f;--mu:#6e6e73;--ln:rgba(0,0,0,.09);--ac:#0071e3;--fl:rgba(255,159,10,.3);--bar:rgba(245,245,247,.72);--ease:cubic-bezier(.32,.72,0,1);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--sf:#1c1c1e;--tx:#f5f5f7;--mu:#98989d;--ln:rgba(255,255,255,.14);--ac:#2997ff;--fl:rgba(255,159,10,.35);--bar:rgba(0,0,0,.6)}}
+:root[data-theme="dark"]{--bg:#000;--sf:#1c1c1e;--tx:#f5f5f7;--mu:#98989d;--ln:rgba(255,255,255,.14);--ac:#2997ff;--fl:rgba(255,159,10,.35);--bar:rgba(0,0,0,.6)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 -apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--ac);text-decoration:none}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem max(1rem,5vw);background:var(--bar);-webkit-backdrop-filter:saturate(180%) blur(22px);backdrop-filter:saturate(180%) blur(22px);border-bottom:1px solid var(--ln)}
+.brand{font-weight:700;letter-spacing:-.01em}
+main{max-width:680px;margin:0 auto;padding:0 max(1.25rem,5vw) 6rem}
+h1{margin:3rem 0 .4rem;font-size:clamp(2rem,6vw,2.8rem);line-height:1.05;letter-spacing:-.03em}
+.lede{color:var(--mu);font-size:1.15rem;margin:0 0 3rem;max-width:46ch}
+h2{margin:3rem 0 .8rem;font-size:1.5rem;letter-spacing:-.02em;scroll-margin-top:5rem}
+h2 span{color:var(--mu);font-weight:500;font-size:.95rem;display:block;margin-top:.15rem;letter-spacing:0}
+p{margin:0 0 1rem}
+ul{margin:0 0 1rem;padding-left:1.2rem}
+li{margin:0 0 .5rem}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:18px;padding:1.1rem 1.3rem;margin:1rem 0}
+.card b{display:block;margin-bottom:.2rem}.card span{color:var(--mu)}
+kbd{background:var(--ln);border-radius:6px;padding:.1rem .45rem;font:600 .85em/1 -apple-system,sans-serif}
+.pill{display:inline-block;background:var(--fl);border-radius:980px;padding:.1rem .7rem;font-size:.85em;margin:0 .15em}
+.swatch{display:inline-flex;align-items:center;gap:.4rem;background:var(--sf);border:1px solid var(--ln);border-radius:980px;padding:.2rem .8rem .2rem .5rem;font-size:.9rem;margin:.15rem .3rem .15rem 0}
+.dot{width:.6rem;height:.6rem;border-radius:50%}
+nav.toc{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 3rem}
+nav.toc a{background:var(--sf);border:1px solid var(--ln);border-radius:980px;padding:.4rem .9rem;font-size:.88rem;color:var(--tx)}
+footer{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--ln);color:var(--mu);font-size:.9rem}
+/* ── liquid glass (matches the tool) ── */
+:root{--spring:cubic-bezier(.34,1.56,.64,1);--glass:rgba(255,255,255,.38);--glass-hi:rgba(255,255,255,.65);--rim:rgba(255,255,255,.75);--rim-lo:rgba(255,255,255,.28);--bar:rgba(245,245,247,.55)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--glass:rgba(40,40,44,.38);--glass-hi:rgba(255,255,255,.12);--rim:rgba(255,255,255,.32);--rim-lo:rgba(255,255,255,.09);--bar:rgba(0,0,0,.42)}:root:not([data-theme="light"]) .blobs{opacity:.24}}
+:root[data-theme="dark"]{--glass:rgba(40,40,44,.38);--glass-hi:rgba(255,255,255,.12);--rim:rgba(255,255,255,.32);--rim-lo:rgba(255,255,255,.09);--bar:rgba(0,0,0,.42)}
+:root[data-theme="dark"] .blobs{opacity:.24}
+html{background:var(--bg)}
+body{background:transparent}
+.bgfx{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+.bgfx::before{content:'';position:absolute;inset:-60px;background-image:repeating-linear-gradient(45deg,#2eb859 0 2px,transparent 2px 46px),repeating-linear-gradient(-45deg,#e03b42 0 2px,transparent 2px 46px),repeating-linear-gradient(45deg,#3aa9ba 0 2px,transparent 2px 92px),repeating-linear-gradient(-45deg,#8933b8 0 2px,transparent 2px 92px),repeating-linear-gradient(-45deg,#e8b931 0 2px,transparent 2px 138px);opacity:.4;animation:patDrift 50s linear infinite}
+.bgfx::after{content:'';position:absolute;inset:0;background:var(--bg);opacity:.82}
+@keyframes patDrift{to{transform:translate(-92px,92px)}}
+.blobs{position:fixed;inset:-10%;z-index:-1;pointer-events:none;filter:blur(80px) saturate(150%);opacity:.3}
+.blobs i{position:absolute;width:40vmax;height:40vmax;border-radius:50%;will-change:transform}
+.blobs i:nth-child(1){background:#2eb859;left:-8%;top:5%;animation:b1 28s ease-in-out infinite alternate}
+.blobs i:nth-child(2){background:#e03b42;right:-6%;top:-10%;animation:b2 32s ease-in-out infinite alternate}
+.blobs i:nth-child(3){background:#3aa9ba;left:30%;bottom:-18%;animation:b3 36s ease-in-out infinite alternate}
+.blobs i:nth-child(4){background:#8933b8;right:10%;bottom:10%;width:30vmax;height:30vmax;animation:b1 40s ease-in-out -12s infinite alternate-reverse}
+.blobs i:nth-child(5){background:#e8b931;left:20%;top:30%;width:24vmax;height:24vmax;animation:b2 30s ease-in-out -8s infinite alternate-reverse}
+@keyframes b1{to{transform:translate(28vw,18vh) scale(1.25)}}
+@keyframes b2{to{transform:translate(-24vw,26vh) scale(.8)}}
+@keyframes b3{to{transform:translate(-14vw,-30vh) scale(1.15)}}
+.bar{background:var(--bar);-webkit-backdrop-filter:saturate(220%) blur(40px);backdrop-filter:saturate(220%) blur(40px);box-shadow:inset 0 1px 0 var(--glass-hi),inset 0 -1px 0 var(--rim-lo),0 8px 24px -14px rgba(0,0,0,.3)}
+.bar a{display:inline-block;padding:.4rem .9rem;border-radius:980px;background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%)}
+.card,nav.toc a,.swatch,.bar a{border-color:transparent;box-shadow:inset 1px 1px 0 -.5px var(--rim),inset -1px -1px 0 -.5px var(--rim-lo),inset 0 0 18px -8px var(--rim-lo),0 10px 30px -18px rgba(0,0,0,.35)}
+.card,nav.toc a,.swatch{background:var(--glass);-webkit-backdrop-filter:blur(30px) saturate(190%);backdrop-filter:blur(30px) saturate(190%)}
+.card{position:relative;overflow:hidden;border-radius:22px;--mx:50%;--my:0%}
+.card::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(240px circle at var(--mx) var(--my),var(--glass-hi),transparent 62%);opacity:.55;mix-blend-mode:overlay}
+nav.toc a,.bar a{transition:transform .5s var(--spring),box-shadow .3s}
+@media(hover:hover){nav.toc a:hover,.bar a:hover{transform:translateY(-2px) scale(1.05)}}
+nav.toc a:active,.bar a:active{transform:scale(.93);transition-duration:.12s}
+.brand .fw{display:inline-block;transform-origin:15% 90%;animation:wave 3.6s ease-in-out infinite}
+@keyframes wave{0%,55%,100%{rotate:0deg}10%{rotate:-14deg}20%{rotate:10deg}30%{rotate:-6deg}40%{rotate:3deg}}
+@keyframes riseIn{from{opacity:0;translate:0 14px;filter:blur(4px)}}
+h1,.lede,nav.toc a{animation:riseIn .7s var(--ease) backwards}
+.lede{animation-delay:.08s}
+nav.toc a{animation-delay:calc(.14s + var(--i,0) * 40ms)}
+.rv{opacity:0;translate:0 18px;filter:blur(4px);transition:opacity .6s var(--ease),translate .7s var(--spring),filter .6s var(--ease)}
+.rv.in{opacity:1;translate:0 0;filter:none}
+h2:target{animation:hl 1.4s var(--ease)}
+@keyframes hl{0%,30%{color:var(--ac)}}
+@media(prefers-reduced-motion:reduce){*,.bgfx::before{animation:none!important;transition:none!important}.rv{opacity:1;translate:none;filter:none}}
+@media(prefers-reduced-transparency:reduce){.blobs,.bgfx,.card::after{display:none}.card,nav.toc a,.swatch,.bar a{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--sf)}.bar{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--bg)}}
+@media(prefers-contrast:more){.blobs,.bgfx{display:none}.card,nav.toc a,.swatch{border-color:var(--tx)}}
+</style>
+</head>
+<body>
+<div class="bgfx" aria-hidden="true"></div>
+<div class="blobs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+<header class="bar">
+  <div class="brand"><span class="fw">🚩</span> TextFlag</div>
+  <a href="https://ruytha.dev/tools/textflag">← Back to the tool</a>
+</header>
+<main>
+  <h1>Guide</h1>
+  <p class="lede">TextFlag turns a TTML lyrics file into an annotated review — flag lines with sync or wording problems, jot notes, and export it all as Markdown. Everything runs in your browser; nothing is uploaded anywhere.</p>
+
+  <nav class="toc">
+    <a href="#load">Loading a file</a>
+    <a href="#layout">Reading the layout</a>
+    <a href="#flags">Raising flags</a>
+    <a href="#timing">Timing flags</a>
+    <a href="#presets">Custom presets</a>
+    <a href="#export">Exporting</a>
+    <a href="#keys">Shortcuts</a>
+  </nav>
+
+  <h2 id="load">Loading a file</h2>
+  <p>Three ways in, pick whichever's easiest:</p>
+  <ul>
+    <li><b>Drag and drop</b> a <code>.ttml</code> or <code>.xml</code> file anywhere on the page — a full-screen zone appears while you drag.</li>
+    <li><b>Choose File</b> opens your system's file picker.</li>
+    <li><b>Paste a link</b> to a TTML file and press Load. Some hosts block this; if it fails, download the file and drop it in instead.</li>
+  </ul>
+  <div class="card"><b>Your flags are saved automatically</b><span>Reopen the same file later — by name — and any flags you raised are still there, stored locally in your browser.</span></div>
+
+  <h2 id="layout">Reading the layout <span>Background vocals and duets</span></h2>
+  <p>Each lyric line shows its start time on the left. Where a line has background vocals, they appear as a smaller, italic line just underneath, and can be flagged on their own.</p>
+  <p>Duet files line up by singer:</p>
+  <p><span class="swatch"><span class="dot" style="background:var(--tx)"></span>Singer 1 — left</span><span class="swatch"><span class="dot" style="background:var(--tx)"></span>Singer 2 — right</span><span class="swatch"><span class="dot" style="background:var(--tx)"></span>Both together — centered</span></p>
+
+  <h2 id="flags">Raising a flag <span>Select, tap, save</span></h2>
+  <ul>
+    <li>Select a word, a few words, or a whole line — a <b>Raise Flag</b> button appears above your selection.</li>
+    <li>Pick a template (Timing, Spelling, Line break, and so on) or leave it blank, then add a note.</li>
+    <li>A flagged word gets a soft highlight. Click any highlighted word afterward to view, edit, or delete that flag.</li>
+  </ul>
+
+  <h2 id="timing">Timing flags <span>Two switches, one label</span></h2>
+  <p>Choosing the <span class="pill">Timing</span> template shows two switches: <b>Sync / Starts / Ends</b>, and <b>Too early / Too late</b>. Together they label the flag — "Starts too early," "Ends too late," and so on — and fill in a matching note you can still edit.</p>
+
+  <h2 id="presets">Custom presets <span>Save your own wording</span></h2>
+  <p>Write a note the way you like to phrase it, then press <b>Save as preset</b> and give it a name. It shows up as its own chip next to the built-in templates from then on — click the <b>×</b> on a chip to remove it.</p>
+
+  <h2 id="export">Exporting your review <span>Copy or download</span></h2>
+  <ul>
+    <li><b>Export</b> copies the whole review as Markdown to your clipboard, quoting each flagged line with the flagged words in bold and the note underneath.</li>
+    <li><b>⬇ Download as .md</b>, in the <b>⋯</b> menu, saves the same text as a <code>.md</code> file instead.</li>
+    <li>Turn on <b>Line #</b> (also in the <b>⋯</b> menu) to add each line's number alongside its timestamp, if that's easier for whoever reads the review to work from.</li>
+  </ul>
+  <div class="card"><b>Every export ends with a small credit line</b><span>Linking back to this tool, so anyone reading the review can find it too.</span></div>
+
+  <h2 id="keys">Keyboard shortcuts</h2>
+  <ul>
+    <li><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd> — save the flag you're writing, without leaving the notes field.</li>
+    <li><kbd>J</kbd> / <kbd>K</kbd> — jump to the next or previous flag in the song.</li>
+    <li><kbd>Esc</kbd> — close whatever's open.</li>
+  </ul>
+  <p>There's also a text-size slider in the <b>⋯</b> menu if the lyrics are too small or too large to read comfortably — it remembers your setting next time.</p>
+
+  <footer>TextFlag is a free tool by Ruytha. <a href="https://ruytha.dev/tools/textflag">Open the tool →</a></footer>
+</main>
+<script>
+const reduceMo=matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('nav.toc a').forEach((a,i)=>a.style.setProperty('--i',i));
+/* reveal sections as they scroll in */
+if(!reduceMo&&'IntersectionObserver' in window){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('main>h2,main>p:not(.lede),main>ul,.card,footer').forEach(el=>{el.classList.add('rv');io.observe(el)});
+  /* cards follow the pointer with a soft highlight */
+  document.querySelectorAll('.card').forEach(c=>c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();
+    c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')}))}
+/* liquid glass: bend the backdrop at rounded edges (Chromium only; others keep the frosted blur) */
+if(navigator.userAgentData&&!matchMedia('(prefers-reduced-transparency: reduce)').matches){
+  const NS='http://www.w3.org/2000/svg',fx=document.body.appendChild(document.createElementNS(NS,'svg'));let uid=0;
+  fx.setAttribute('width',0);fx.setAttribute('height',0);fx.setAttribute('aria-hidden','true');fx.style.position='absolute';
+  const mk=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+  const lens=(w,h,r,d)=>{const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d'),im=x.createImageData(w,h),p=im.data,hw=w/2,hh=h/2;
+    for(let j=0;j<h;j++)for(let i=0;i<w;i++){const px=i+.5-hw,py=j+.5-hh,qx=Math.abs(px)-(hw-r),qy=Math.abs(py)-(hh-r);let nx=0,ny=0,dist;
+      if(qx>0&&qy>0){const l=Math.hypot(qx,qy);dist=r-l;nx=qx/l;ny=qy/l}else if(qx>qy){dist=r-qx;nx=1}else{dist=r-qy;ny=1}
+      const t=Math.min(1,Math.max(0,1-dist/d)),s=t*t,k=(j*w+i)*4;
+      p[k]=128-Math.sign(px)*nx*s*127;p[k+1]=128-Math.sign(py)*ny*s*127;p[k+2]=128;p[k+3]=255}
+    x.putImageData(im,0,0);return c.toDataURL()};
+  const fit=el=>{const w=el.offsetWidth,h=el.offsetHeight;if(!w||!h)return;
+    const r=Math.min(parseFloat(getComputedStyle(el).borderTopLeftRadius)||0,w/2,h/2),d=Math.max(6,Math.min(Math.max(r,14),24,Math.min(w,h)/2));
+    let f=el._lg;if(!f){f=el._lg=mk('filter',{id:'lg'+uid++,x:0,y:0,filterUnits:'userSpaceOnUse',primitiveUnits:'userSpaceOnUse','color-interpolation-filters':'sRGB'});
+      f.append(mk('feImage',{result:'m',x:0,y:0,preserveAspectRatio:'none'}),mk('feDisplacementMap',{in:'SourceGraphic',in2:'m',xChannelSelector:'R',yChannelSelector:'G'}));fx.append(f);
+      const base=getComputedStyle(el).backdropFilter;el._lgBase=base&&base!=='none'?base+' ':''}
+    f.setAttribute('width',w);f.setAttribute('height',h);
+    const [img,dm]=f.children;img.setAttribute('width',w);img.setAttribute('height',h);img.setAttribute('href',lens(w,h,r,d));dm.setAttribute('scale',Math.round(d*1.5));
+    el.style.backdropFilter=el._lgBase+'url(#'+f.id+')'};
+  const pend=new Set();let raf=0;
+  const ro=new ResizeObserver(es=>{es.forEach(e=>pend.add(e.target));cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{pend.forEach(fit);pend.clear()})});
+  document.querySelectorAll('.bar,.card,.bar a').forEach(e=>ro.observe(e))}
+</script>
+</body>
+</html>
