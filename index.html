@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Gochi+Hand&display=swap">
 <link rel="stylesheet" href="assets/styles.css">
 <link rel="stylesheet" href="assets/home.css">
+<link rel="stylesheet" href="assets/extras.css">
 
 </head>
 
@@ -42,6 +43,7 @@
       <a href="#projects">Projects</a>
       <a href="#about">About</a>
       <a href="#links">Links</a>
+      <a href="#guestbook">Guestbook</a>
     </div>
   </div>
 </nav>
@@ -198,6 +200,33 @@
   </div>
 </section>
 
+<section class="section section-alt" id="about">
+  <div class="wrap about-wrap">
+    <span class="peek peek-r" aria-hidden="true"><img src="assets/img/avatar.png" alt="" width="52" height="52" loading="lazy" decoding="async"></span>
+    <div class="about-main">
+      <h2 class="h2">About me</h2>
+      <p class="about-lead">Hi, I'm Ruytha!</p>
+      <p class="about-body">I am a content creator and developer, passionate about storytelling and technology. I am from Australia. I am learning Japanese and web development. I also sync and review TTMLs (synced songs) for Spicy Lyrics.</p>
+      <p class="about-body">If you want to know more about me, feel free to reach out! (@ruytha on Discord and in the links below)</p>
+    </div>
+
+    <dl class="facts">
+      <div><dt>Based</dt><dd>Australia</dd></div>
+      <div><dt>Played Rec Room</dt><dd>2021 – 2026</dd></div>
+      <div><dt>Learning</dt><dd>Japanese and web development</dd></div>
+      <div><dt>Fav LLM</dt><dd>Claude</dd></div>
+      <div><dt>Femboy</dt><dd>I <strong>AM</strong> a femboy</dd></div>
+    </dl>
+
+    <button class="wotd" id="wotd" type="button" aria-live="polite">
+      <span class="wotd-head">日本語 of the day <span class="wotd-hint">tap for another</span></span>
+      <span class="wotd-word" id="wotdWord">夢</span>
+      <span class="wotd-read" id="wotdRead">ゆめ · yume</span>
+      <span class="wotd-mean" id="wotdMean">dream</span>
+    </button>
+  </div>
+</section>
+
 <section class="section section-alt" id="work">
   <div class="wrap">
     <h2 class="h2">What I do</h2>
@@ -240,108 +269,6 @@
   </div>
 </section>
 
-<section class="section" id="projects">
-  <div class="wrap">
-    <h2 class="h2">Current projects</h2>
-    <p class="lede">Some Projects I am working on.</p>
-    <p class="note">borderline obsession is waiting on vcap, no pressure<svg class="note-arrow" viewBox="0 0 60 40" aria-hidden="true"><path d="M4 6c14-2 30 4 38 16 3 4 5 9 6 13"/><path d="M40 28l8 8 3-11"/></svg></p>
-
-    <div class="projects">
-      <article class="proj">
-        <div class="proj-media"><img src="assets/img/project-ddfc.png" alt="" loading="lazy" decoding="async"></div>
-        <div class="proj-body">
-          <span class="badge badge-build">On going</span>
-          <h3>TTMLS</h3>
-          <p>I have been syncing songs for Spicy Lyrics for a while and ig this is a project.</p>
-        </div>
-      </article>
-
-      <article class="proj">
-        <div class="proj-media"><img src="assets/img/project-vcap.png" alt="" loading="lazy" decoding="async"></div>
-        <div class="proj-body">
-          <span class="badge badge-soon">Coming soon</span>
-          <h3>VCap Motion</h3>
-          <p>Working on a VR motion capture project.</p>
-        </div>
-      </article>
-
-      <article class="proj">
-        <div class="proj-media"><img src="assets/img/project-website.png" alt="" loading="lazy" decoding="async"></div>
-        <div class="proj-body">
-          <span class="badge badge-build">In progress</span>
-          <h3>This website</h3>
-          <p>ig this is a project, but Claude is doing most of the work lol.</p>
-        </div>
-      </article>
-
-      <article class="proj">
-        <div class="proj-media"><img src="assets/img/project-bo.png" alt="" loading="lazy" decoding="async"></div>
-        <div class="proj-body">
-          <span class="badge badge-queue">In the queue</span>
-          <h3>Borderline Obsession</h3>
-          <p>A short YouTube series, written and edited by me. This one becomes in production once a stable version of VCap Motion is completed.</p>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section class="section section-alt" id="about">
-  <div class="wrap about-wrap">
-    <span class="peek peek-r" aria-hidden="true"><img src="assets/img/avatar.png" alt="" width="52" height="52" loading="lazy" decoding="async"></span>
-    <div class="about-main">
-      <h2 class="h2">About me</h2>
-      <p class="about-lead">Hi, I'm Ruytha!</p>
-      <p class="about-body">I am a content creator and developer, passionate about storytelling and technology. I am from Australia. I am learning Japanese and web development. I also sync and review TTMLs (synced songs) for Spicy Lyrics.</p>
-      <p class="about-body">If you want to know more about me, feel free to reach out! (@ruytha on Discord and in the links below)</p>
-    </div>
-
-    <dl class="facts">
-      <div><dt>Based</dt><dd>Australia</dd></div>
-      <div><dt>Played Rec Room</dt><dd>2021 – 2026</dd></div>
-      <div><dt>Learning</dt><dd>Japanese and web development</dd></div>
-      <div><dt>Fav LLM</dt><dd>Claude</dd></div>
-      <div><dt>Femboy</dt><dd>I <strong>AM</strong> a femboy</dd></div>
-    </dl>
-
-    <button class="wotd" id="wotd" type="button" aria-live="polite">
-      <span class="wotd-head">日本語 of the day <span class="wotd-hint">tap for another</span></span>
-      <span class="wotd-word" id="wotdWord">夢</span>
-      <span class="wotd-read" id="wotdRead">ゆめ · yume</span>
-      <span class="wotd-mean" id="wotdMean">dream</span>
-    </button>
-  </div>
-</section>
-
-<section class="section" id="favourites">
-  <div class="wrap">
-    <span class="peek peek-r" aria-hidden="true"><img src="assets/img/avatar.png" alt="" width="52" height="52" loading="lazy" decoding="async"></span>
-    <div class="fav-head">
-      <div>
-        <h2 class="h2">Favourites</h2>
-        <p class="lede">Anime and games I keep going back to. Open one for the details.</p>
-        <p class="note">the starred ones are the best, fight me<svg class="note-arrow" viewBox="0 0 60 40" aria-hidden="true"><path d="M4 6c14-2 30 4 38 16 3 4 5 9 6 13"/><path d="M40 28l8 8 3-11"/></svg></p>
-      </div>
-      <div class="fav-filters" id="favFilters" role="group" aria-label="Show">
-        <button type="button" data-filter="all" aria-pressed="true">All <span class="fav-count"></span></button>
-        <button type="button" data-filter="anime" aria-pressed="false">Anime <span class="fav-count"></span></button>
-        <button type="button" data-filter="games" aria-pressed="false">Games <span class="fav-count"></span></button>
-        <button type="button" data-filter="top" aria-pressed="false"><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.94 5.96 6.58.96-4.76 4.64 1.12 6.55L12 17.52l-5.88 3.09 1.12-6.55L2.48 9.42l6.58-.96L12 2.5z"/></svg> Top picks <span class="fav-count"></span></button>
-      </div>
-    </div>
-
-    <div class="fav-group" data-kind="anime">
-      <h3 class="media-h">Anime</h3>
-      <ul class="media-grid media-grid-anime" id="animeGrid"></ul>
-    </div>
-
-    <div class="fav-group" data-kind="games">
-      <h3 class="media-h">Games</h3>
-      <ul class="media-grid media-grid-games" id="gamesGrid"></ul>
-    </div>
-  </div>
-</section>
-
 <section class="section section-alt" id="links">
   <div class="wrap">
     <span class="peek peek-l" aria-hidden="true"><img src="assets/img/avatar.png" alt="" width="52" height="52" loading="lazy" decoding="async"></span>
@@ -380,7 +307,141 @@
 
     </ul>
   </div>
-</section> 
+</section>
+
+<section class="section" id="projects">
+  <div class="wrap">
+    <h2 class="h2">Current projects</h2>
+    <p class="lede">Some Projects I am working on.</p>
+    <p class="note">borderline obsession is waiting on vcap, no pressure<svg class="note-arrow" viewBox="0 0 60 40" aria-hidden="true"><path d="M4 6c14-2 30 4 38 16 3 4 5 9 6 13"/><path d="M40 28l8 8 3-11"/></svg></p>
+
+    <div class="projects">
+      <article class="proj" data-project="ttmls" tabindex="0" role="button" aria-haspopup="dialog">
+        <div class="proj-media"><img src="assets/img/project-ddfc.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="proj-body">
+          <span class="badge badge-build">On going</span>
+          <h3>TTMLS</h3>
+          <p>I have been syncing songs for Spicy Lyrics for a while and ig this is a project.</p>
+        </div>
+      </article>
+
+      <article class="proj" data-project="vcap" tabindex="0" role="button" aria-haspopup="dialog">
+        <div class="proj-media"><img src="assets/img/project-vcap.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="proj-body">
+          <span class="badge badge-soon">Coming soon</span>
+          <h3>VCap Motion</h3>
+          <p>Working on a VR motion capture project.</p>
+        </div>
+      </article>
+
+      <article class="proj" data-project="site" tabindex="0" role="button" aria-haspopup="dialog">
+        <div class="proj-media"><img src="assets/img/project-website.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="proj-body">
+          <span class="badge badge-build">In progress</span>
+          <h3>This website</h3>
+          <p>ig this is a project, but Claude is doing most of the work lol.</p>
+        </div>
+      </article>
+
+      <article class="proj" data-project="bo" tabindex="0" role="button" aria-haspopup="dialog">
+        <div class="proj-media"><img src="assets/img/project-bo.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="proj-body">
+          <span class="badge badge-queue">In the queue</span>
+          <h3>Borderline Obsession</h3>
+          <p>A short YouTube series, written and edited by me. This one becomes in production once a stable version of VCap Motion is completed.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="gallery">
+  <div class="wrap">
+    <h2 class="h2">Photos</h2>
+    <p class="lede">Shot on a Canon EOS 7D and an iPhone 12.</p>
+    <ul class="gallery" id="galleryGrid"></ul>
+  </div>
+</section>
+
+<section class="section" id="sync">
+  <div class="wrap sync">
+    <h2 class="h2">Sync a line</h2>
+    <p class="lede">This is what I do for Spicy Lyrics, but tiny. Press play, wait for the count-in, then tap on every word right as it lands.</p>
+    <p class="note">headphones help!<svg class="note-arrow" viewBox="0 0 60 40" aria-hidden="true"><path d="M4 6c14-2 30 4 38 16 3 4 5 9 6 13"/><path d="M40 28l8 8 3-11"/></svg></p>
+
+    <div class="sync-stage">
+      <p class="sync-line" id="syncLine" aria-live="off"></p>
+      <div class="sync-track" id="syncTrack" aria-hidden="true"></div>
+      <div class="sync-ctrl">
+        <button class="btn btn-primary" id="syncPlay" type="button">Play and sync</button>
+        <button class="sync-tap" id="syncTap" type="button" hidden>Tap <kbd>space</kbd></button>
+        <button class="btn btn-primary" id="syncAgain" type="button" hidden>Try again</button>
+        <button class="btn btn-ghost" id="syncBack" type="button" hidden>Play back my sync</button>
+      </div>
+      <p class="sync-result" id="syncResult" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="week">
+  <div class="wrap">
+    <h2 class="h2">This week</h2>
+    <p class="lede">What I've actually been listening to.</p>
+    <div class="wk" id="weekStats" aria-busy="true">
+      <div class="wk-hero"><span class="wk-num wk-skel"></span><span class="wk-lbl">loading…</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="favourites">
+  <div class="wrap">
+    <span class="peek peek-r" aria-hidden="true"><img src="assets/img/avatar.png" alt="" width="52" height="52" loading="lazy" decoding="async"></span>
+    <div class="fav-head">
+      <div>
+        <h2 class="h2">Favourites</h2>
+        <p class="lede">Anime and games I keep going back to. Open one for the details.</p>
+        <p class="note">the starred ones are the best, fight me<svg class="note-arrow" viewBox="0 0 60 40" aria-hidden="true"><path d="M4 6c14-2 30 4 38 16 3 4 5 9 6 13"/><path d="M40 28l8 8 3-11"/></svg></p>
+      </div>
+      <div class="fav-filters" id="favFilters" role="group" aria-label="Show">
+        <button type="button" data-filter="all" aria-pressed="true">All <span class="fav-count"></span></button>
+        <button type="button" data-filter="anime" aria-pressed="false">Anime <span class="fav-count"></span></button>
+        <button type="button" data-filter="games" aria-pressed="false">Games <span class="fav-count"></span></button>
+        <button type="button" data-filter="top" aria-pressed="false"><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.94 5.96 6.58.96-4.76 4.64 1.12 6.55L12 17.52l-5.88 3.09 1.12-6.55L2.48 9.42l6.58-.96L12 2.5z"/></svg> Top picks <span class="fav-count"></span></button>
+      </div>
+    </div>
+
+    <div class="fav-group" data-kind="anime">
+      <h3 class="media-h">Anime</h3>
+      <ul class="media-grid media-grid-anime" id="animeGrid"></ul>
+    </div>
+
+    <div class="fav-group" data-kind="games">
+      <h3 class="media-h">Games</h3>
+      <ul class="media-grid media-grid-games" id="gamesGrid"></ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="guestbook">
+  <div class="wrap">
+    <span class="peek peek-l" aria-hidden="true"><img src="assets/img/avatar.png" alt="" width="52" height="52" loading="lazy" decoding="async"></span>
+    <h2 class="h2">Guestbook</h2>
+    <p class="lede">Leave a note on the wall. Be nice, I read every one.</p>
+    <p class="note">sign it pls<svg class="note-arrow" viewBox="0 0 60 40" aria-hidden="true"><path d="M4 6c14-2 30 4 38 16 3 4 5 9 6 13"/><path d="M40 28l8 8 3-11"/></svg></p>
+
+    <div class="gb">
+      <form class="gb-form" id="gbForm" autocomplete="off">
+        <label class="gb-field"><span>Your name</span><input name="name" maxlength="24" required placeholder="mita"></label>
+        <label class="gb-field"><span>Message</span><textarea name="msg" maxlength="160" rows="3" required placeholder="hi ruytha! cool site"></textarea><span class="gb-count" id="gbCount">0/160</span></label>
+        <fieldset class="gb-stickers"><legend>Pick a sticker</legend><label><input type="radio" name="sticker" value="💖" checked><span>💖</span></label><label><input type="radio" name="sticker" value="✨"><span>✨</span></label><label><input type="radio" name="sticker" value="🎬"><span>🎬</span></label><label><input type="radio" name="sticker" value="🎧"><span>🎧</span></label><label><input type="radio" name="sticker" value="🌸"><span>🌸</span></label><label><input type="radio" name="sticker" value="🦘"><span>🦘</span></label><label><input type="radio" name="sticker" value="🍙"><span>🍙</span></label><label><input type="radio" name="sticker" value="⭐"><span>⭐</span></label></fieldset>
+        <label class="gb-hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
+        <button class="btn btn-primary" type="submit">Sign the guestbook</button>
+        <p class="gb-status" id="gbStatus" aria-live="polite"></p>
+      </form>
+      <ul class="gb-wall" id="gbWall" aria-live="polite"><li class="gb-empty">Loading notes…</li></ul>
+    </div>
+  </div>
+</section>
 
 </main>
 
@@ -394,6 +455,7 @@
         <li><a href="/#projects">Projects</a></li>
         <li><a href="/#about">About me</a></li>
         <li><a href="/#links">Find me</a></li>
+        <li><a href="/#guestbook">Guestbook</a></li>
         <li><a href="/links">Links page</a></li>
         <li><a href="/boykisser">Boykisser clicker</a></li>
       </ul>
@@ -541,7 +603,11 @@
       <a href="#work" data-map="work">What I do</a>
       <a href="#links" data-map="links">Find me</a>
       <a href="#projects" data-map="projects">Projects</a>
+      <a href="#gallery" data-map="gallery">Photos</a>
+      <a href="#sync" data-map="sync">Sync a line</a>
+      <a href="#week" data-map="week">This week</a>
       <a href="#favourites" data-map="favourites">Favourites</a>
+      <a href="#guestbook" data-map="guestbook">Guestbook</a>
     </nav>
     <p class="rail-kana rail-bob" aria-hidden="true" style="--d: -5s; --r: 3deg; --depth: 28">ルイサ</p>
   </div>
@@ -680,6 +746,22 @@
   </div>
 </dialog>
 
+<dialog class="artist project" id="project" aria-labelledby="projectTitle">
+  <div class="artist-panel" id="projectPanel">
+    <div class="artist-scroll" id="projectBody"></div>
+    <button class="artist-close" id="projectClose" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+</dialog>
+
+<dialog class="lightbox" id="lightbox" aria-label="Photo">
+  <figure class="lb-fig"><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+  <button class="lb-btn lb-prev" id="lbPrev" type="button" aria-label="Previous photo">‹</button>
+  <button class="lb-btn lb-next" id="lbNext" type="button" aria-label="Next photo">›</button>
+  <button class="lb-btn lb-close" id="lbClose" type="button" aria-label="Close">✕</button>
+</dialog>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <div class="fb-hearts" id="fbHearts" aria-hidden="true"></div>
@@ -693,5 +775,6 @@
 <script src="assets/favourites.js" defer></script>
 <script src="assets/starfield.js" defer></script>
 <script src="assets/home.js" defer></script>
+<script src="assets/extras.js" defer></script>
 </body>
 </html>

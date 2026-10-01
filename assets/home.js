@@ -503,6 +503,8 @@
     return pick(LINES);
   }
 
+  window.mitaSay = function (text, ms) { if (!el.classList.contains('is-sleep')) talk(text, ms); };
+
   function checkSleep() { el.classList.toggle('is-sleep', sleepy()); }
   checkSleep();
   setInterval(checkSleep, 60000);
@@ -610,4 +612,14 @@
   closeBtn.addEventListener('click', close);
   dlg.addEventListener('cancel', function (e) { e.preventDefault(); close(); });
   dlg.addEventListener('click', function (e) { if (e.target === dlg) close(); });   // click the dimmed area
+})();
+
+/* ---------- 15. performance: pause decorations that are off screen ---------- */
+(function () {
+  'use strict';
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { e.target.classList.toggle('is-off', !e.isIntersecting); });
+  }, { rootMargin: '150px 0px' });
+  document.querySelectorAll('.hero-big, .rail, .cult, .marquee, .section > .wrap').forEach(function (el) { io.observe(el); });
 })();

@@ -123,7 +123,7 @@
       id: 'fh6', title: 'Forza Horizon 6', mono: 'FH6', hue: 348, star: true,
       genres: ['Racing', 'Open world'],
       by: 'Playground Games', year: '2026',
-      platforms: 'Xbox Series X|S, PC',
+      platforms: 'Xbox Series X|S, PC (PS5 later)',
       take: '',
       summary: [
         'The open-world racing series heads to Japan, with Tokyo as its biggest and most detailed drivable space yet. There are around 550 cars at launch, plenty of them kei cars and vans, and the roads run from city streets to mountain passes made for drifting. This time you start out as a tourist and earn your way up through the Horizon Festival.'
@@ -340,7 +340,10 @@
     }
   }
 
+  var probed = false;
   function probeArt() {
+    if (probed) return;
+    probed = true;
     ANIME.concat(GAMES).forEach(function (item) {
       var url = ART_DIR + item.id + '.' + ART_EXT;
       var im = new Image();
@@ -649,6 +652,7 @@
   /* Opened from a shared link like /#fav-rdr2 */
   var hashMatch = /^#fav-(.+)$/.exec(location.hash);
   if (hashMatch && byId[hashMatch[1]]) {
+    probeArt();   // a shared link opens the popup straight away, so load the cover art now
     var start = byId[hashMatch[1]];
     var go = function () { openSheet(start, null); };
     if (document.readyState === 'complete') go();

@@ -1533,3 +1533,15 @@ body { position: relative; }
 /* footer signature */
 .footer-sign { display: inline-flex; align-items: center; gap: 8px; }
 .footer-sign img { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line); }
+
+/* ============================================================
+   Performance
+   ============================================================ */
+/* anything scrolled out of view stops animating (home.js adds .is-off) */
+.is-off, .is-off * { animation-play-state: paused !important; }
+.is-off .fb-heart { animation-play-state: running !important; }
+
+/* phones: lighter glass blur is much cheaper to scroll */
+@media (max-width: 720px) {
+  :root { --glass-blur: blur(14px) saturate(160%); }
+}
