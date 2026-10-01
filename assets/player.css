@@ -1,0 +1,168 @@
+/* ============================================================
+   Mini song player (assets/player.js)
+   Sits bottom-right, just above the femboy switch.
+   ============================================================ */
+.mp {
+  --mp-h: 230;
+  position: fixed; right: 16px; bottom: 66px; z-index: 118;
+  width: 268px;
+  display: flex; flex-direction: column; align-items: stretch; gap: 8px;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.mp-dock, .mp-card {
+  position: relative;
+  border-radius: 20px;
+  background: var(--glass-2);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-shine), var(--glass-drop);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+/* ---------- the dock (always visible) ---------- */
+.mp-dock {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 6px 6px 6px;
+  overflow: hidden;
+}
+.mp-dock-main {
+  appearance: none; border: 0; background: none; color: inherit; font: inherit;
+  flex: 1; min-width: 0;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0; text-align: left;
+  cursor: pointer;
+}
+.mp-dock-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.mp-song { margin: 0; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mp-artist { margin: 0; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.is-error .mp-artist { color: #ff8f8f; }
+.mp-chev { display: grid; place-items: center; width: 20px; color: var(--muted); transition: rotate 0.35s var(--ease); }
+.mp-chev svg { width: 16px; height: 16px; }
+.is-open .mp-chev { rotate: 180deg; }
+
+.mp-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: rgba(255, 255, 255, 0.08); }
+.mp-progress i {
+  display: block; height: 100%;
+  background: linear-gradient(90deg, var(--a1), var(--a2));
+  transform: scaleX(0); transform-origin: left;
+}
+
+/* cover: the song's art, or a coloured record if there isn't any */
+.mp-cover {
+  position: relative; flex: none;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 0 4px, rgba(0, 0, 0, 0) 4px),
+    linear-gradient(135deg, hsl(var(--mp-h) 80% 62%), hsl(calc(var(--mp-h) + 50) 70% 40%));
+  background-size: cover; background-position: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+.mp-disc {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #0b0b10 0 3px, transparent 3.5px),
+    repeating-radial-gradient(circle, rgba(0, 0, 0, 0) 0 2px, rgba(0, 0, 0, 0.18) 2.5px 3.5px);
+}
+.mp-cover.has-art .mp-disc { background: radial-gradient(circle, #0b0b10 0 3px, rgba(255, 255, 255, 0.5) 3.5px 4.5px, transparent 5px); }
+.is-playing .mp-cover { animation: mp-spin 4s linear infinite; }
+@keyframes mp-spin { to { rotate: 360deg; } }
+
+/* ---------- buttons ---------- */
+.mp-btn {
+  appearance: none; border: 0; cursor: pointer;
+  flex: none;
+  display: grid; place-items: center;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  transition: background 0.2s, transform 0.15s;
+}
+.mp-btn:hover { background: rgba(255, 255, 255, 0.16); }
+.mp-btn:active { transform: scale(0.92); }
+.mp-btn svg { width: 18px; height: 18px; fill: currentColor; }
+.mp-play { background: linear-gradient(135deg, var(--a1), var(--a2)); color: #fff; }
+.mp-play:hover { background: linear-gradient(135deg, var(--a1), var(--a2)); filter: brightness(1.1); }
+.mp-sm { width: 32px; height: 32px; }
+.mp-sm svg { width: 17px; height: 17px; }
+
+/* ---------- the expanded card ---------- */
+.mp-card { padding: 16px; animation: mp-in 0.35s var(--ease); }
+.mp-card[hidden] { display: none; }
+@keyframes mp-in { from { opacity: 0; transform: translateY(10px) scale(0.97); } }
+.mp-top { display: flex; align-items: center; gap: 12px; }
+.mp-cover-lg { width: 64px; height: 64px; }
+.mp-cover-lg .mp-disc { background-size: auto; }
+.mp-meta { min-width: 0; }
+.mp-meta .mp-song { font-size: 15.5px; }
+.mp-meta .mp-artist { font-size: 13px; margin-top: 2px; }
+
+.mp-seek { margin-top: 14px; }
+.mp-times { display: flex; justify-content: space-between; margin-top: 2px; font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.mp-range {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 18px;
+  background: transparent;
+  cursor: pointer;
+}
+.mp-range::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: rgba(255, 255, 255, 0.16); }
+.mp-range::-moz-range-track { height: 4px; border-radius: 4px; background: rgba(255, 255, 255, 0.16); }
+.mp-range::-moz-range-progress { height: 4px; border-radius: 4px; background: var(--a2); }
+.mp-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 13px; height: 13px; margin-top: -4.5px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.mp-range::-moz-range-thumb { width: 13px; height: 13px; border: 0; border-radius: 50%; background: #fff; }
+.mp-range:focus-visible { outline: 2px solid var(--a1); outline-offset: 2px; border-radius: 6px; }
+
+.mp-ctrl { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 6px; }
+.mp-play-lg { width: 48px; height: 48px; background: linear-gradient(135deg, var(--a1), var(--a2)); color: #fff; }
+.mp-play-lg svg { width: 22px; height: 22px; }
+
+.mp-bottom { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.mp-vol { flex: 1; display: flex; align-items: center; gap: 8px; color: var(--muted); }
+.mp-vol svg { flex: none; width: 18px; height: 18px; fill: currentColor; }
+.is-muted .mp-vol .vol-wave { display: none; }
+
+.mp-list {
+  margin-top: 12px;
+  max-height: 180px; overflow-y: auto;
+  display: grid; gap: 2px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+.mp-list[hidden] { display: none; }
+.mp-list button {
+  appearance: none; border: 0; background: none; color: inherit; font: inherit; cursor: pointer;
+  width: 100%;
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 8px;
+  border-radius: 10px;
+  text-align: left;
+}
+.mp-list button:hover { background: rgba(255, 255, 255, 0.08); }
+.mp-list button.is-on { background: rgba(255, 255, 255, 0.12); }
+.mp-list button.is-on .mp-n { color: var(--a2); }
+.mp-n { width: 16px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.mp-li-text { display: flex; flex-direction: column; min-width: 0; }
+.mp-li-text span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mp-li-text span + span { font-size: 11.5px; color: var(--muted); }
+
+.mp-btn:focus-visible, .mp-dock-main:focus-visible, .mp-list button:focus-visible { outline: 2px solid var(--a1); outline-offset: 2px; }
+
+/* phones: narrower, still clear of Mita on the left */
+@media (max-width: 560px) {
+  .mp { right: 12px; bottom: 60px; width: min(268px, 100vw - 108px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .is-playing .mp-cover { animation: none; }
+  .mp-card { animation: none; }
+}
