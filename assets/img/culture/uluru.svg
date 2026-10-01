@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 100"><style>@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }</style>
+<defs><linearGradient id="u" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e86a3a"/><stop offset="1" stop-color="#a8381f"/></linearGradient></defs>
+<circle cx="126" cy="30" r="12" fill="#ffcf6b" opacity=".9"/>
+<rect x="0" y="78" width="160" height="22" fill="#b5532f" opacity=".8"/>
+<path d="M12 80q4-30 30-36q30-6 70-4q28 2 36 30l2 10Z" fill="url(#u)"/>
+<path d="M40 50q-2 16 0 30M64 44q-3 18 0 36M92 42q-2 20 2 38M118 48q2 16 4 32" stroke="#8f2e18" stroke-width="1.6" fill="none" opacity=".7"/>
+<g fill="#7a8f4a"><ellipse cx="20" cy="84" rx="6" ry="3"/><ellipse cx="70" cy="88" rx="5" ry="2.5"/><ellipse cx="140" cy="86" rx="7" ry="3"/></g></svg>

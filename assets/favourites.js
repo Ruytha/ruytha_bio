@@ -15,8 +15,14 @@
 
   /* id     file name for the art, and the #fav-<id> link
      title  full name
-     sub    optional line under the name on the grid
-     meta   studio / developer and year
+     sub    optional extra line, shown under the title in the popup
+     genres    short list, the first one shows on the card
+     by        studio (anime) or developer (games)
+     year      release year, or a range
+     length    episodes / seasons, or how long it takes to beat
+     source    what the anime is adapted from
+     platforms where the game runs
+     take      YOUR OWN thoughts, a sentence or two. Leave '' to hide it.
      mono   short name shown on the cover until real art exists
      hue    0-360, colour of the cover
      star   true = top pick
@@ -25,40 +31,64 @@
   var ANIME = [
     {
       id: 'ttq', title: 'The Quintessential Quintuplets', mono: 'TQQ', hue: 215, 
-      meta: ' Tezuka Productions,  Bibury Animation Studios · 2019',
+      genres: ['Romance', 'Comedy'],
+      by: 'Tezuka Productions (S1), Bibury Animation Studios (S2 and film)', year: '2019',
+      length: '2 seasons, 24 episodes, plus a film',
+      source: 'Manga by Negi Haruba',
+      take: '',
       summary: ['Fuutarou Uesugi is a top student from a poor family who takes a high-paying tutoring job to help clear his fathers debts. His students turn out to be five classmates who are quintuplets: Ichika, Nino, Miku, Yotsuba and Itsuki, all of them failing and none of them interested in studying. He has to get all five through graduation, but first he has to get any of them to actually listen to him.']
     },
     {
       id: 'rascal', title: 'Rascal Does Not Dream of Bunny Girl Senpai', mono: 'Rascal', hue: 335,
-      meta: 'CloverWorks · 2018',
+      genres: ['Romance', 'Supernatural', 'Drama'],
+      by: 'CloverWorks', year: '2018',
+      length: '13 episodes, plus follow-up films and a second season',
+      source: 'Light novels by Hajime Kamoshida',
+      take: '',
       summary: [
         'Sakuta Azusagawa is a high schooler whose quiet routine changes when he runs into Mai Sakurajima, a famous actress wandering the library in a bunny girl outfit that nobody else seems able to see. Helping her leads him into a run of strange \u201cAdolescence Syndrome\u201d cases around school, each one growing out of something painfully real. It\u2019s part supernatural mystery, part sharp banter, and a lot of heart.'
       ]
     },
     {
       id: 'bocchi', title: 'Bocchi the Rock!', mono: 'Bocchi', hue: 8,
-      meta: 'CloverWorks · 2022',
+      genres: ['Music', 'Comedy', 'Slice of life'],
+      by: 'CloverWorks', year: '2022',
+      length: '12 episodes',
+      source: 'Manga by Aki Hamaji',
+      take: '',
       summary: [
         'Hitori \u201cBocchi\u201d Gotoh is a guitarist who has practised alone for years and can barely talk to other people. When drummer Nijika pulls her into the band Kessoku Band, she has to work out how to stand on a real stage without dissolving into a puddle of anxiety. The music is great, the comedy is sharp, and Bocchi\u2019s spiralling inner monologue is half the fun.'
       ]
     },
     {
       id: 'alya', title: 'Alya Sometimes Hides Her Feelings in Russian', mono: 'Alya', hue: 192,
-      meta: 'Doga Kobo · 2024',
+      genres: ['Romance', 'Comedy'],
+      by: 'Doga Kobo', year: '2024',
+      length: '12 episodes',
+      source: 'Light novels by Sunsunsun',
+      take: '',
       summary: [
         'Alya is a half-Russian top student who everyone finds cool and unapproachable, and who spends her days scolding Masachika Kuze, the sleepy classmate sitting next to her. She also mutters affectionate things in Russian, sure that nobody around her understands. Masachika understands every word and pretends he doesn\u2019t. The whole show grows out of that one secret.'
       ]
     },
     {
       id: 'spyxfamily', title: 'Spy x Family', mono: 'SxF', hue: 145,
-      meta: 'Wit Studio and CloverWorks · 2022',
+      genres: ['Action', 'Comedy', 'Family'],
+      by: 'Wit Studio and CloverWorks', year: '2022',
+      length: '3 seasons, plus the film Code: White',
+      source: 'Manga by Tatsuya Endo',
+      take: '',
       summary: [
         'Twilight, a top-tier spy, needs a family to finish his latest mission. He becomes Loid Forger, adopts a little girl called Anya, and marries Yor, who needs a cover of her own. What none of them know is that Anya can read minds and Yor is an assassin. Each is hiding something from the other two, and somehow they end up feeling like a real family anyway.'
       ]
     },
     {
       id: 'married-couple', title: 'More Than a Married Couple, But Not Lovers', mono: 'MTAMC', hue: 292,
-      meta: 'Studio Mother · 2022',
+      genres: ['Romance', 'Comedy'],
+      by: 'Studio Mother', year: '2022',
+      length: '12 episodes',
+      source: 'Manga by Yūki Kanamaru',
+      take: '',
       summary: [
         'At Jiro Yakuin\u2019s school, third-years are paired up for a \u201cmarriage practical\u201d and have to live together as a married couple. He gets Akari Watanabe, a lively gyaru who is nothing like him, and both of them would rather have been matched with their crushes. To swap partners they need to score well as a couple, so they play house properly, and it slowly stops feeling like acting.'
       ]
@@ -68,7 +98,11 @@
   var GAMES = [
     {
       id: 'ieytd', title: 'I Expect You to Die', sub: 'Parts 1, 2 & 3', mono: 'IEYTD', hue: 230,
-      meta: 'Schell Games · 2016 to 2023',
+      genres: ['VR', 'Puzzle', 'Spy'],
+      by: 'Schell Games', year: '2016 to 2023',
+      length: 'Three games',
+      platforms: 'Meta Quest, PC VR, PlayStation VR',
+      take: '',
       summary: [
         'A VR spy puzzle series. You play an agent who gets dropped into deadly, escape-room-style setups and has to work out how to finish the mission before something goes badly wrong. Everything is solved with what\u2019s within arm\u2019s reach, and the dry, dark humour is a big part of the charm.',
         'Three games, each one bigger and stranger than the last.'
@@ -76,56 +110,84 @@
     },
     {
       id: 'rdr2', title: 'Red Dead Redemption 2', mono: 'RDR2', hue: 26, star: true,
-      meta: 'Rockstar Games · 2018',
+      genres: ['Open world', 'Western'],
+      by: 'Rockstar Games', year: '2018',
+      length: 'Around 50 hours for the story',
+      platforms: 'PS4, Xbox One, PC',
+      take: '',
       summary: [
         'An open-world Western set in 1899, when the outlaw era is fading and the law is closing in. You play Arthur Morgan, an enforcer in the Van der Linde gang, as the crew runs from one job to the next and starts to come apart from the inside. It\u2019s known for its slow, detailed world and a story that takes its time before it hits you.'
       ]
     },
     {
       id: 'fh6', title: 'Forza Horizon 6', mono: 'FH6', hue: 348, star: true,
-      meta: 'Playground Games, Turn 10 Gmaes, Xbox Game Studios · 2026',
+      genres: ['Racing', 'Open world'],
+      by: 'Playground Games', year: '2026',
+      platforms: 'Xbox Series X|S, PC',
+      take: '',
       summary: [
         'The open-world racing series heads to Japan, with Tokyo as its biggest and most detailed drivable space yet. There are around 550 cars at launch, plenty of them kei cars and vans, and the roads run from city streets to mountain passes made for drifting. This time you start out as a tourist and earn your way up through the Horizon Festival.'
       ]
     },
     {
       id: 'ddlc', title: 'Doki Doki Literature Club!', mono: 'DDLC', hue: 322,
-      meta: 'Team Salvato · 2017',
+      genres: ['Visual novel', 'Psychological horror'],
+      by: 'Team Salvato', year: '2017',
+      length: 'About 4 to 6 hours',
+      platforms: 'PC (free), consoles as DDLC Plus',
+      take: '',
       summary: [
         'A free visual novel that starts out as a sweet story about joining your school\u2019s literature club and getting to know its four members. It doesn\u2019t stay that way. It\u2019s best to go in knowing as little as possible, and it opens with a content warning, so read that first.'
       ]
     },
     {
       id: 'zzz', title: 'Zenless Zone Zero', mono: 'ZZZ', hue: 52,
-      meta: 'HoYoverse · 2024',
+      genres: ['Action RPG', 'Free to play'],
+      by: 'HoYoverse', year: '2024',
+      platforms: 'PC, PS5, Xbox Series X|S, iOS, Android',
+      take: '',
       summary: [
         'A stylish urban-fantasy action RPG set in New Eridu, a city that survived the disasters known as Hollows. You play a Proxy, someone who guides squads of agents through those Hollows, and the fights are fast and flashy with a soundtrack to match.'
       ]
     },
     {
       id: 'rr', title: 'Rec Room', mono: 'RR', hue: 176,
-      meta: 'Rec Room Inc. · 2016 to 2026',
+      genres: ['Social', 'Sandbox'],
+      by: 'Rec Room Inc.', year: '2016 to 2026',
+      platforms: 'VR, PC, PlayStation, Xbox, iOS, Android',
+      take: '',
       summary: [
         'A free social platform where you could hang out, play games and build your own rooms, on VR, consoles, PC and mobile. Over a decade it grew to more than 150 million players and creators. It shut down on June 1, 2026.'
       ]
     },
     {
       id: 'firewatch', title: 'Firewatch', mono: 'Firewatch', hue: 14,
-      meta: 'Campo Santo · 2016',
+      genres: ['Adventure', 'Mystery'],
+      by: 'Campo Santo', year: '2016',
+      length: 'About 4 to 5 hours',
+      platforms: 'PC, PS4, Xbox One, Switch',
+      take: '',
       summary: [
         'You play Henry, who takes a summer job as a fire lookout in Wyoming\u2019s Shoshone National Forest in 1989, with only a radio and his supervisor Delilah for company. It\u2019s a first-person story about isolation and trust that slowly turns into a mystery about who else is out there.'
       ]
     },
     {
       id: 'dead-as-disco', title: 'Dead as Disco', mono: 'DaD', hue: 285,
-      meta: 'Brain Jar Games · 2026 (early access)',
+      genres: ['Rhythm', 'Brawler'],
+      by: 'Brain Jar Games', year: '2026 (early access)',
+      platforms: 'PC',
+      take: '',
       summary: [
         'A rhythm brawler where every punch, kick and dodge lands on the beat. You play Charlie Disco, a dead drummer who rises for one night to take on his old bandmates and the corporation running them. You can also load in your own songs and fight to them.'
       ]
     },
     {
       id: 'fears-to-fathom', title: 'Fears to Fathom', sub: 'Episodes 1 & 2', mono: 'FTF', hue: 160,
-      meta: 'Rayll · 2021 to 2022',
+      genres: ['Horror', 'Episodic'],
+      by: 'Rayll', year: '2021 to 2022',
+      length: 'About an hour per episode',
+      platforms: 'PC',
+      take: '',
       summary: [
         'An episodic horror series where each episode is a short, self-contained story about an ordinary situation turning frightening, inspired by scares that real people described.',
         'Episode 1 is Home Alone and episode 2 is Norwood Hitchhike.'
@@ -133,7 +195,10 @@
     },
     {
       id: 'minecraft', title: 'Minecraft', mono: 'Minecraft', hue: 125,
-      meta: 'Mojang · 2011',
+      genres: ['Sandbox', 'Survival'],
+      by: 'Mojang', year: '2011',
+      platforms: 'Pretty much everything',
+      take: '',
       summary: [
         'A sandbox game where you explore a world made of blocks, gather resources and build whatever you can imagine, from a tiny dirt hut to a full-scale castle. Survive the night in survival mode or build freely in creative mode. Either way, you set your own goals.'
       ]
@@ -163,6 +228,11 @@
   var subEl      = $('sheetSub');
   var metaEl     = $('sheetMeta');
   var bodyEl     = $('sheetBody');
+  var tagsEl     = $('sheetTags');
+  var factsEl    = $('sheetFacts');
+  var takeEl     = $('sheetTake');
+  var prevBtn    = $('sheetPrev');
+  var nextBtn    = $('sheetNext');
 
   var STAR = '<svg class="star" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
     '<path d="M12 2.5l2.94 5.96 6.58.96-4.76 4.64 1.12 6.55L12 17.52l-5.88 3.09 1.12-6.55L2.48 9.42l6.58-.96L12 2.5z"/></svg>' +
@@ -206,12 +276,14 @@
     if (withMono) el.innerHTML = '<span class="cover-mono">' + esc(item.mono) + '</span>';
   }
 
+  function firstYear(item) { return String(item.year || '').slice(0, 4); }
+
   function cardHTML(item) {
     return '' +
-      '<li class="media-item"><button class="media-card" type="button" data-id="' + esc(item.id) + '" aria-haspopup="dialog">' +
+      '<li class="media-item"' + (item.star ? ' data-star' : '') + '><button class="media-card" type="button" data-id="' + esc(item.id) + '" aria-haspopup="dialog">' +
         '<span class="art media-art"><span class="cover"></span></span>' +
         '<span class="media-name">' + esc(item.title) + (item.star ? STAR : '') + '</span>' +
-        (item.sub ? '<span class="media-sub">' + esc(item.sub) + '</span>' : '') +
+        '<span class="media-sub"><span>' + esc(item.genres ? item.genres[0] : '') + '</span><span>' + esc(firstYear(item)) + '</span></span>' +
       '</button></li>';
   }
 
@@ -226,6 +298,36 @@
   }
   render(animeGrid, ANIME);
   render(gamesGrid, GAMES);
+
+  /* ---------- filters ---------- */
+  var ALL = ANIME.concat(GAMES);
+  var filterBar = $('favFilters');
+  if (filterBar) {
+    var counts = {
+      all: ALL.length, anime: ANIME.length, games: GAMES.length,
+      top: ALL.filter(function (it) { return it.star; }).length
+    };
+    filterBar.querySelectorAll('[data-filter]').forEach(function (b) {
+      var c = b.querySelector('.fav-count');
+      if (c) c.textContent = counts[b.getAttribute('data-filter')];
+    });
+    filterBar.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-filter]') : null;
+      if (!b) return;
+      var f = b.getAttribute('data-filter');
+      filterBar.querySelectorAll('[data-filter]').forEach(function (x) {
+        x.setAttribute('aria-pressed', String(x === b));
+      });
+      document.querySelectorAll('.fav-group').forEach(function (g) {
+        var kind = g.getAttribute('data-kind');
+        g.querySelectorAll('.media-item').forEach(function (li) {
+          li.hidden = f === 'top' && !li.hasAttribute('data-star');
+        });
+        if (f === 'top') g.hidden = !g.querySelector('.media-item[data-star]');
+        else g.hidden = !(f === 'all' || f === kind);
+      });
+    });
+  }
 
   /* Look for real art once the section is near the screen. */
   var active = null;
@@ -301,9 +403,34 @@
     titleEl.innerHTML = esc(item.title) + (item.star ? STAR : '');
     subEl.textContent = item.sub || '';
     subEl.hidden = !item.sub;
-    metaEl.textContent = item.meta || '';
-    metaEl.hidden = !item.meta;
+    metaEl.hidden = true;
+
+    tagsEl.innerHTML = (item.genres || []).map(function (g) { return '<li>' + esc(g) + '</li>'; }).join('');
+
+    var anime = item.kind === 'anime';
+    var rows = [
+      [anime ? 'Studio' : 'Developer', item.by],
+      ['Released', item.year],
+      [anime ? 'Episodes' : 'Length', item.length],
+      ['Based on', item.source],
+      ['Plays on', item.platforms]
+    ].filter(function (r) { return r[1]; });
+    factsEl.innerHTML = rows.map(function (r) {
+      return '<div><dt>' + esc(r[0]) + '</dt><dd>' + esc(r[1]) + '</dd></div>';
+    }).join('');
+
     bodyEl.innerHTML = item.summary.map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('');
+    takeEl.hidden = !item.take;
+    takeEl.querySelector('p').textContent = item.take || '';
+
+    var list = anime ? ANIME : GAMES;
+    var i = list.indexOf(item);
+    var prev = list[(i - 1 + list.length) % list.length];
+    var next = list[(i + 1) % list.length];
+    prevBtn.querySelector('.sheet-nav-name').textContent = prev.title;
+    nextBtn.querySelector('.sheet-nav-name').textContent = next.title;
+    prevBtn.setAttribute('data-id', prev.id);
+    nextBtn.setAttribute('data-id', next.id);
     paint(posterCov, item, true);
     paint(sheetCover, item, false);
   }
@@ -379,6 +506,7 @@
     anims = [];
     extras = [];
     state = 'closed';
+    browsed = false;
     if (sheet.open) sheet.close();
     unlockScroll();
     if (card) {
@@ -397,7 +525,7 @@
     if (scroller.scrollTop > 0) scroller.scrollTop = 0;
 
     // If the window changed size while open, the card has moved. Just fade.
-    var moved = sheet.clientWidth !== openW || sheet.clientHeight !== openH;
+    var moved = browsed || sheet.clientWidth !== openW || sheet.clientHeight !== openH;
     if (moved && anims.length > 1) {
       anims.forEach(function (a) { try { a.cancel(); } catch (e) { /* noop */ } });
       anims = fade(1, 0, 180);
@@ -448,6 +576,40 @@
   function clearHash() {
     try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* noop */ }
   }
+
+  /* ---------- browse while open ---------- */
+  var browsed = false;
+
+  function browse(id) {
+    var item = byId[id];
+    if (!item || state !== 'open' || !active) return;
+    browsed = true;   // the card we came from is no longer the one showing, so close with a fade
+    if (active.card) active.card.classList.remove('is-open');
+    active = { item: item, card: item._card || null };
+    var swap = function () {
+      fillSheet(item);
+      scroller.scrollTop = 0;
+      try { history.replaceState(history.state, '', '#fav-' + item.id); } catch (e) { /* noop */ }
+    };
+    if (!textEl.animate || reduced()) { swap(); return; }
+    var out = { duration: 140, easing: 'ease-in', fill: 'both' };
+    var a = textEl.animate([{ opacity: 1 }, { opacity: 0, transform: 'translateY(6px)' }], out);
+    var b = poster.animate([{ opacity: 1 }, { opacity: 0 }], out);
+    a.onfinish = function () {
+      swap();
+      a.cancel(); b.cancel();
+      var inn = { duration: 300, easing: EASE };
+      textEl.animate([{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], inn);
+      poster.animate([{ opacity: 0, transform: 'scale(0.96)' }, { opacity: 1, transform: 'none' }], inn);
+    };
+  }
+
+  prevBtn.addEventListener('click', function () { browse(prevBtn.getAttribute('data-id')); });
+  nextBtn.addEventListener('click', function () { browse(nextBtn.getAttribute('data-id')); });
+  sheet.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') browse(prevBtn.getAttribute('data-id'));
+    else if (e.key === 'ArrowRight') browse(nextBtn.getAttribute('data-id'));
+  });
 
   /* ---------- events ---------- */
   function onGridClick(e) {

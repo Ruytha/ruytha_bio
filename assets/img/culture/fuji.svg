@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 110"><style>.c{animation:dr 9s ease-in-out infinite alternate}.c2{animation:dr 7s ease-in-out -3s infinite alternate-reverse}@keyframes dr{to{transform:translateX(12px)}}@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }</style>
+<circle cx="118" cy="30" r="15" fill="#e8384f"/>
+<path d="M6 104 58 30q22-14 44 0l52 74Z" fill="#4c5aa8"/>
+<path d="M6 104 58 30q8-5 16-6L44 104Z" fill="#5d6cbd"/>
+<path d="M58 30q22-14 44 0l12 17-9-3-7 8-8-9-10 9-9-8-8 6-6-4Z" fill="#f4f6ff"/>
+<g class="c"><path d="M14 72q4-9 14-6q4-8 13-4q9-2 10 7q7 1 6 7H12q-4-2 2-4Z" fill="#fff" opacity=".85"/></g>
+<g class="c2"><path d="M100 84q3-7 11-5q4-6 11-3q8-1 8 6q6 1 5 6H98q-3-2 2-4Z" fill="#fff" opacity=".7"/></g></svg>
