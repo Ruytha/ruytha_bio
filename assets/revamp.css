@@ -1,0 +1,610 @@
+/* ============================================================
+   Home page revamp (only loaded by index.html, after everything else)
+
+   Rules this layer follows:
+   - one accent (moonlight blue). Femboy mode swaps it for pink.
+   - handwritten notes are the only other colour: pink marker ink.
+   - glass only on the floating bits (nav dock, now playing, player).
+     Sections sit straight on the night sky, no panels.
+   - radius scale: buttons/chips = pill, surfaces = 18px, media = 12px.
+   - nothing loops forever unless it shows something real
+     (the equalizer only moves while music is playing).
+   ============================================================ */
+
+:root {
+  --font: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --display: "Bricolage Grotesque", var(--font);
+  --hand: "Gochi Hand", "Comic Sans MS", cursive;
+
+  --accent: #9cc7f2;
+  --accent-ink: #08142e;
+  --ink: #ff9ecb;
+
+  /* the old three-colour rainbow collapses into shades of the one accent */
+  --a1: #9cc7f2;
+  --a2: #7aa6dc;
+  --a3: #c9def5;
+
+  --text: #eef1fa;
+  --muted: #9aa3bf;
+  --line: rgba(190, 205, 255, 0.13);
+  --surface: rgba(140, 165, 235, 0.06);
+  --surface-2: rgba(140, 165, 235, 0.11);
+
+  --r-surface: 18px;
+  --r-media: 12px;
+}
+
+:root.femboy {
+  --accent: #ff8fc8;
+  --accent-ink: #3a0a24;
+  --ink: #ffc2e0;
+  --surface: rgba(255, 170, 215, 0.08);
+  --surface-2: rgba(255, 170, 215, 0.14);
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.55;
+  letter-spacing: -0.006em;
+}
+
+/* ---------- page frame: no bento, sections stack ---------- */
+main {
+  display: block;
+  max-width: var(--col);
+  padding-inline: clamp(16px, 4vw, 40px);
+}
+
+.section { display: block; padding-top: clamp(80px, 11vw, 140px); }
+.section > .wrap {
+  max-width: none;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.section > .wrap::before,
+.section > .wrap::after { content: none; }
+
+/* ---------- type ---------- */
+.h2 {
+  font-family: var(--display);
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+.section .h2::before { content: none; }
+.femboy .section .h2::before { content: ""; display: block; margin-bottom: 14px; }
+.h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 26px; font-weight: 650;
+  letter-spacing: -0.03em; line-height: 1.1;
+}
+.lede {
+  margin-top: 12px;
+  max-width: 60ch;
+  font-size: 17px;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.lede strong { color: var(--text); }
+
+.note,
+.section:nth-of-type(even) .note,
+.femboy .note,
+.femboy .section:nth-of-type(even) .note { color: var(--ink); }
+.note { font-family: var(--hand); font-size: 21px; margin-top: 10px; }
+
+/* ---------- buttons ---------- */
+.btn {
+  padding: 12px 22px;
+  font-size: 15px; font-weight: 600;
+  transition: transform 0.25s var(--ease), background 0.25s, border-color 0.25s;
+}
+.btn:active { transform: scale(0.98); }
+.btn-primary {
+  color: var(--accent-ink);
+  background: var(--accent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+.btn-primary:hover {
+  background: color-mix(in srgb, var(--accent) 82%, #fff);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--line);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.btn-ghost:hover { background: var(--surface); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+
+.link { color: var(--accent); font-weight: 500; }
+
+/* ============================================================
+   Hero: words on the left, me + what I'm playing on the right
+   ============================================================ */
+.hero.hero-big {
+  --s0: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+  min-height: min(100svh, 940px);
+  padding: clamp(88px, 12vh, 112px) 0 clamp(40px, 6vh, 64px);
+  text-align: left;
+}
+.hero-big .hero-inner {
+  max-width: none;
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+
+.hero-hello {
+  font-family: var(--hand);
+  font-size: clamp(24px, 2.4vw, 30px);
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--ink);
+  rotate: -3deg;
+  margin-left: 4px;
+}
+
+.hero-big .hero-name,
+.femboy .hero-big .hero-name {
+  margin-top: 6px;
+  font-family: var(--display);
+  font-size: clamp(76px, 12vw, 176px);
+  font-weight: 800;
+  line-height: 0.88;
+  letter-spacing: -0.055em;
+  padding-bottom: 0.04em;
+  color: var(--text);
+  background: none;
+  animation: none;
+  filter: none;
+}
+/* femboy mode keeps the flag-striped name, but static */
+.femboy .hero-big .hero-name {
+  color: transparent;
+  background-image: linear-gradient(100deg, #ff4fa3 0%, #ff9ccc 26%, #fff 46%, #fff 54%, #a8dcff 76%, #5aa9ff 100%);
+  -webkit-background-clip: text; background-clip: text;
+}
+
+.lyric {
+  margin-top: clamp(16px, 2.4vh, 24px);
+  max-width: 22ch;
+  font-family: var(--display);
+  font-size: clamp(22px, 2.6vw, 32px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  min-height: 2.4em;
+}
+.lyric-line { text-wrap: balance; }
+
+.hero-big .hero-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px;
+  margin-top: clamp(18px, 3vh, 28px);
+  font-size: 14.5px;
+  color: var(--muted);
+}
+.hero-open { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font-weight: 500; }
+.hero-clock { padding-left: 14px; border-left: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+/* a real status, so the dot stays. No pulse. */
+.dot-green { background: #5fd38a; animation: none; box-shadow: none; }
+
+.hero-big .hero-cta {
+  justify-content: flex-start; align-items: center;
+  gap: 8px 22px;
+  margin-top: clamp(22px, 3.4vh, 32px);
+}
+.hero-link { font-size: 15px; }
+.hero-link .chev { display: inline-block; transition: transform 0.25s var(--ease); }
+.hero-link:hover { text-decoration: none; }
+.hero-link:hover .chev { transform: translateX(3px); }
+
+/* right side */
+.hero-visual {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+}
+.hero-big .avatar-wrap {
+  width: clamp(220px, 25vw, 330px);
+  height: clamp(220px, 25vw, 330px);
+  margin: 0;
+}
+.avatar-wrap::before {
+  inset: -6px;
+  animation: none;
+  background: conic-gradient(from 210deg, var(--np1), var(--np2), var(--np1));
+  opacity: 0.85;
+}
+.avatar-wrap::after { content: none; }
+.hero-big .avatar { cursor: pointer; }
+.hero-big .avatar:hover { transform: scale(1.03) rotate(-2deg); }
+.viz i { width: 4px; margin-left: -2px; }
+
+.hero-visual .pill.np {
+  position: relative; z-index: 2;
+  margin-top: -34px;
+  max-width: min(100%, 380px);
+}
+.hero-note {
+  position: absolute; top: -40px; left: -8px;
+  margin: 0;
+  max-width: 11em;
+  font-size: 20px;
+  rotate: -6deg;
+  text-align: left;
+}
+
+/* ============================================================
+   Who's Ruytha? (the old About panel lives in here now)
+   ============================================================ */
+.bio-head { align-items: flex-end; }
+.bio-grid {
+  margin-top: clamp(28px, 4vw, 44px);
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+  gap: 40px clamp(40px, 6vw, 88px);
+  align-items: start;
+}
+.bio-text { max-width: 64ch; }
+.bio-text p { font-size: 17px; line-height: 1.65; color: color-mix(in srgb, var(--text) 80%, transparent); }
+.bio-text p + p { margin-top: 14px; }
+.bio-text .bio-lead {
+  margin-bottom: 22px;
+  font-family: var(--display);
+  font-size: clamp(24px, 2.6vw, 32px);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.bio-text[data-v="fem"] .bio-lead { font-family: var(--hand); font-weight: 400; letter-spacing: 0; color: var(--ink); }
+
+.bio-side { display: grid; justify-items: center; gap: 28px; }
+.bio-switch-pill { background: var(--surface-2); box-shadow: none; }
+
+.facts {
+  justify-self: stretch;
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+.facts > div {
+  display: flex; justify-content: space-between; gap: 16px;
+  padding: 11px 0;
+  border: 0;
+  background: none;
+}
+.facts > div:hover { padding-inline: 0; background: none; }
+.facts dt { font-size: 14px; color: var(--muted); }
+.facts dd { font-size: 14px; font-weight: 500; text-align: right; }
+.facts strong { color: var(--ink); }
+
+/* word of the day: a wide strip under the bio */
+.wotd,
+#about .wotd {
+  margin-top: clamp(36px, 5vw, 56px);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "word head" "word text";
+  align-items: center;
+  column-gap: clamp(20px, 3vw, 36px);
+  row-gap: 4px;
+  width: 100%;
+  padding: 22px clamp(20px, 3vw, 32px);
+  border-radius: var(--r-surface);
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.wotd:hover { transform: none; border-color: color-mix(in srgb, var(--accent) 40%, transparent); background: var(--surface-2); }
+.wotd:active { transform: scale(0.995); }
+.wotd-word {
+  grid-area: word;
+  margin: 0;
+  font-size: clamp(52px, 7vw, 76px);
+  line-height: 1;
+  color: var(--text);
+  background: none;
+}
+.wotd-head { grid-area: head; align-self: end; font-size: 13.5px; }
+.wotd-text { grid-area: text; align-self: start; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.wotd-read { font-size: 16px; }
+.wotd-mean { font-family: var(--display); font-size: clamp(22px, 2.4vw, 28px); font-weight: 600; letter-spacing: -0.02em; }
+
+/* ============================================================
+   Music: recent streams beside this week, featured artist below
+   ============================================================ */
+.music-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 48px clamp(40px, 6vw, 80px);
+  align-items: start;
+}
+.music-grid > *, #week.music-week { grid-column: auto; min-width: 0; }
+.music-week { padding-top: 10px; scroll-margin-top: 80px; }
+
+.tracks { margin-top: 26px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 20px; }
+.track,
+a.track:hover {
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+.track { padding: 8px; margin-inline: -8px; width: calc(100% + 16px); border-radius: var(--r-media); }
+.track::before, .track::after { content: none; }
+a.track:hover { transform: none; background: var(--surface); }
+.track-art { width: 46px; height: 46px; flex-basis: 46px; border-radius: 8px; }
+.track-name { font-size: 15px; }
+.track-now { color: var(--accent); }
+
+.wk-num { font-family: var(--display); font-size: 72px; font-weight: 700; letter-spacing: -0.05em; }
+.wk-bar i { background: var(--accent); }
+.wk-bars a::after { background: #0b1433; }
+
+.faves { margin-top: clamp(48px, 6vw, 72px); }
+.fave {
+  display: flex; flex-direction: column; justify-content: flex-end;
+  min-height: 280px;
+  padding: clamp(24px, 3vw, 36px);
+  border-radius: var(--r-surface);
+  border: 1px solid var(--line);
+  background: #0a1230;
+  box-shadow: none;
+}
+.fave::after { content: none; }
+.fave::before {
+  opacity: 0.85;
+  -webkit-mask-image: linear-gradient(to right, transparent 20%, #000 75%);
+  mask-image: linear-gradient(to right, transparent 20%, #000 75%);
+}
+.fave-kicker { font-size: 13.5px; color: var(--muted); }
+.fave-title {
+  font-family: var(--display);
+  font-size: clamp(40px, 5.4vw, 64px);
+  font-weight: 750;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+.fave-sub { margin-top: 8px; font-size: 16px; max-width: 32ch; color: color-mix(in srgb, var(--text) 78%, transparent); }
+.fave-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin-top: 20px; }
+.fave .btn-ghost { background: rgba(8, 14, 40, 0.55); }
+
+/* ============================================================
+   What I do: a typographic list, no icon cards
+   ============================================================ */
+.skills {
+  margin-top: clamp(32px, 4vw, 48px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(32px, 5vw, 72px);
+}
+.skill {
+  padding: 22px 0 24px;
+  border-top: 1px solid var(--line);
+}
+.skill h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(26px, 2.8vw, 34px);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  transition: color 0.25s;
+}
+.skill p { margin-top: 8px; max-width: 46ch; font-size: 16px; color: var(--muted); }
+.skill:hover h3 { color: var(--accent); }
+.skill-lead { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 32px; }
+.skill-lead h3 { font-size: clamp(48px, 7vw, 92px); font-weight: 750; letter-spacing: -0.05em; }
+.skill-lead p { margin: 0; font-size: 18px; color: var(--text); }
+
+/* ============================================================
+   Projects: the main one big, the rest in a column
+   ============================================================ */
+.projects {
+  margin-top: clamp(32px, 4vw, 48px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  grid-template-rows: repeat(3, auto);
+  gap: 18px clamp(28px, 4vw, 48px);
+}
+.proj,
+.proj:hover {
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+.proj { border-radius: var(--r-media); overflow: visible; }
+.proj::before, .proj::after { content: none; }
+.proj-media { border-radius: var(--r-media); overflow: hidden; }
+.proj-body { padding: 0; }
+.proj-body h3 { font-family: var(--display); font-size: 21px; font-weight: 650; letter-spacing: -0.025em; margin-top: 6px; }
+.proj-body p { margin-top: 4px; font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+
+.proj-feature { grid-row: 1 / span 3; display: flex; flex-direction: column; gap: 18px; }
+.proj-feature .proj-media { aspect-ratio: 16 / 10; }
+.proj-feature .proj-body h3 { font-size: clamp(30px, 3.4vw, 42px); font-weight: 750; letter-spacing: -0.04em; }
+.proj-feature .proj-body p { font-size: 16.5px; max-width: 46ch; }
+
+.proj:not(.proj-feature) {
+  display: grid;
+  grid-template-columns: minmax(120px, 42%) minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  padding: 10px;
+  margin: -10px;
+  border-radius: var(--r-surface);
+  transition: background 0.25s;
+}
+.proj:not(.proj-feature):hover { background: var(--surface); }
+
+.badge { font-size: 12.5px; font-weight: 600; }
+.badge::before { animation: none; }
+.badge-soon { color: var(--accent); }
+.badge-build { color: #7fd8a0; }
+.badge-queue { color: var(--muted); }
+
+/* ============================================================
+   Sync a line: centred, the stage is the focus
+   ============================================================ */
+.sync { text-align: center; }
+.sync-head { display: flex; flex-direction: column; align-items: center; }
+.sync-head .lede { margin-inline: auto; max-width: 52ch; }
+.sync-head .note { rotate: 2deg; }
+.sync-stage {
+  margin: clamp(28px, 4vw, 40px) auto 0;
+  max-width: 880px;
+  padding: clamp(28px, 4vw, 44px) clamp(18px, 3vw, 36px) 28px;
+  border-radius: var(--r-surface);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.sync-line { font-family: var(--display); font-weight: 650; }
+.sync-tap {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+.sync-tap kbd { background: rgba(8, 20, 46, 0.14); }
+.st-head { background: var(--accent); box-shadow: none; }
+.sync-verdict { color: var(--ink); }
+
+/* ============================================================
+   Favourites
+   ============================================================ */
+.fav-head { align-items: flex-end; }
+.media-h { font-family: var(--display); font-size: 20px; font-weight: 650; margin-top: 36px; }
+.fav-filters { background: var(--surface); }
+.fav-filters button[aria-pressed="true"] { background: var(--surface-2); box-shadow: none; }
+
+/* ============================================================
+   Find me: Discord first and bigger, the rest in a row
+   ============================================================ */
+.links {
+  margin-top: clamp(28px, 4vw, 40px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.links li { min-width: 0; display: flex; }
+.links .link-main { grid-column: 1 / -1; }
+.links a {
+  width: 100%;
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px;
+  border-radius: var(--r-surface);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: none;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s var(--ease);
+}
+.links a::before, .links a::after { content: none; }
+.links a:hover {
+  transform: translateY(-2px);
+  background: var(--surface-2);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.links a:active { transform: scale(0.98); }
+.links a:hover .ico-sm { color: var(--accent); }
+.link-name { font-size: 15.5px; font-weight: 600; }
+.link-sub { font-size: 13px; }
+.links li:not(.link-main) a { flex-direction: column; align-items: flex-start; gap: 18px; }
+.links li:not(.link-main) .chev { display: none; }
+.links .link-main a { padding: 20px 22px; }
+.links .link-main .link-name { font-family: var(--display); font-size: 24px; font-weight: 650; letter-spacing: -0.03em; }
+@media (min-width: 821px) {
+  .links { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+  .links .link-main { grid-column: span 5; }
+  .links li:not(.link-main) { grid-column: span 2; }
+}
+
+/* ============================================================
+   Guestbook
+   ============================================================ */
+.gb { margin-top: clamp(28px, 4vw, 40px); gap: clamp(24px, 4vw, 48px); }
+.gb-form {
+  padding: 22px;
+  border-radius: var(--r-surface);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* ============================================================
+   Footer: one row, no link farm
+   ============================================================ */
+.footer {
+  margin-top: clamp(96px, 12vw, 160px);
+  padding: 28px 0 calc(150px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+}
+.footer-inner {
+  max-width: var(--col);
+  padding-inline: clamp(16px, 4vw, 40px);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px 32px;
+}
+.footer p.footer-sign {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--display);
+  font-size: 17px; font-weight: 650; letter-spacing: -0.02em;
+  color: var(--text);
+}
+.footer-sign img { width: 28px; height: 28px; border-radius: 50%; }
+.footer-links, .footer-legal { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 14px; }
+.footer-links a { color: var(--text); opacity: 0.85; }
+.footer-legal a { color: var(--muted); font-size: 13px; }
+.footer-links a:hover, .footer-legal a:hover { opacity: 1; color: var(--accent); }
+
+/* ============================================================
+   Smaller screens
+   ============================================================ */
+@media (max-width: 980px) {
+  .music-grid { grid-template-columns: 1fr; }
+  .music-week { padding-top: 0; }
+  .footer-inner { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 860px) {
+  .hero.hero-big {
+    grid-template-columns: 1fr;
+    align-content: center;
+    gap: 28px;
+    min-height: 0;
+    padding-top: 72px;
+  }
+  .hero-visual { order: -1; justify-items: start; }
+  .hero-big .avatar-wrap { width: 148px; height: 148px; }
+  .hero-visual .pill.np { margin-top: 18px; }
+  .hero-note { top: 12px; left: 172px; right: auto; text-align: left; rotate: -4deg; font-size: 18px; }
+  .bio-grid { grid-template-columns: 1fr; }
+  .bio-side { grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 24px; }
+  .bio-side .polaroid { width: 150px; }
+  .projects { grid-template-columns: 1fr; }
+  .proj-feature { grid-row: auto; }
+}
+
+@media (max-width: 640px) {
+  .tracks { grid-template-columns: 1fr; }
+  .skills { grid-template-columns: 1fr; }
+  .bio-side { grid-template-columns: 1fr; justify-items: center; }
+  .wotd, #about .wotd { grid-template-columns: 1fr; grid-template-areas: "head" "word" "text"; }
+  .proj:not(.proj-feature) { grid-template-columns: 112px minmax(0, 1fr); gap: 14px; }
+  .proj:not(.proj-feature) .proj-body p { display: none; }
+  .hero-note { display: none; }
+}

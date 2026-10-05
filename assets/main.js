@@ -193,7 +193,7 @@
       setPill(
         live ? 'playing' : 'recent',
         live ? 'Listening right now' : 'Last played ' + ago(top.date && top.date.uts),
-        top.name + ' — ' + (top.artist && top.artist['#text']),
+        top.name + ' · ' + (top.artist && top.artist['#text']),
         pickArt(top.image)
       );
     })

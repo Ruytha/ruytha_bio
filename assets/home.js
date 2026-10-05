@@ -102,7 +102,7 @@
 /* ---------- 5. side cards drift with the cursor ---------- */
 (function () {
   'use strict';
-  var floats = document.querySelectorAll('.float, .rail-bob');
+  var floats = document.querySelectorAll('.rail-bob');
   if (!floats.length) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
@@ -455,10 +455,10 @@
   var arEl = document.getElementById('ttArtist');
   function mirror() {
     tt.setAttribute('data-state', pill.getAttribute('data-state') || '');
-    var parts = (document.getElementById('pillTrack').textContent || '').split(' — ');
+    var parts = (document.getElementById('pillTrack').textContent || '').split(' · ');
     stEl.textContent = document.getElementById('pillLabel').textContent;
     trEl.textContent = parts[0] || '';
-    arEl.textContent = parts.slice(1).join(' — ');
+    arEl.textContent = parts.slice(1).join(' · ');
     var img = document.getElementById('npLabel').style.backgroundImage;
     label.style.backgroundImage = img || '';
   }
@@ -497,7 +497,7 @@
     var pill = document.getElementById('pill');
     var track = document.getElementById('pillTrack');
     if (pill && pill.getAttribute('data-state') === 'playing' && track && Math.random() < 0.5) {
-      return '♪ ' + track.textContent.split(' — ')[0] + ' ♪';
+      return '♪ ' + track.textContent.split(' · ')[0] + ' ♪';
     }
     if (root.classList.contains('femboy') && Math.random() < 0.5) return pick(FEM);
     return pick(LINES);
@@ -621,5 +621,5 @@
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) { e.target.classList.toggle('is-off', !e.isIntersecting); });
   }, { rootMargin: '150px 0px' });
-  document.querySelectorAll('.hero-big, .rail, .cult, .marquee, .section > .wrap').forEach(function (el) { io.observe(el); });
+  document.querySelectorAll('.hero-big, .rail, .cult, .section > .wrap').forEach(function (el) { io.observe(el); });
 })();
