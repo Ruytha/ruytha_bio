@@ -1054,7 +1054,7 @@ body::after {
 @media (prefers-reduced-motion: reduce) { .rail-bob { animation: none; translate: none; } }
 
 /* ============================================================
-   Mita, sitting in the bottom-left corner
+   Claude Code, sitting in the bottom-left corner
    ============================================================ */
 .chibi {
   position: fixed; left: 14px; bottom: 0; z-index: 112;
@@ -1072,7 +1072,7 @@ body::after {
 .chibi-svg { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 6px 10px rgba(0, 0, 20, 0.45)); }
 
 .chibi g { transform-box: fill-box; }
-.chibi .c-head { transform-origin: 50% 95%; animation: head-sway 6s ease-in-out infinite; transition: transform 0.4s var(--ease); }
+.chibi .c-head { transform-origin: 50% 100%; animation: head-sway 6s ease-in-out infinite; transition: transform 0.4s var(--ease); }
 @keyframes head-sway { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(-4deg); } 60% { transform: rotate(3deg); } }
 .chibi .c-body { transform-origin: 50% 100%; animation: chibi-breathe 3s ease-in-out infinite; }
 @keyframes chibi-breathe { 50% { transform: scaleY(0.985); } }
@@ -1087,10 +1087,10 @@ body::after {
 .chibi .c-legR { animation: swing 1.6s ease-in-out -0.8s infinite alternate; }
 @keyframes swing { from { transform: rotate(-10deg); } to { transform: rotate(12deg); } }
 
-/* hover: she waves */
-.chibi .c-armR { transform-origin: 15% 6%; }
+/* hover: the side nub waves */
+.chibi .c-armR { transform-origin: 0 50%; }
 .chibi-btn:hover .c-armR { animation: wave-arm 0.4s ease-in-out infinite alternate; }
-@keyframes wave-arm { from { transform: rotate(-150deg); } to { transform: rotate(-118deg); } }
+@keyframes wave-arm { from { transform: rotate(-40deg); } to { transform: rotate(-10deg); } }
 .chibi-btn:hover .c-head { animation: none; transform: rotate(-6deg); }
 
 /* click: little bounce */

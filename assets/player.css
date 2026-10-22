@@ -158,7 +158,7 @@
 
 .mp-btn:focus-visible, .mp-dock-main:focus-visible, .mp-list button:focus-visible { outline: 2px solid var(--a1); outline-offset: 2px; }
 
-/* phones: narrower, still clear of Mita on the left */
+/* phones: narrower, still clear of Claude Code on the left */
 @media (max-width: 560px) {
   .mp { right: 12px; bottom: 60px; width: min(268px, 100vw - 108px); }
 }

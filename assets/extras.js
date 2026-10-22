@@ -1,7 +1,7 @@
 /* ============================================================
    Ruytha: extra home page features
    sync game, weekly stats, photo gallery, guestbook,
-   project panels, Mita reactions, seasonal mode
+   project panels, Claude Code reactions, seasonal mode
    ============================================================ */
 
 /* ------------------------------------------------------------
@@ -70,7 +70,7 @@ var RUYTHA_PROJECTS_UPDATED = '1 October 2026';
   function esc(v) {
     return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
-  function mita(text, ms) { if (window.mitaSay) window.mitaSay(text, ms); }
+  function say(text, ms) { if (window.mascotSay) window.mascotSay(text, ms); }
   var toastT;
   function toast(msg) {
     var t = $('toast'); if (!t) return;
@@ -202,7 +202,7 @@ var RUYTHA_PROJECTS_UPDATED = '1 October 2026';
       result.innerHTML = taps.length
         ? '<strong>' + avg + 'ms</strong> off on average' + (missed ? ', ' + missed + ' missed' : '') + '. <span class="sync-verdict">' + verdict + '</span>'
         : '<span class="sync-verdict">' + verdict + '</span>';
-      mita(taps.length ? (avg < 90 ? 'ooh, nice timing! ♡' : 'practice makes perfect~') : 'you have to tap along, silly');
+      say(taps.length ? (avg < 90 ? 'ooh, nice timing! ♡' : 'practice makes perfect~') : 'you have to tap along, silly');
     }
 
     function replay() {
@@ -392,7 +392,7 @@ var RUYTHA_PROJECTS_UPDATED = '1 October 2026';
           }
           form.reset(); count.textContent = '0/160';
           setStatus('Signed! Thank you ♡', 'ok');
-          mita('you signed the guestbook! thank you ♡');
+          say('you signed the guestbook! thank you ♡');
         })
         .catch(function (err) { setStatus(err.message, 'err'); })
         .then(function () { submit.disabled = false; });
@@ -436,7 +436,7 @@ var RUYTHA_PROJECTS_UPDATED = '1 October 2026';
       from = trigger;
       root.classList.add('sheet-lock');
       dlg.showModal();
-      mita(id === 'site' ? 'this is where we are right now!' : 'ooh, ' + p.title + '!');
+      say(id === 'site' ? 'this is where we are right now!' : 'ooh, ' + p.title + '!');
       if (reduced || !panel.animate || !trigger) return;
       busy = true;
       var a = panel.animate([{ transform: flip(trigger.getBoundingClientRect()), borderRadius: '22px', opacity: 0.6 }, { transform: 'none', borderRadius: '28px', opacity: 1 }], { duration: 540, easing: EASE });
@@ -469,24 +469,24 @@ var RUYTHA_PROJECTS_UPDATED = '1 October 2026';
   })();
 
   /* ============================================================
-     6. Mita reacts to what you do
+     6. Claude Code reacts to what you do
      ============================================================ */
   (function () {
     if (!window.MutationObserver) return;
     var sheet = $('sheet'), artist = $('artist');
     var seen = {};
-    function once(key, text) { if (seen[key]) return; seen[key] = 1; mita(text); }
+    function once(key, text) { if (seen[key]) return; seen[key] = 1; say(text); }
     if (sheet) new MutationObserver(function () {
       if (sheet.open) once('fav', 'ooh, good taste ♡');
     }).observe(sheet, { attributes: true, attributeFilter: ['open'] });
     if (artist) new MutationObserver(function () {
-      if (artist.open) mita('tame impala again? classic.');
+      if (artist.open) say('tame impala again? classic.');
     }).observe(artist, { attributes: true, attributeFilter: ['open'] });
 
     var wasFem = root.classList.contains('femboy');
     new MutationObserver(function () {
       var fem = root.classList.contains('femboy');
-      if (fem !== wasFem) mita(fem ? 'so pink!! i love it ♡' : 'aww, back to blue');
+      if (fem !== wasFem) say(fem ? 'so pink!! i love it ♡' : 'aww, back to blue');
       wasFem = fem;
     }).observe(root, { attributes: true, attributeFilter: ['class'] });
 
@@ -519,7 +519,7 @@ var RUYTHA_PROJECTS_UPDATED = '1 October 2026';
       jacaranda: 'jacaranda season! everything’s purple 💜',
       xmas: 'merry christmas! it’s like 35° here ☀️'
     };
-    setTimeout(function () { mita(LINES[season] || 'hi!', 4200); }, 6500);
+    setTimeout(function () { say(LINES[season] || 'hi!', 4200); }, 6500);
     if (reduced) return;
 
     var layer = document.createElement('div');

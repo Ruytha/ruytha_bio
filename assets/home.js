@@ -466,7 +466,7 @@
   new MutationObserver(mirror).observe(pill, { attributes: true, childList: true, subtree: true, characterData: true });
 })();
 
-/* ---------- 12. Mita sitting in the corner ---------- */
+/* ---------- 12. Claude Code sitting in the corner ---------- */
 (function () {
   'use strict';
   var el = document.getElementById('chibi');
@@ -476,12 +476,12 @@
   var root = document.documentElement;
 
   var LINES = [
-    'hi! i’m mita ♡', 'welcome to ruytha’s site!', 'you’re staying a while, right?',
-    'i’ll keep this corner warm for you', 'have you seen the projects?', 'scroll down, there’s more!',
-    'don’t leave yet~', 'i like it here', 'the turntable is my favourite part'
+    'hi! i’m claude code ♡', 'welcome to ruytha’s site!', 'i helped build some of this~',
+    'you’re absolutely right!', 'want me to refactor this page?', 'scroll down, there’s more!',
+    'running tests… jk, they all pass ♡', 'ctrl+c won’t get rid of me', 'the turntable is my favourite part'
   ];
   var FEM = ['psst, the femboy switch is over there →', 'pink suits this place ♡', 'so cute in here ♡'];
-  var SLEEPY = ['mm… five more minutes…', 'zzz… oh! hi…', 'it’s so late…'];
+  var SLEEPY = ['compacting conversation… zzz', 'zzz… oh! hi…', 'mm… context window full…'];
 
   function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
   function sleepy() { return new Date(Date.now() + 8 * 3600e3).getUTCHours() < 6; }   // Ruytha's night
@@ -503,7 +503,7 @@
     return pick(LINES);
   }
 
-  window.mitaSay = function (text, ms) { if (!el.classList.contains('is-sleep')) talk(text, ms); };
+  window.mascotSay = function (text, ms) { if (!el.classList.contains('is-sleep')) talk(text, ms); };
 
   function checkSleep() { el.classList.toggle('is-sleep', sleepy()); }
   checkSleep();
@@ -526,7 +526,7 @@
       idleChat();
     }, 18000 + Math.random() * 18000);
   })();
-  setTimeout(function () { if (!el.classList.contains('is-sleep')) talk('hi! i’m mita ♡'); }, 2500);
+  setTimeout(function () { if (!el.classList.contains('is-sleep')) talk('hi! i’m claude code ♡'); }, 2500);
 })();
 
 /* ---------- 13. full-screen hero shrinks as you scroll ---------- */

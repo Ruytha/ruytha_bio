@@ -372,7 +372,7 @@
 
     <div class="gb">
       <form class="gb-form" id="gbForm" autocomplete="off">
-        <label class="gb-field"><span>Your name</span><input name="name" maxlength="24" required placeholder="mita"></label>
+        <label class="gb-field"><span>Your name</span><input name="name" maxlength="24" required placeholder="clawd"></label>
         <label class="gb-field"><span>Message</span><textarea name="msg" maxlength="160" rows="3" required placeholder="hi ruytha! cool site"></textarea><span class="gb-count" id="gbCount">0/160</span></label>
         <fieldset class="gb-stickers"><legend>Pick a sticker</legend><label><input type="radio" name="sticker" value="💖" checked><span>💖</span></label><label><input type="radio" name="sticker" value="✨"><span>✨</span></label><label><input type="radio" name="sticker" value="🎬"><span>🎬</span></label><label><input type="radio" name="sticker" value="🎧"><span>🎧</span></label><label><input type="radio" name="sticker" value="🌸"><span>🌸</span></label><label><input type="radio" name="sticker" value="🦘"><span>🦘</span></label><label><input type="radio" name="sticker" value="🍙"><span>🍙</span></label><label><input type="radio" name="sticker" value="⭐"><span>⭐</span></label></fieldset>
         <label class="gb-hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
@@ -547,76 +547,49 @@
   </a>
 </aside>
 
-<div class="chibi mita" id="chibi">
+<div class="chibi clawd" id="chibi">
   <p class="chibi-say" id="chibiSay" aria-live="polite"></p>
   <span class="chibi-zz" aria-hidden="true"><i>z</i><i>z</i><i>z</i></span>
-  <button class="chibi-btn" id="chibiBtn" type="button" aria-label="Mita from MiSide. Click to say hi.">
-    <svg class="chibi-svg" viewBox="0 0 120 170" aria-hidden="true">
-      <ellipse cx="60" cy="166" rx="40" ry="3.5" fill="rgba(0,0,0,0.35)"/>
-    
-      <!-- long hair behind everything -->
-      <path class="c-hairback" d="M30 46c-6 22-10 52-12 84 10 4 22 4 30 0l-4-60h32l-4 60c8 4 20 4 30 0-2-32-6-62-12-84Z" fill="#2c3884"/>
+  <button class="chibi-btn" id="chibiBtn" type="button" aria-label="Claude Code's little pixel mascot. Click to say hi.">
+    <svg class="chibi-svg" viewBox="0 0 120 170" shape-rendering="crispEdges" aria-hidden="true">
+      <ellipse cx="60" cy="166" rx="40" ry="3.5" fill="rgba(0,0,0,0.35)" shape-rendering="auto"/>
     
       <!-- cushion -->
-      <rect x="16" y="120" width="88" height="22" rx="11" fill="#e9dcc8"/>
-      <path d="M22 126c25 4 51 4 76 0" fill="none" stroke="#d3c2a8" stroke-width="2" stroke-linecap="round"/>
+      <rect x="16" y="120" width="88" height="22" rx="11" fill="#e9dcc8" shape-rendering="auto"/>
+      <path d="M22 126c25 4 51 4 76 0" fill="none" stroke="#d3c2a8" stroke-width="2" stroke-linecap="round" shape-rendering="auto"/>
     
-      <!-- legs dangling over the cushion edge -->
+      <!-- four stubby legs dangling over the cushion edge -->
       <g class="c-leg c-legL">
-        <rect x="46" y="116" width="11" height="42" rx="5" fill="#17171f"/>
-        <path d="M44 155h14a3 3 0 0 1 3 3v3H42v-3a3 3 0 0 1 2-3Z" fill="#b8273d"/>
+        <rect x="32" y="116" width="8" height="34" fill="#c4633f"/>
+        <rect x="46" y="116" width="8" height="34" fill="#d97757"/>
       </g>
       <g class="c-leg c-legR">
-        <rect x="63" y="116" width="11" height="42" rx="5" fill="#17171f"/>
-        <path d="M62 155h14a3 3 0 0 1 2 3v3H59v-3a3 3 0 0 1 3-3Z" fill="#b8273d"/>
+        <rect x="66" y="116" width="8" height="34" fill="#d97757"/>
+        <rect x="80" y="116" width="8" height="34" fill="#c4633f"/>
       </g>
     
       <g class="c-body">
-        <!-- skirt -->
-        <path d="M38 104h44l12 22c-22 5-46 5-68 0Z" fill="#262c63"/>
-        <path d="M48 106l-6 20M60 106v22M72 106l6 20" stroke="#1b2050" stroke-width="1.6"/>
-        <!-- top -->
-        <path d="M42 80c11-4 25-4 36 0l4 26H38Z" fill="#c92a42"/>
-        <path d="M50 80c4 5 16 5 20 0" fill="none" stroke="#f3e9e0" stroke-width="3" stroke-linecap="round"/>
-        <!-- arms resting on the cushion -->
-        <g class="c-arm c-armL">
-          <path d="M43 82c-8 8-11 22-10 36l8-1c0-12 2-22 6-29Z" fill="#c92a42"/>
-          <circle cx="37" cy="119" r="4.2" fill="#fbe3d6"/>
+        <g class="c-head">
+          <!-- side nubs -->
+          <rect class="c-arm c-armL" x="14" y="96" width="12" height="12" fill="#d97757"/>
+          <g class="c-arm c-armR">
+            <rect x="94" y="96" width="12" height="12" fill="#d97757"/>
+          </g>
+          <!-- blocky body -->
+          <rect x="24" y="72" width="72" height="48" fill="#d97757"/>
+          <rect x="24" y="72" width="72" height="4" fill="#e8916f"/>
+          <!-- eyes -->
+          <g class="c-eyes">
+            <rect x="40" y="86" width="7" height="13" fill="#1a1410"/>
+            <rect x="73" y="86" width="7" height="13" fill="#1a1410"/>
+          </g>
+          <g class="c-eyes-shut">
+            <rect x="38" y="94" width="11" height="3" fill="#1a1410"/>
+            <rect x="71" y="94" width="11" height="3" fill="#1a1410"/>
+          </g>
+          <rect class="c-blush" x="32" y="103" width="9" height="4" fill="#ff9bb0"/>
+          <rect class="c-blush" x="79" y="103" width="9" height="4" fill="#ff9bb0"/>
         </g>
-        <g class="c-arm c-armR">
-          <path d="M77 82c8 8 11 22 10 36l-8-1c0-12-2-22-6-29Z" fill="#c92a42"/>
-          <circle cx="83" cy="119" r="4.2" fill="#fbe3d6"/>
-        </g>
-      </g>
-    
-      <g class="c-head">
-        <!-- hair behind the face -->
-        <path d="M26 54c-2-28 14-42 34-42s36 14 34 42c0 10-2 18-5 24H31c-3-6-5-14-5-24Z" fill="#2c3884"/>
-        <ellipse cx="60" cy="58" rx="26" ry="24" fill="#fbe3d6"/>
-        <!-- eyes -->
-        <g class="c-eyes">
-          <ellipse cx="50" cy="62" rx="5" ry="6.4" fill="#3c6fd8"/>
-          <ellipse cx="50" cy="63.4" rx="2.3" ry="3.4" fill="#1b2a63"/>
-          <circle cx="48.4" cy="60" r="1.7" fill="#fff"/>
-          <ellipse cx="70" cy="62" rx="5" ry="6.4" fill="#3c6fd8"/>
-          <ellipse cx="70" cy="63.4" rx="2.3" ry="3.4" fill="#1b2a63"/>
-          <circle cx="68.4" cy="60" r="1.7" fill="#fff"/>
-          <path d="M44 55q6-3 11 0M65 55q5-3 11 0" fill="none" stroke="#1d2560" stroke-width="1.6" stroke-linecap="round"/>
-        </g>
-        <g class="c-eyes-shut">
-          <path d="M45 63q5 4 10 0M65 63q5 4 10 0" fill="none" stroke="#1b2a63" stroke-width="2" stroke-linecap="round"/>
-        </g>
-        <ellipse class="c-blush" cx="44" cy="70" rx="4.6" ry="2.3" fill="#ff9bb0"/>
-        <ellipse class="c-blush" cx="76" cy="70" rx="4.6" ry="2.3" fill="#ff9bb0"/>
-        <path class="c-mouth" d="M56 72q4 3 8 0" fill="none" stroke="#b05a5a" stroke-width="1.8" stroke-linecap="round"/>
-        <!-- straight bangs -->
-        <path d="M33 52c-1-20 11-32 27-32s28 12 27 32l-5-7-3 6-4-9-4 8-4-10-4 9-4-9-4 10-4-8-4 9-4-6-3 7-3-7Z" fill="#2c3884"/>
-        <!-- side locks in front of the shoulders -->
-        <path d="M34 50c-4 14-5 32-2 50l7-2c-2-16-1-32 2-46Z" fill="#2c3884"/>
-        <path d="M86 50c4 14 5 32 2 50l-7-2c2-16 1-32-2-46Z" fill="#2c3884"/>
-        <path d="M42 26c8-6 22-7 32-2" fill="none" stroke="#4b5bb6" stroke-width="2.2" stroke-linecap="round"/>
-        <!-- red hairband -->
-        <path d="M35 34c6-10 15-15 25-15s19 5 25 15" fill="none" stroke="#d3263f" stroke-width="4.5" stroke-linecap="round"/>
       </g>
     </svg>
   </button>

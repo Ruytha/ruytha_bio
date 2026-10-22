@@ -149,7 +149,7 @@ var RUYTHA_PLAYLIST = [
   audio.addEventListener('play', function () {
     paint();
     var m = split(LIST[idx].title);
-    if (window.mitaSay) window.mitaSay('♪ ' + m.song + (m.artist ? ' by ' + m.artist : '') + ' ♪');
+    if (window.mascotSay) window.mascotSay('♪ ' + m.song + (m.artist ? ' by ' + m.artist : '') + ' ♪');
   });
   audio.addEventListener('pause', function () { paint(); save(); });
   audio.addEventListener('ended', function () { load(idx + 1, true); });
