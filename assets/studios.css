@@ -175,3 +175,12 @@ main>section:first-child{border-top:0;padding-top:96px}
 .more-link{margin:28px 0 0}
 .more-link a{color:var(--t2);text-decoration:none;border-bottom:1px solid var(--line2);padding-bottom:2px;transition:color .2s,border-color .2s}
 .more-link a:hover{color:var(--t1);border-color:var(--t1)}
+/* screenshots, framed as a browser window */
+.screen{margin:56px 0 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg2);box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}
+.screen-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line);color:var(--t3)}
+.screen-bar i{width:9px;height:9px;border-radius:50%;background:var(--line2)}
+.screen-bar span{margin-left:10px}
+.screen img{width:100%;height:auto}
+.screen figcaption{padding:12px 14px;border-top:1px solid var(--line);color:var(--t3)}
+.shot-lead{padding-bottom:40px}
+.shot-lead .screen{margin-top:0}
