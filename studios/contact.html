@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contact · Ruytha Studios</title>
+<meta name="description" content="Start a project with Ruytha Studios.">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" href="../assets/img/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&display=swap">
+<link rel="stylesheet" href="../assets/studios.css">
+</head>
+<body>
+<header class="nav">
+  <div class="w">
+    <a class="logo" href="/studios"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2a10 10 0 0 1 0 20 6 6 0 0 0 0-20z" fill="#ffcf99"/></svg>Ruytha Studios</a>
+    <nav class="links" aria-label="Pages"><a href="/studios/services">Services</a><a href="/studios/toolkit">Toolkit</a><a href="/studios/contact" aria-current="page">Contact</a></nav>
+    <a class="btn solid" href="/studios/contact">Start a project</a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Menu"><span></span><span></span></button>
+  </div>
+  <nav class="mnav" id="mnav" aria-label="Pages" hidden>
+    <div class="w"><a href="/studios/services">Services</a><a href="/studios/toolkit">Toolkit</a><a href="/studios/contact" aria-current="page">Contact</a><a class="btn solid" href="/studios/contact">Start a project</a></div>
+  </nav>
+</header>
+
+<main>
+<section id="contact" class="closer">
+    <div class="w">
+      <div data-r><h1 class="h2">Got a story waiting on a crew?</h1>
+      <p class="lead">Ruytha Studios takes on collaborations in direction, lighting and editing. The fastest reply is on Discord.</p>
+      <div class="acts"><a class="btn solid" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">Message @ruytha</a><a class="btn" href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener">Join the Discord server</a></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="w brief-wrap">
+      <div data-r><h2 class="h2">Write your brief.</h2>
+      <p class="lead">Fill this in and copy it into a Discord message. Nothing here is sent anywhere.</p></div>
+      <form class="brief" id="brief" data-r>
+        <fieldset><legend class="mono">What are you making?</legend>
+          <div class="opts">
+            <label><input type="radio" name="kind" value="a short film" checked><span>Short film</span></label>
+            <label><input type="radio" name="kind" value="a music video"><span>Music video</span></label>
+            <label><input type="radio" name="kind" value="lighting"><span>Lighting</span></label>
+            <label><input type="radio" name="kind" value="an edit"><span>Editing</span></label>
+            <label><input type="radio" name="kind" value="lyric sync"><span>Lyric sync</span></label>
+          </div>
+        </fieldset>
+        <label><span class="mono">When do you need it?</span><input name="when" placeholder="e.g. end of March"></label>
+        <label><span class="mono">Tell me about it</span><textarea name="about" rows="4" placeholder="The idea, the song, links to references…"></textarea></label>
+        <div class="brief-out"><span class="mono">Your message</span><p id="briefText"></p></div>
+        <div class="acts"><button class="btn solid" type="submit">Copy and open Discord</button><span class="brief-status mono" id="briefStatus" aria-live="polite"></span></div>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    <div class="w">
+      <div data-r><h2 class="h2">Good to know.</h2></div>
+      <div class="faq" data-r>
+        <details><summary>What's the fastest way to reach you?</summary><p>Discord. Message <b>@ruytha</b> directly, or say hi in the server.</p></details>
+        <details><summary>What should I send first?</summary><p>What you're making, when you need it, and any references you like. The brief builder above covers all three.</p></details>
+        <details><summary>Can you take on just one part, like the edit?</summary><p>Yes. Any of the four crafts can be booked on its own.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="w">
+    <a class="logo" href="/studios"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2a10 10 0 0 1 0 20 6 6 0 0 0 0-20z" fill="#ffcf99"/></svg>Ruytha Studios</a>
+    <a href="/studios/services">Services</a><a href="/studios/toolkit">Toolkit</a><a href="/studios/contact">Contact</a>
+    <a href="/">Ruytha's site</a>
+    <a href="/legal/privacy-policy">Privacy</a>
+    <a href="/legal/terms-of-service">Terms</a>
+    <small>© 2026 Ruytha Studios · Australia</small>
+  </div>
+</footer>
+<script src="../assets/studios.js"></script>
+</body>
+</html>
