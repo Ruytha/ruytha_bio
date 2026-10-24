@@ -1,1 +1,6 @@
-Disallow: *
+User-agent: *
+Allow: /studios
+Allow: /assets/studios.css
+Allow: /assets/studios.js
+Allow: /assets/img/favicon.png
+Disallow: /
