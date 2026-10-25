@@ -189,3 +189,15 @@ main>section:first-child{border-top:0;padding-top:96px}
 .feature{display:grid;grid-template-columns:5fr 7fr;gap:56px;align-items:center}
 .feature .screen{margin:0}
 @media(max-width:960px){.feature{grid-template-columns:1fr;gap:40px}}
+
+/* home: the studio reel, widescreen under the hero */
+.reel{position:relative;margin:0 0 96px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.reel-video{display:block;width:100%;height:auto;aspect-ratio:1440/610;object-fit:cover}
+.reel .corner{position:absolute;width:20px;height:20px;border:2px solid rgba(255,255,255,.75);pointer-events:none}
+.reel .corner.a{top:14px;left:14px;border-right:0;border-bottom:0}
+.reel .corner.b{top:14px;right:14px;border-left:0;border-bottom:0}
+.reel-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px;border-top:1px solid var(--line);background:var(--bg2);color:var(--t3)}
+.reel-toggle{min-width:64px;min-height:28px;padding:0 10px;border:1px solid var(--line2);border-radius:6px;background:none;color:var(--t1);font:inherit;cursor:pointer}
+.reel-toggle:hover{border-color:var(--t3)}
+.hero{padding-bottom:72px}
+@media(prefers-reduced-motion:no-preference){.reel{animation:up 1s var(--out) .25s both}}

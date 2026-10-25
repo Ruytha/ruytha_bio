@@ -21,3 +21,14 @@ document.querySelectorAll('[data-r]').forEach(function(g){io.observe(g)});
   f.addEventListener('submit',function(e){e.preventDefault();var t=text();
     (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){st.textContent='Copied. Paste it into Discord.'},function(){st.textContent='Copy the message above, then paste it into Discord.'});
     window.open('https://discord.com/users/690508522395402260','_blank','noopener')})})();
+
+// studio reel: plays muted on loop, pauses off screen, never autoplays with reduced motion
+(function(){var v=document.querySelector('.reel-video'),b=document.querySelector('.reel-toggle');if(!v||!b)return;
+  var wanted=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function sync(){var on=!v.paused;b.textContent=on?'Pause':'Play';b.setAttribute('aria-pressed',String(!on))}
+  function play(){var p=v.play();if(p&&p.catch)p.catch(sync)}
+  b.addEventListener('click',function(){wanted=v.paused;wanted?play():v.pause()});
+  v.addEventListener('play',sync);v.addEventListener('pause',sync);
+  new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&wanted)play();else if(!e.isIntersecting)v.pause()})},{threshold:.25}).observe(v);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden&&wanted&&v.getBoundingClientRect().top<innerHeight)play()});
+  sync()})();
