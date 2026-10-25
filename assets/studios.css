@@ -23,7 +23,7 @@ h1,h2,h3{font-family:var(--display);margin:0;font-weight:700}
 .nav{border-bottom:1px solid var(--line)}
 .nav>.w{height:64px;display:flex;align-items:center;gap:28px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;text-decoration:none}
-.logo svg{width:22px;height:22px}
+.logo-mark{width:24px;height:24px;flex-shrink:0;background:currentColor;-webkit-mask:url(img/studios/logo.svg) center/contain no-repeat;mask:url(img/studios/logo.svg) center/contain no-repeat}
 .nav .links{display:flex;gap:24px;color:var(--t3)}
 .nav .links a{text-decoration:none}.nav .links a:hover,.nav .links a[aria-current]{color:var(--t1)}
 .nav .btn{margin-left:auto;height:36px;font-size:15px}
