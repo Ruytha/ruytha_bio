@@ -631,8 +631,8 @@ a.track:hover { transform: none; background: var(--surface); }
 .studio-card {
   display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(28px, 4vw, 56px); align-items: center;
   padding: clamp(28px, 5vw, 56px); border-radius: 24px;
-  background: #0a0a0a; color: #fafafa; border: 1px solid rgba(255,255,255,.1);
-  box-shadow: 0 40px 80px -40px rgba(0,0,0,.8);
+  background: rgba(6, 8, 22, .55); color: #fafafa; border: 1px solid var(--line);
+  backdrop-filter: blur(18px) saturate(120%); -webkit-backdrop-filter: blur(18px) saturate(120%);
 }
 @media (max-width: 860px) { .studio-card { grid-template-columns: 1fr; } }
 .studio-lockup {
@@ -648,17 +648,18 @@ a.track:hover { transform: none; background: var(--surface); }
 .studio-btn:hover { background: #e5e5e5; }
 .studio-link { color: #fafafa; text-decoration: none; font-weight: 500; }
 .studio-link:hover { text-decoration: underline; }
-.studio-apps { list-style: none; margin: 0; padding: 0; border-top: 1px solid #262626; }
+.studio-apps { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
 .studio-apps a {
-  display: grid; gap: 4px; padding: 18px 4px; border-bottom: 1px solid #262626;
+  display: grid; gap: 4px; padding: 18px 4px; border-bottom: 1px solid var(--line);
   color: #fafafa; text-decoration: none; transition: padding .3s var(--ease);
 }
 .studio-apps a:hover { padding-left: 12px; }
 .studio-apps b { font: 900 24px/1.1 "Archivo", sans-serif; font-stretch: 112%; letter-spacing: -.04em; }
 .studio-apps span { color: #a3a3a3; font-size: 15px; }
-#studios .note { margin-top: 16px; }
+#studios .note { margin: 0 0 14px; }
 
 /* ---------- phones: a long handwritten note mustn't widen the page ---------- */
 /* flex items won't shrink below their content by default, and a one-line note + arrow is ~385px */
 .fav-head > div { min-width: 0; }
 .note { flex-wrap: wrap; }
+
