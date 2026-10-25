@@ -201,3 +201,17 @@ main>section:first-child{border-top:0;padding-top:96px}
 .reel-toggle:hover{border-color:var(--t3)}
 .hero{padding-bottom:72px}
 @media(prefers-reduced-motion:no-preference){.reel{animation:up 1s var(--out) .25s both}}
+
+/* legal pages */
+.legal .eyebrow a{color:inherit;text-decoration:none}.legal .eyebrow a:hover{text-decoration:underline}
+.legal .updated{color:var(--t3);margin:16px 0 0}
+.legal-grid{display:grid;grid-template-columns:220px minmax(0,68ch);gap:64px;margin-top:64px;align-items:start}
+.legal-toc .mono{color:var(--t3);margin:0 0 12px}
+.legal-toc ol{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:14px}
+.legal-toc a{color:var(--t2);text-decoration:none}.legal-toc a:hover{color:var(--t1)}
+.legal-body h2{margin:48px 0 14px;font-size:26px;letter-spacing:-.01em;scroll-margin-top:24px}
+.legal-body h2:first-child{margin-top:0}
+.legal-body p,.legal-body li{color:var(--t2);font-size:17px;line-height:1.65}
+.legal-body ul{padding-left:20px;display:grid;gap:8px}
+.legal-body a{color:var(--t1)}
+@media(max-width:860px){.legal-grid{grid-template-columns:1fr;gap:40px}.legal-toc{padding:20px;border:1px solid var(--line);border-radius:12px}}
