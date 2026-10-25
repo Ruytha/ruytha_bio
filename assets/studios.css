@@ -22,10 +22,9 @@ h1,h2,h3{font-family:var(--display);margin:0;font-weight:700}
 /* nav: scrolls with the page */
 .nav{border-bottom:1px solid var(--line)}
 .nav>.w{height:64px;display:flex;align-items:center;gap:28px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;text-decoration:none}
-.logo-tile{width:26px;height:26px;flex-shrink:0;display:block}
-.wm{font:500 18px/1 var(--display);letter-spacing:-.025em}
-.wm b{font-weight:800}
+.logo{display:flex;align-items:center;gap:.18em;font:900 22px/1 var(--display);font-stretch:112%;letter-spacing:-.045em;text-decoration:none}
+/* lockup: head glyph + heavy wide lowercase, after the 2026 Apple Music mark */
+.logo-glyph{width:.86em;height:.86em;flex-shrink:0;background:currentColor;-webkit-mask:url(img/studios/logo.svg) center/contain no-repeat;mask:url(img/studios/logo.svg) center/contain no-repeat}
 .nav .links{display:flex;gap:24px;color:var(--t3)}
 .nav .links a{text-decoration:none}.nav .links a:hover,.nav .links a[aria-current]{color:var(--t1)}
 .nav .btn{margin-left:auto;height:36px;font-size:15px}
