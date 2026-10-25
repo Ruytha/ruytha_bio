@@ -25,7 +25,7 @@ document.querySelectorAll('[data-r]').forEach(function(g){io.observe(g)});
 // studio reel: plays muted on loop, pauses off screen, never autoplays with reduced motion
 (function(){var v=document.querySelector('.reel-video'),b=document.querySelector('.reel-toggle');if(!v||!b)return;
   var wanted=!matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function sync(){var on=!v.paused;b.textContent=on?'Pause':'Play';b.setAttribute('aria-pressed',String(!on))}
+  function sync(){var on=!v.paused;b.textContent=on?'Pause':'Play';b.setAttribute('aria-pressed',String(!on));b.setAttribute('aria-label',(on?'Pause':'Play')+' the background reel')}
   function play(){var p=v.play();if(p&&p.catch)p.catch(sync)}
   b.addEventListener('click',function(){wanted=v.paused;wanted?play():v.pause()});
   v.addEventListener('play',sync);v.addEventListener('pause',sync);
