@@ -657,3 +657,8 @@ a.track:hover { transform: none; background: var(--surface); }
 .studio-apps b { font: 900 24px/1.1 "Archivo", sans-serif; font-stretch: 112%; letter-spacing: -.04em; }
 .studio-apps span { color: #a3a3a3; font-size: 15px; }
 #studios .note { margin-top: 16px; }
+
+/* ---------- phones: a long handwritten note mustn't widen the page ---------- */
+/* flex items won't shrink below their content by default, and a one-line note + arrow is ~385px */
+.fav-head > div { min-width: 0; }
+.note { flex-wrap: wrap; }
