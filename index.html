@@ -23,7 +23,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400;500;600&family=Gochi+Hand&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400;500;600&family=Gochi+Hand&family=Archivo:wdth,wght@100..125,500..900&display=swap">
 <link rel="stylesheet" href="assets/styles.css">
 <link rel="stylesheet" href="assets/home.css">
 <link rel="stylesheet" href="assets/player.css">
@@ -42,11 +42,12 @@
     <div class="nav-links">
       <a href="#about">About</a>
       <a href="#music">Music</a>
-      <a href="#work">Skills</a>
       <a href="#projects">Projects</a>
+      <a href="#studios">Studios</a>
       <a href="#links">Links</a>
       <a href="#guestbook">Guestbook</a>
     </div>
+    <a class="nav-cta" href="/studios" aria-label="Ruytha Studios"><i class="studio-glyph" aria-hidden="true"></i><span aria-hidden="true">studios</span></a>
   </div>
 </nav>
 
@@ -268,6 +269,24 @@
   </div>
 </section>
 
+<section class="section" id="studios">
+  <div class="wrap">
+    <div class="studio-card">
+      <div class="studio-head">
+        <h2 class="studio-lockup" aria-label="Ruytha Studios"><i class="studio-glyph" aria-hidden="true"></i><span aria-hidden="true">studios</span></h2>
+        <p class="studio-lede">My media company. Direction, lighting, editing and lyric sync for short films and music videos, plus three apps for the people who make them.</p>
+        <div class="studio-acts"><a class="studio-btn" href="/studios">Visit Ruytha Studios</a><a class="studio-link" href="/studios/contact">Start a project <span class="chev">›</span></a></div>
+      </div>
+      <ul class="studio-apps">
+        <li><a href="/studios/shutter"><b>Shutter</b><span>Frame-accurate review notes, exported as markers for Resolve.</span></a></li>
+        <li><a href="/studios/slate"><b>Slate</b><span>Shot lists, shareable call sheets and a take log on set.</span></a></li>
+        <li><a href="/studios/tools"><b>Tools</b><span>Free timecode, storage and crop calculators.</span></a></li>
+      </ul>
+    </div>
+    <p class="note">the grown-up side of me (mostly)<svg class="note-arrow" viewBox="0 0 60 40" aria-hidden="true"><path d="M4 6c14-2 30 4 38 16 3 4 5 9 6 13"/><path d="M40 28l8 8 3-11"/></svg></p>
+  </div>
+</section>
+
 <section class="section" id="gallery">
   <div class="wrap">
     <h2 class="h2">Photos</h2>
@@ -396,8 +415,6 @@
       <a href="https://ko-fi.com/ruytha" target="_blank" rel="noopener">Support this website</a>
     </nav>
     <nav class="footer-legal" aria-label="Legal">
-      <a href="/legal/privacy-policy">Privacy Policy</a>
-      <a href="/legal/terms-of-service">Terms of Service</a>
       <a href="/tools/textflag/privacy">TextFlag Privacy</a>
       <a href="/tools/textflag/terms">TextFlag Terms</a>
     </nav>
@@ -438,114 +455,6 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
   </button>
 </dialog>
-
-<!-- Japan down the left margin, Australia down the right (very wide screens only) -->
-<div class="culture" aria-label="Japan and Australia">
-<div class="cult-col cult-col-l">
-  <figure class="cult cult-jp rail-bob" style="top: 25%; --d: -1s; --r: -3deg; --depth: 24">
-    <img src="assets/img/culture/torii.svg" alt="" width="160" height="120" loading="lazy" decoding="async">
-    <figcaption><span class="cult-title">鳥居</span> <span class="cult-sub">torii</span><span class="cult-fact">Gates that mark the way into a Shinto shrine.</span></figcaption>
-  </figure>
-  <figure class="cult cult-jp rail-bob" style="top: 40%; --d: -3s; --r: 2deg; --depth: 20">
-    <img src="assets/img/culture/lanterns.svg" alt="" width="160" height="120" loading="lazy" decoding="async">
-    <figcaption><span class="cult-title">提灯</span> <span class="cult-sub">chōchin</span><span class="cult-fact">Paper lanterns. Red ones often hang outside izakaya.</span></figcaption>
-  </figure>
-  <figure class="cult cult-jp rail-bob" style="top: 55%; --d: -5s; --r: -2deg; --depth: 20">
-    <img src="assets/img/culture/fuji.svg" alt="" width="160" height="120" loading="lazy" decoding="async">
-    <figcaption><span class="cult-title">富士山</span> <span class="cult-sub">Fuji-san</span><span class="cult-fact">3,776 m, the tallest mountain in Japan.</span></figcaption>
-  </figure>
-  <figure class="cult cult-jp rail-bob" style="top: 70%; --d: -2s; --r: 3deg; --depth: 24">
-    <img src="assets/img/culture/maneki.svg" alt="" width="160" height="120" loading="lazy" decoding="async">
-    <figcaption><span class="cult-title">招き猫</span> <span class="cult-sub">maneki-neko</span><span class="cult-fact">The beckoning cat. Its raised paw waves good luck in.</span></figcaption>
-  </figure>
-  <figure class="cult cult-jp rail-bob" style="top: 85%; --d: -4s; --r: -2deg; --depth: 20">
-    <img src="assets/img/culture/sakura.svg" alt="" width="160" height="120" loading="lazy" decoding="async">
-    <figcaption><span class="cult-title">桜</span> <span class="cult-sub">sakura</span><span class="cult-fact">Cherry blossoms only last a week or two each spring.</span></figcaption>
-  </figure>
-</div>
-<div class="cult-col cult-col-r">
-  <figure class="cult cult-au rail-bob" style="top: 22%; --d: -2s; --r: 3deg; --depth: 24">
-    <img src="assets/img/culture/southern-cross.svg" alt="" width="160" height="120" loading="lazy" decoding="async">
-    <figcaption><span class="cult-title">Southern Cross</span> <span class="cult-sub">Crux</span><span class="cult-fact">Five stars on the Aussie flag, and right above us at night.</span></figcaption>
-  </figure>
-  <figure class="cult cult-au rail-bob" style="top: 37%; --d: -4s; --r: -2deg; --depth: 20">
-    <img src="assets/img/culture/kangaroo.svg" alt="" width="160" height="120" loading="lazy" decoding="async">
-    <figcaption><span class="cult-title">Kangaroo</span> <span class="cult-sub">big feet energy</span><span class="cult-fact">With feet and a tail like that, walking backwards basically isn’t an option.</span></figcaption>
-  </figure>
-  <figure class="cult cult-au rail-bob" style="top: 52%; --d: -1s; --r: 2deg; --depth: 20">
-    <img src="assets/img/culture/opera-house.svg" alt="" width="160" height="120" loading="lazy" decoding="async">
-    <figcaption><span class="cult-title">Sydney Opera House</span> <span class="cult-sub">opened 1973</span><span class="cult-fact">The roof is covered in just over a million tiles.</span></figcaption>
-  </figure>
-  <figure class="cult cult-au rail-bob" style="top: 67%; --d: -3s; --r: -3deg; --depth: 24">
-    <img src="assets/img/culture/koala.svg" alt="" width="160" height="120" loading="lazy" decoding="async">
-    <figcaption><span class="cult-title">Koala</span> <span class="cult-sub">professional napper</span><span class="cult-fact">Sleeps up to 20 hours a day. Honestly relatable.</span></figcaption>
-  </figure>
-  <figure class="cult cult-au rail-bob" style="top: 82%; --d: -5s; --r: 2deg; --depth: 20">
-    <img src="assets/img/culture/uluru.svg" alt="" width="160" height="120" loading="lazy" decoding="async">
-    <figcaption><span class="cult-title">Uluru</span> <span class="cult-sub">Red Centre</span><span class="cult-fact">348 m tall, and sacred to the Aṉangu people.</span></figcaption>
-  </figure>
-</div>
-</div>
-
-<!-- side rails: only on very wide screens, they fill the margins outside the page -->
-<aside class="rail rail-l" aria-label="Ruytha's time and page map">
-  <div class="rail-card clock-card rail-bob" style="--d: -1s; --r: -2deg; --depth: 16">
-    <svg class="clock" viewBox="0 0 100 100" aria-hidden="true">
-      <circle class="clock-face" cx="50" cy="50" r="46"/>
-      <clipPath id="clockClip"><circle cx="50" cy="50" r="27"/></clipPath>
-      <image href="assets/img/avatar.png" x="23" y="23" width="54" height="54" clip-path="url(#clockClip)" preserveAspectRatio="xMidYMid slice" class="clock-pfp"/>
-      <circle cx="50" cy="50" r="27" fill="rgba(5,10,35,0.35)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
-      <g class="clock-ticks"></g>
-      <line class="clock-h" id="clockH" x1="50" y1="50" x2="50" y2="28"/>
-      <line class="clock-m" id="clockM" x1="50" y1="50" x2="50" y2="16"/>
-      <line class="clock-s" id="clockS" x1="50" y1="56" x2="50" y2="12"/>
-      <circle cx="50" cy="50" r="2.6" class="clock-pin"/>
-    </svg>
-    <p class="clock-time" id="railTime">--:--</p>
-    <p class="clock-where">my time</p>
-    <p class="clock-doing" id="railDoing"></p>
-  </div>
-
-  <div class="rail-map">
-    <nav class="map rail-bob" aria-label="Page map" style="--d: -3s; --r: 1deg; --depth: 10">
-      <span class="map-line"><span class="map-fill" id="mapFill"></span></span>
-      <a href="#top" data-map="top">Hello</a>
-      <a href="#about" data-map="about">Who's Ruytha?</a>
-      <a href="#music" data-map="music">Music</a>
-      <a href="#work" data-map="work">What I do</a>
-      <a href="#projects" data-map="projects">Projects</a>
-      <a href="#gallery" data-map="gallery">Photos</a>
-      <a href="#sync" data-map="sync">Sync a line</a>
-      <a href="#favourites" data-map="favourites">Favourites</a>
-      <a href="#links" data-map="links">Find me</a>
-      <a href="#guestbook" data-map="guestbook">Guestbook</a>
-    </nav>
-    <p class="rail-kana rail-bob" aria-hidden="true" style="--d: -5s; --r: 3deg; --depth: 28">ルイサ</p>
-  </div>
-</aside>
-
-<aside class="rail rail-r" aria-label="Now playing">
-  <a class="tt rail-bob" href="#music" id="tt" data-state="loading" style="--d: -2s; --r: 2deg; --depth: 18">
-    <span class="tt-deck">
-      <span class="tt-platter">
-        <span class="tt-record"><span class="tt-label"></span></span>
-      </span>
-      <span class="tt-glare" aria-hidden="true"></span>
-      <svg class="tt-arm" viewBox="0 0 60 160" aria-hidden="true">
-        <circle cx="44" cy="14" r="11" class="tt-arm-base"/>
-        <path d="M44 14 L40 112 L24 140" class="tt-arm-rod"/>
-        <rect x="14" y="134" width="18" height="12" rx="2" transform="rotate(35 23 140)" class="tt-arm-head"/>
-        <circle cx="44" cy="14" r="4" class="tt-arm-pin"/>
-      </svg>
-      <span class="tt-led" aria-hidden="true"></span>
-    </span>
-    <span class="tt-info">
-      <span class="tt-state" id="ttState">Checking what's playing</span>
-      <span class="tt-track" id="ttTrack">one sec…</span>
-      <span class="tt-artist" id="ttArtist"></span>
-    </span>
-  </a>
-</aside>
 
 <div class="chibi clawd" id="chibi">
   <p class="chibi-say" id="chibiSay" aria-live="polite"></p>

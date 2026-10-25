@@ -608,3 +608,52 @@ a.track:hover { transform: none; background: var(--surface); }
   .proj:not(.proj-feature) .proj-body p { display: none; }
   .hero-note { display: none; }
 }
+
+/* ---------- header: visible from the top and scrolls away with the page ---------- */
+.nav.dock,
+.nav.dock.is-stuck { position: absolute; top: 16px; transform: translate(-50%, 0); opacity: 1; background: var(--glass-2); }
+.dock .nav-links a[href="#studios"] { color: var(--text); }
+.nav-cta {
+  display: flex; align-items: center; gap: .18em; margin-left: 6px; padding: 7px 14px;
+  border-radius: 999px; background: #0a0a0a; color: #fafafa; text-decoration: none;
+  font: 900 15px/1 "Archivo", sans-serif; font-stretch: 112%; letter-spacing: -.045em;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.14);
+  transition: transform .25s var(--ease);
+}
+.nav-cta:hover { transform: translateY(-1px); }
+@media (max-width: 720px) { .nav-cta { display: none; } }
+
+/* ---------- Ruytha Studios: a black panel in the studio's own voice ---------- */
+.studio-glyph {
+  display: inline-block; width: .86em; height: .86em; flex-shrink: 0; background: currentColor;
+  -webkit-mask: url(img/studios/logo.svg) center/contain no-repeat; mask: url(img/studios/logo.svg) center/contain no-repeat;
+}
+.studio-card {
+  display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(28px, 4vw, 56px); align-items: center;
+  padding: clamp(28px, 5vw, 56px); border-radius: 24px;
+  background: #0a0a0a; color: #fafafa; border: 1px solid rgba(255,255,255,.1);
+  box-shadow: 0 40px 80px -40px rgba(0,0,0,.8);
+}
+@media (max-width: 860px) { .studio-card { grid-template-columns: 1fr; } }
+.studio-lockup {
+  display: flex; align-items: center; gap: .18em; margin: 0;
+  font: 900 clamp(48px, 7vw, 84px)/1 "Archivo", sans-serif; font-stretch: 112%; letter-spacing: -.045em;
+}
+.studio-lede { margin: 18px 0 0; max-width: 44ch; color: #a3a3a3; font-size: 17px; }
+.studio-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 28px; }
+.studio-btn {
+  display: inline-flex; align-items: center; height: 44px; padding: 0 18px; border-radius: 6px;
+  background: #fafafa; color: #0a0a0a; font-weight: 600; text-decoration: none;
+}
+.studio-btn:hover { background: #e5e5e5; }
+.studio-link { color: #fafafa; text-decoration: none; font-weight: 500; }
+.studio-link:hover { text-decoration: underline; }
+.studio-apps { list-style: none; margin: 0; padding: 0; border-top: 1px solid #262626; }
+.studio-apps a {
+  display: grid; gap: 4px; padding: 18px 4px; border-bottom: 1px solid #262626;
+  color: #fafafa; text-decoration: none; transition: padding .3s var(--ease);
+}
+.studio-apps a:hover { padding-left: 12px; }
+.studio-apps b { font: 900 24px/1.1 "Archivo", sans-serif; font-stretch: 112%; letter-spacing: -.04em; }
+.studio-apps span { color: #a3a3a3; font-size: 15px; }
+#studios .note { margin-top: 16px; }
