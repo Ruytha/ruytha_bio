@@ -115,9 +115,8 @@ main>section:first-child{border-top:0;padding-top:96px}
 
 /* ticker */
 .ticker{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:22px 0;-webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.ticker-track{display:flex;gap:56px;width:max-content;animation:tick 40s linear infinite}
+.ticker-track{display:flex;gap:72px;width:max-content;animation:tick 40s linear infinite}
 .ticker span{font:700 clamp(24px,3vw,36px)/1 var(--display);color:var(--t3);white-space:nowrap}
-.ticker span::after{content:'';display:inline-block;width:.62em;height:.62em;margin-left:56px;vertical-align:.05em;background:var(--t1);-webkit-mask:url(img/studios/logo.svg) center/contain no-repeat;mask:url(img/studios/logo.svg) center/contain no-repeat}
 .ticker:hover .ticker-track{animation-play-state:paused}
 @keyframes tick{to{translate:-50% 0}}
 @media(prefers-reduced-motion:reduce){.ticker-track{animation:none}.ticker-track span:nth-child(n+8){display:none}}
