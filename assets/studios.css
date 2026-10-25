@@ -115,7 +115,7 @@ main>section:first-child{border-top:0;padding-top:96px}
 
 /* ticker */
 .ticker{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:22px 0;-webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.ticker-track{display:flex;gap:72px;width:max-content;animation:tick 40s linear infinite}
+.ticker-track{display:flex;width:max-content;animation:tick 40s linear infinite}
 .ticker span{font:700 clamp(24px,3vw,36px)/1 var(--display);color:var(--t3);white-space:nowrap}
 .ticker:hover .ticker-track{animation-play-state:paused}
 @keyframes tick{to{translate:-50% 0}}
@@ -223,4 +223,4 @@ main>section:first-child{border-top:0;padding-top:96px}
 /* type: every display line uses the lockup's voice, heavy and slightly wide (after the 2026 Apple Music mark) */
 h1,h2,h3,.h2,.hero h1,.moves h3,.steps h3,.legal-body h2,.next b,.kit b,.facts b,.faq summary,.mnav a:not(.btn),.ticker span{font-weight:900;font-stretch:112%;letter-spacing:-.04em}
 .hero h1{line-height:.9}
-.ticker span{color:var(--t1)}
+.ticker span{color:var(--t1);padding-right:72px}
