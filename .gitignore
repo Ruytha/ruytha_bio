@@ -2,3 +2,6 @@
 .env*
 !.env.example
 node_modules/
+
+# source artwork, not for the site
+studios/*.png
