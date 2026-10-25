@@ -326,37 +326,6 @@
 .pj-links .btn { font-size: 14px; padding: 9px 16px; cursor: pointer; font-family: inherit; color: var(--text); }
 .pj-updated { margin-top: 18px; font-size: 12.5px; color: var(--muted); }
 
-/* ============================================================
-   Seasonal mode (petals, wattle, snow)
-   ============================================================ */
-.season-layer { position: fixed; inset: 0; z-index: 108; pointer-events: none; overflow: hidden; }
-.season-layer i {
-  position: absolute; top: -20px;
-  width: var(--size); height: calc(var(--size) * 1.3);
-  opacity: 0.85;
-  animation: season-fall 14s linear infinite;
-}
-@keyframes season-fall {
-  0%   { transform: translate(0, -20px) rotate(0); }
-  50%  { transform: translate(var(--sway), 50vh) rotate(180deg); }
-  100% { transform: translate(calc(var(--sway) * -0.5), 105vh) rotate(360deg); }
-}
-[data-season="sakura"] .season-layer i { background: #ffc0d6; border-radius: 80% 0 80% 0; }
-[data-season="jacaranda"] .season-layer i { background: #a98bef; border-radius: 50% 50% 45% 45% / 70% 70% 30% 30%; }
-[data-season="wattle"] .season-layer i {
-  width: var(--size); height: var(--size);
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #ffe680, #f2b705);
-  box-shadow: 0 0 8px rgba(242, 183, 5, 0.6);
-}
-[data-season="xmas"] .season-layer i {
-  width: calc(var(--size) * 0.6); height: calc(var(--size) * 0.6);
-  border-radius: 50%;
-  background: #fff;
-  opacity: 0.7;
-}
-@media (prefers-reduced-motion: reduce) { .season-layer { display: none; } }
-
 /* .btn was written for links; make it work on buttons too */
 button.btn { font-family: inherit; cursor: pointer; color: var(--text); }
 button.btn-primary { border: 0; color: #fff; }

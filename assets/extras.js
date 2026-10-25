@@ -520,21 +520,5 @@ var RUYTHA_PROJECTS_UPDATED = '1 October 2026';
       xmas: 'merry christmas! it’s like 35° here ☀️'
     };
     setTimeout(function () { say(LINES[season] || 'hi!', 4200); }, 6500);
-    if (reduced) return;
-
-    var layer = document.createElement('div');
-    layer.className = 'season-layer';
-    layer.setAttribute('aria-hidden', 'true');
-    var n = window.innerWidth < 700 ? 8 : 16;
-    for (var i = 0; i < n; i++) {
-      var p = document.createElement('i');
-      p.style.left = (Math.random() * 100).toFixed(1) + '%';
-      p.style.animationDuration = (9 + Math.random() * 9).toFixed(1) + 's';
-      p.style.animationDelay = (-Math.random() * 18).toFixed(1) + 's';
-      p.style.setProperty('--size', (6 + Math.random() * 8).toFixed(1) + 'px');
-      p.style.setProperty('--sway', (Math.random() * 80 - 40).toFixed(0) + 'px');
-      layer.appendChild(p);
-    }
-    document.body.appendChild(layer);
   })();
 })();

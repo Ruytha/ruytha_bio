@@ -631,7 +631,6 @@ a.track:hover { transform: none; background: var(--surface); }
 .studio-card {
   display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(28px, 4vw, 56px); align-items: center;
   padding: clamp(28px, 5vw, 56px); border-radius: 24px;
-  position: relative; z-index: 109; /* above the seasonal petals, which read as specks on solid black */
   background: #0a0a0a; color: #fafafa; border: 1px solid rgba(255,255,255,.1);
   box-shadow: 0 40px 80px -40px rgba(0,0,0,.8);
 }
@@ -665,7 +664,19 @@ a.track:hover { transform: none; background: var(--surface); }
 .note { flex-wrap: wrap; }
 
 
-/* ---------- page background: one solid colour (the sky and starfield were a bit much) ---------- */
+/* ---------- page background: solid navy with a faint, still glow (the moving sky was a bit much) ---------- */
 html, body { background: var(--bg); }
-body::before, body::after { content: none; }
+body::before {
+  inset: 0; filter: none; animation: none;
+  background:
+    radial-gradient(70% 45% at 50% -8%, rgba(70, 100, 220, .20), transparent 70%),
+    radial-gradient(45% 35% at 100% 100%, rgba(120, 85, 220, .10), transparent 70%),
+    radial-gradient(40% 30% at 0% 70%, rgba(40, 130, 210, .07), transparent 70%);
+}
+body::after { content: none; }
 .femboy, .femboy body { background: #170a1f; }
+.femboy body::before {
+  background:
+    radial-gradient(70% 45% at 50% -8%, rgba(255, 120, 190, .18), transparent 70%),
+    radial-gradient(45% 35% at 100% 100%, rgba(150, 190, 255, .10), transparent 70%);
+}
