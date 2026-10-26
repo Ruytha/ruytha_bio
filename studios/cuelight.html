@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cuelight · Ruytha Studios</title>
+<meta name="description" content="Cuelight, from Ruytha Studios: a free Blender extension for concert light shows. Place a rig, stack effects, cue them to the song and render, without keyframing a light by hand.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://ruytha.dev/studios/cuelight">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ruytha Studios">
+<meta property="og:title" content="Cuelight · Ruytha Studios">
+<meta property="og:description" content="A free Blender extension for concert light shows, cued to the music.">
+<meta property="og:url" content="https://ruytha.dev/studios/cuelight">
+<meta property="og:image" content="https://ruytha.dev/assets/img/studios/cuelight/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/img/studios/app-icon.svg?v=3" type="image/svg+xml">
+<link rel="icon" href="../assets/img/studios/app-icon-32.png?v=3" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/img/studios/app-touch-icon.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<link rel="stylesheet" href="../assets/studios.css">
+</head>
+<body>
+<header class="nav">
+  <div class="w">
+    <a class="logo" href="/studios" aria-label="Ruytha Studios"><i class="logo-glyph" aria-hidden="true"></i><span aria-hidden="true">studios</span></a>
+    <nav class="links" aria-label="Pages"><a href="/studios/services">Services</a><a href="/studios/toolkit">Toolkit</a><a href="/studios/shutter">Shutter</a><a href="/studios/slate">Slate</a><a href="/studios/cuelight" aria-current="page">Cuelight</a><a href="/studios/tools">Tools</a><a href="/studios/contact">Contact</a></nav>
+    <a class="btn solid" href="/studios/contact">Start a project</a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Menu"><span></span><span></span></button>
+  </div>
+  <nav class="mnav" id="mnav" aria-label="Pages" hidden>
+    <div class="w"><a href="/studios/services">Services</a><a href="/studios/toolkit">Toolkit</a><a href="/studios/shutter">Shutter</a><a href="/studios/slate">Slate</a><a href="/studios/cuelight" aria-current="page">Cuelight</a><a href="/studios/tools">Tools</a><a href="/studios/contact">Contact</a><a class="btn solid" href="/studios/contact">Start a project</a></div>
+  </nav>
+</header>
+
+<main>
+  <header class="hero-bg cl-hero">
+    <img class="reel-video" src="../assets/img/studios/cuelight/hero.jpg" width="1920" height="1080" alt="The Cuelight demo stage at the drop: cyan laser fans cross over the crowd while moving heads throw purple, blue, yellow, orange and pink beams above a rainbow LED floor." fetchpriority="high" decoding="async">
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero w">
+      <p class="eyebrow mono">Software · Blender extension</p>
+      <h1 class="product"><i class="product-glyph" aria-hidden="true"></i>Cuelight.</h1>
+      <p class="sub">Concert light shows in Blender, cued to the music. Place a rig, group it, stack effects, lock them to the song and render. Nobody keyframes a light by hand.</p>
+      <div class="acts"><a class="btn solid" href="/assets/files/cuelight-1.0.0.zip" download>Download Cuelight 1.0</a><a class="btn" href="/studios/cuelight/docs">Read the docs</a></div>
+      <p class="mono note-line">Free and open source. Blender 4.5 LTS or newer, EEVEE and Cycles.</p>
+    </div>
+  </header>
+
+  <section id="moves">
+    <div class="w">
+      <div data-r><h2 class="h2">From an empty stage to a render in four moves.</h2></div>
+      <ol class="moves" data-r><li><span class="mono">Place</span><h3>A rig in a few clicks</h3><p>Moving-head spots, washes, LED bars, lasers and strobes, one at a time or as a row, an arc, a ring or a grid. Add haze and the beams show.</p></li><li><span class="mono">Group</span><h3>Groups that know their order</h3><p>Effects travel left to right, from the centre out, from the edges in, or at random. Every LED pixel can be its own light.</p></li><li><span class="mono">Cue</span><h3>Effects on the beat</h3><p>Stack chases, waves, strobes and sweeps on any group, lock them to the tempo, and let cues choose what plays in the verse, the build and the drop.</p></li><li><span class="mono">Render</span><h3>Bake, then render anywhere</h3><p>Bake the show to keyframes. Render farms and background renders play it without Cuelight installed.</p></li></ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="w">
+      <div data-r><h2 class="h2">Fourteen effects that stack like layers.</h2>
+      <p class="lead">Each one plays on a group, from a start to an end, with fades, a speed in beats or seconds, and a spread across the fixtures. Layers blend as Replace, Add, Multiply or Max, the way a lighting console does.</p></div>
+      <div class="kit three" data-r>
+        <div><span class="mono">Intensity</span><b>Chase, Wave, Strobe, Pulse, Sparkle, Flicker, Full on, Blackout</b></div>
+        <div><span class="mono">Colour</span><b>Colour fade, Rainbow</b></div>
+        <div><span class="mono">Movement</span><b>Fan, Sweep, Circle, Figure 8, Wave on pan and tilt</b></div>
+      </div>
+      <ul class="facts four" data-r><li><b>Locked to the song</b><span>Speeds in beats stay on the grid, even when an effect starts mid-bar.</span></li><li><b>Driven by the song</b><span>Any layer can follow the bass, the mids, the highs or the overall energy.</span></li><li><b>Every pixel counts</b><span>LED bars split into pixels, so a chase can run pixel by pixel.</span></li><li><b>One function to add</b><span>A new effect is a short Python function. The panel, presets and bake come with it.</span></li></ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="w">
+      <div data-r><h2 class="h2">It listens to the song first.</h2>
+      <p class="lead">Load a song and Cuelight finds the tempo and tells you how sure it is. When it isn't, the BPM editor opens: the song's hits drawn under the beat grid, the tempos it heard, fine nudges, and a metronome to check it by ear.</p></div>
+      <div class="trio" data-r>
+        <figure class="screen"><img src="../assets/img/studios/cuelight/breakdown.jpg" width="960" height="540" alt="The breakdown: eight slow blue and violet beams over a dim stage." loading="lazy" decoding="async"><figcaption class="mono">Breakdown. Slow blue breathing.</figcaption></figure>
+        <figure class="screen"><img src="../assets/img/studios/cuelight/build.jpg" width="960" height="540" alt="The build: white chases and front washes hitting the truss, with a cyan LED floor." loading="lazy" decoding="async"><figcaption class="mono">Build. White chases, hits on the kick.</figcaption></figure>
+        <figure class="screen"><img src="../assets/img/studios/cuelight/full.jpg" width="960" height="540" alt="The full band: colour-cycling beams with laser fans across the stage." loading="lazy" decoding="async"><figcaption class="mono">Full band. Colour and lasers.</figcaption></figure>
+      </div>
+      <p class="mono note-line">The demo splits a song into sections by how loud each bar is, then lights each one.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="w">
+      <div data-r><h2 class="h2">Cue the verse, the build and the drop.</h2>
+      <p class="lead">A cue is a point in the song and the layers that play from there. Cues crossfade on the beat and keep the stage dark between looks. They show on Blender's own Timeline, where every layer is a bar you can drag, trim and fade.</p></div>
+      <figure class="screen" data-r>
+        <div class="screen-bar mono" aria-hidden="true"><i></i><i></i><i></i><span>Blender · Timeline</span></div>
+        <img src="../assets/img/studios/cuelight/lanes.jpg" width="1320" height="440" alt="Blender's Timeline with eight effect layers drawn as bars under Verse, Build and Drop cues. One layer is selected with fade handles; a muted layer is dimmed." loading="lazy" decoding="async">
+        <figcaption class="mono">Eight layers under three cues. Drag to move, pull an end to trim, a top corner to fade.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="w">
+      <div data-r><h2 class="h2">Renders anywhere, even without Cuelight.</h2>
+      <p class="lead">Bake turns the show into ordinary keyframes and plain drivers. A render farm opens the file and renders it, with no add-on and no scripts.</p></div>
+      <ul class="facts" data-r><li><b>Matches what you saw</b><span>Baked playback follows live preview, frame for frame.</span></li><li><b>Small on disk</b><span>Bake keeps only the keys it needs. 30 seconds of a 100-light rig saves at about 3 MB.</span></li><li><b>Eight shows built in</b><span>EDM Drop to Slow Ballad Wash, fitted to whatever rig you've built.</span></li></ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="w">
+      <div data-r><h2 class="h2">Running in a minute.</h2></div>
+      <ol class="steps" data-r>
+        <li><span class="mono">01</span><h3>Download</h3><p>One zip, about 110 KB.</p></li>
+        <li><span class="mono">02</span><h3>Install</h3><p>Drag it into Blender 4.5 or newer.</p></li>
+        <li><span class="mono">03</span><h3>Open</h3><p>Press N in the viewport and pick the Light Show tab.</p></li>
+        <li><span class="mono">04</span><h3>Play</h3><p>Load a song, add an effect, press play.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="w">
+      <div data-r><h2 class="h2">Questions.</h2></div>
+      <div class="faq" data-r>
+        <details><summary>Which Blender does it need?</summary><p>Blender 4.5 LTS or newer, on Windows, macOS or Linux. It installs like any other Blender extension.</p></details>
+        <details><summary>EEVEE or Cycles?</summary><p>Both. Cycles projects gobos through the haze and lets LED bars light the room. EEVEE is fast, and shows gobos as streaks in the beam.</p></details>
+        <details><summary>Does the render farm need Cuelight?</summary><p>No. Bake the show first and the file renders with Cuelight uninstalled and auto-run scripts off.</p></details>
+        <details><summary>What music can I load?</summary><p>WAV, MP3, OGG, FLAC, M4A and AIFF. The song stays linked, not copied into your file.</p></details>
+        <details><summary>Can I write my own effects?</summary><p>Yes. An effect is one Python function with a decorator. <a href="/studios/cuelight/docs#extending">The docs walk through one.</a></p></details>
+        <details><summary>Is it free?</summary><p>Yes. Cuelight is free and open source under the GPL.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="w">
+      <ul class="next" data-r><li><a href="/studios/cuelight/docs"><span class="mono">Docs</span><b>Cuelight, every panel explained</b><span aria-hidden="true">→</span></a></li><li><a href="/studios/shutter"><span class="mono">Review</span><b>Shutter, frame-accurate notes</b><span aria-hidden="true">→</span></a></li><li><a href="/studios/slate"><span class="mono">Plan</span><b>Slate, shot lists to the take log</b><span aria-hidden="true">→</span></a></li><li><a href="/studios/contact"><span class="mono">Contact</span><b>Want a show lit for you?</b><span aria-hidden="true">→</span></a></li></ul>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="w" data-r>
+      <h2 class="h2">Got a show to light?</h2>
+      <a class="btn solid" href="/assets/files/cuelight-1.0.0.zip" download>Download Cuelight 1.0</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="w">
+    <a class="logo" href="/studios" aria-label="Ruytha Studios"><i class="logo-glyph" aria-hidden="true"></i><span aria-hidden="true">studios</span></a>
+    <a href="/studios/services">Services</a><a href="/studios/toolkit">Toolkit</a><a href="/studios/shutter">Shutter</a><a href="/studios/slate">Slate</a><a href="/studios/cuelight">Cuelight</a><a href="/studios/tools">Tools</a><a href="/studios/contact">Contact</a>
+    <a href="/">Ruytha's site</a>
+    <a href="/studios/legal">Legal</a>
+    <small>© 2026 Ruytha Studios · Australia</small>
+  </div>
+</footer>
+<script src="../assets/studios.js"></script>
+</body>
+</html>

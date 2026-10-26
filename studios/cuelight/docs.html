@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cuelight docs · Ruytha Studios</title>
+<meta name="description" content="How to use Cuelight, the Ruytha Studios Blender extension for concert light shows: fixtures, groups, effects, music, cues, the timeline, presets, rendering and writing your own effects.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://ruytha.dev/studios/cuelight/docs">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Ruytha Studios">
+<meta property="og:title" content="Cuelight docs · Ruytha Studios">
+<meta property="og:description" content="Everything Cuelight does, panel by panel.">
+<meta property="og:url" content="https://ruytha.dev/studios/cuelight/docs">
+<meta property="og:image" content="https://ruytha.dev/assets/img/studios/cuelight/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../assets/img/studios/app-icon.svg?v=3" type="image/svg+xml">
+<link rel="icon" href="../../assets/img/studios/app-icon-32.png?v=3" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/img/studios/app-touch-icon.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<link rel="stylesheet" href="../../assets/studios.css">
+</head>
+<body>
+<header class="nav">
+  <div class="w">
+    <a class="logo" href="/studios" aria-label="Ruytha Studios"><i class="logo-glyph" aria-hidden="true"></i><span aria-hidden="true">studios</span></a>
+    <nav class="links" aria-label="Pages"><a href="/studios/services">Services</a><a href="/studios/toolkit">Toolkit</a><a href="/studios/shutter">Shutter</a><a href="/studios/slate">Slate</a><a href="/studios/cuelight" aria-current="page">Cuelight</a><a href="/studios/tools">Tools</a><a href="/studios/contact">Contact</a></nav>
+    <a class="btn solid" href="/studios/contact">Start a project</a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Menu"><span></span><span></span></button>
+  </div>
+  <nav class="mnav" id="mnav" aria-label="Pages" hidden>
+    <div class="w"><a href="/studios/services">Services</a><a href="/studios/toolkit">Toolkit</a><a href="/studios/shutter">Shutter</a><a href="/studios/slate">Slate</a><a href="/studios/cuelight" aria-current="page">Cuelight</a><a href="/studios/tools">Tools</a><a href="/studios/contact">Contact</a><a class="btn solid" href="/studios/contact">Start a project</a></div>
+  </nav>
+</header>
+
+<main class="legal docs">
+  <section>
+    <div class="w">
+      <div data-r><p class="eyebrow mono"><a href="/studios/cuelight">Cuelight</a> · Docs</p>
+      <h1 class="h2 product"><i class="product-glyph" aria-hidden="true"></i>Cuelight docs.</h1>
+      <p class="lead">Everything Cuelight does, panel by panel: from an empty stage to a render, and how to write your own effects.</p>
+      <p class="mono updated">Version 1.0 · Blender 4.5 LTS or newer · Updated 26 October 2026</p></div>
+
+      <div class="legal-grid">
+        <nav class="legal-toc" aria-label="On this page">
+          <p class="mono">On this page</p>
+          <ol>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#install">Install and a first show</a></li>
+            <li><a href="#fixtures">Fixtures</a></li>
+            <li><a href="#groups">Groups</a></li>
+            <li><a href="#effects">Effects and layering</a></li>
+            <li><a href="#music">Music</a></li>
+            <li><a href="#cues">Cues</a></li>
+            <li><a href="#timeline">Timeline lanes</a></li>
+            <li><a href="#presets">Presets</a></li>
+            <li><a href="#rendering">Rendering</a></li>
+            <li><a href="#demo">The demo stage</a></li>
+            <li><a href="#extending">Writing an effect</a></li>
+            <li><a href="#how">How it works</a></li>
+            <li><a href="#limits">Known limits</a></li>
+          </ol>
+          <p class="mono" style="margin-top:24px"><a class="dl" href="/assets/files/cuelight-1.0.0.zip" download>Download 1.0 →</a></p>
+        </nav>
+
+        <article class="legal-body docs-body">
+          <h2 id="overview">Overview</h2>
+          <p>Cuelight is a Blender extension for concert light shows. You place fixtures, group them, stack effects, cue them to the song and render, without keyframing a single light by hand. It works in EEVEE and Cycles, and it's built for music videos, lyric videos and short films that need a stage.</p>
+          <p>A show comes together in four moves:</p>
+          <ol>
+            <li><strong>Place.</strong> Spots, washes, LED bars, lasers and strobes in one click, or a whole row, arc, ring or grid. Add haze and the beams show.</li>
+            <li><strong>Group.</strong> Put fixtures in named groups and choose which way effects travel through them.</li>
+            <li><strong>Cue.</strong> Stack effects on groups, lock them to the song's tempo, and let cues decide what plays in the verse, the build and the drop.</li>
+            <li><strong>Render.</strong> Bake the show to keyframes. Renders and render farms then play it without Cuelight installed.</li>
+          </ol>
+          <p>Everything lives in one sidebar tab in the 3D viewport, <strong>Light Show</strong>, in six numbered panels: 01 Fixtures, 02 Groups, 03 Effects, 04 Music, 05 Cues and 06 Bake. Effect layers also show as bars on Blender's own Timeline.</p>
+          <figure class="screen"><img src="../../assets/img/studios/cuelight/panel.jpg" width="838" height="649" alt="The Light Show tab in Blender's sidebar, showing 30 fixtures, the fixture buttons and five groups." loading="lazy" decoding="async"><figcaption class="mono">The Light Show tab on the demo stage.</figcaption></figure>
+
+          <h2 id="install">Install and a first show</h2>
+          <h3>Install</h3>
+          <ol>
+            <li><a href="/assets/files/cuelight-1.0.0.zip" download>Download <code>cuelight-1.0.0.zip</code></a>.</li>
+            <li>Drag it into Blender, or go to <strong>Edit → Preferences → Get Extensions → Install from Disk</strong>.</li>
+            <li>In the 3D viewport, press <strong>N</strong> and open the <strong>Light Show</strong> tab.</li>
+          </ol>
+          <h3>A first show in five minutes</h3>
+          <ol>
+            <li><strong>01 Fixtures → Array.</strong> Add 8 spots in a line. The array makes a group of them for you.</li>
+            <li><strong>Haze → Add haze</strong>, so the beams show in the air.</li>
+            <li><strong>04 Music → Load song.</strong> Cuelight puts it in the sequencer, works out the tempo and says how sure it is.</li>
+            <li><strong>03 Effects → +.</strong> Add Chase, then Rainbow with Spread at 1. Press play.</li>
+            <li><strong>Presets → Add show → EDM Drop</strong> drops a whole section in at the playhead.</li>
+            <li><strong>05 Cues → Cue here</strong> at each section of the song.</li>
+            <li><strong>06 Bake → Bake show</strong>, then render.</li>
+          </ol>
+
+          <h2 id="fixtures">Fixtures</h2>
+          <p>Every fixture is an Empty holding control properties, and effects only ever write those properties. Simple drivers carry them to the lights and glowing parts, so a file keeps working with Cuelight uninstalled and auto-run scripts off.</p>
+          <div class="docs-table"><table>
+            <thead><tr><th>Type</th><th>What you get</th><th>Defaults</th></tr></thead>
+            <tbody>
+              <tr><td>Spot</td><td>Moving head with pan, tilt and zoom (4° to 30°), a visible beam and an optional gobo</td><td>3000 W, white, full</td></tr>
+              <tr><td>Wash</td><td>Moving wash, as a soft spot (20° to 70°) or a disk area light</td><td>1500 W</td></tr>
+              <tr><td>LED bar</td><td>A strip of pixels; every pixel is its own light</td><td>16 pixels, 1 m long</td></tr>
+              <tr><td>Laser</td><td>A fan of thin beams on a pan/tilt mount; zoom sets the fan's spread, up to 60°</td><td>5 beams, 25 m long</td></tr>
+              <tr><td>Strobe</td><td>High-output area light with a glowing face</td><td>6000 W, starts dark</td></tr>
+            </tbody>
+          </table></div>
+          <ul>
+            <li><strong>Control properties.</strong> Each fixture carries <code>cl_intensity</code>, <code>cl_color</code>, <code>cl_pan</code>, <code>cl_tilt</code>, <code>cl_zoom</code> and <code>cl_strobe</code>, plus power, beam strength, beam length and gobo. Strobe Hz on a fixture flashes it on its own, at least one frame on per flash.</li>
+            <li><strong>Arrays.</strong> Line, arc, circle or grid, with count, spacing, radius, arc angle and rows. Arcs and rings turn each fixture to face the centre.</li>
+            <li><strong>Mounting.</strong> Hang (beam down, as from a truss), Floor (beam up) or Front (beam toward the audience).</li>
+            <li><strong>Gobos.</strong> Dots, Spokes, Ring, Breakup, or any image. Cycles projects the gobo through the light. EEVEE can't project light textures, so the visible beam cone shows the pattern as streaks.</li>
+            <li><strong>Haze.</strong> One button adds a volume box fitted round the rig and sets EEVEE up for sharp beams, with a density slider. Adding haze turns the stylised beam cones down to 25%, because the haze now draws the real beams.</li>
+          </ul>
+
+          <h2 id="groups">Groups</h2>
+          <p>A group is a named, ordered set of fixtures. Its order and direction decide how effects travel across it.</p>
+          <ul>
+            <li><strong>Making one.</strong> Select fixtures and press +; members are ordered left to right. Arrays make their own group.</li>
+            <li><strong>Order.</strong> Add or remove selected fixtures, move members up or down, or sort by position, height, name or angle round the 3D cursor.</li>
+            <li><strong>Direction.</strong> Left to right, right to left, centre out, outside in, or random. Centre out and outside in move mirrored fixtures together, so a chase opens from the middle. Reverse flips any of them, and one effect can override its group's direction.</li>
+            <li><strong>Pixels as heads.</strong> On, every LED pixel is its own light, so a chase runs pixel by pixel. Off, each bar acts as one light.</li>
+            <li><strong>Selecting.</strong> Click a member to select just that fixture and see its controls; Select all selects the whole group.</li>
+          </ul>
+
+          <h2 id="effects">Effects and layering</h2>
+          <p>Fourteen effects ship built in, and any number of them stack as layers on any group.</p>
+          <div class="docs-table"><table>
+            <thead><tr><th>Effect</th><th>Drives</th><th>What it does</th></tr></thead>
+            <tbody>
+              <tr><td>Chase</td><td>Intensity</td><td>Steps light across the group: width, tail, bounce, floor level</td></tr>
+              <tr><td>Wave</td><td>Intensity, pan, tilt or zoom</td><td>A sine, triangle, saw or square wave rolling through the group</td></tr>
+              <tr><td>Strobe</td><td>Intensity</td><td>Flashes in Hz or locked to the beat, with flash length and chance</td></tr>
+              <tr><td>Pulse</td><td>Intensity</td><td>Breathe (smooth) or Hit (snap on, decay)</td></tr>
+              <tr><td>Sparkle</td><td>Intensity</td><td>Random heads flash and fade</td></tr>
+              <tr><td>Flicker</td><td>Intensity</td><td>Smooth random flicker, with optional frame jitter</td></tr>
+              <tr><td>Full on</td><td>Intensity</td><td>Every head at a fixed level</td></tr>
+              <tr><td>Blackout</td><td>Intensity</td><td>Everything to black; use fades for a slow fade-out</td></tr>
+              <tr><td>Colour fade</td><td>Colour</td><td>Fades through two or more colours, with a hold</td></tr>
+              <tr><td>Rainbow</td><td>Colour</td><td>Round the colour wheel, or swinging across part of it</td></tr>
+              <tr><td>Fan</td><td>Pan or tilt</td><td>Spreads heads apart from the middle of the group and back</td></tr>
+              <tr><td>Sweep</td><td>Pan, tilt or diagonal</td><td>Swings beams side to side or up and down</td></tr>
+              <tr><td>Circle</td><td>Pan and tilt</td><td>Traces circles</td></tr>
+              <tr><td>Figure 8</td><td>Pan and tilt</td><td>Traces a sideways figure 8</td></tr>
+            </tbody>
+          </table></div>
+          <ul>
+            <li><strong>Every layer has</strong> a group, a start and end frame, fades in and out (beats or seconds), a blend mode, an opacity, a speed, a spread across the group and a direction.</li>
+            <li><strong>Blend modes.</strong> Replace fades from what's below toward this layer by its opacity. Add adds on top. Multiply scales what's below, which suits masks and dimmers. Max takes the highest.</li>
+            <li><strong>Speed.</strong> In beats (locked to the song), seconds or Hz. Beat-locked effects count from the song's beat 1, so a chase that starts mid-bar still lands on the grid. One click sets ¼, ½, 1, 2, 4, 8 or 16 beats per cycle.</li>
+            <li><strong>Spread.</strong> How much of a cycle is spread across the group: 0 moves every head together, 1 puts one full wave across it.</li>
+            <li><strong>Intensity starts from black.</strong> Once any effect drives a fixture's intensity, the stack starts from black, as on a lighting console. Colour and position still start from the fixture's own values.</li>
+            <li><strong>Home values.</strong> When effects let go, each fixture returns to its own look. While effects play, the fixture panel edits that home look, so your change is kept.</li>
+          </ul>
+
+          <h2 id="music">Music</h2>
+          <p><strong>Load song</strong> sets everything up in one step and says how far to trust its tempo: Locked when it's confident, Check by ear when it isn't. It takes WAV, MP3, OGG, FLAC, M4A or AIFF, and needs nothing beyond Blender itself.</p>
+          <h3>Tempo detection</h3>
+          <p>Cuelight finds the beat from how often the song's hits repeat, and scores its confidence on three checks: how clearly one tempo stands out, how much of the song's energy lands on the beats, and how many beats actually have a hit. A clean beat scores 100%, a busy mix around 85%, a sustained pad 0%. Under 50% counts as unsure.</p>
+          <h3>The BPM editor</h3>
+          <p>It opens on its own when detection is unsure, or from the Editor button.</p>
+          <ul>
+            <li><strong>Song strip.</strong> The song's hits under the beat grid, eight bars around the playhead, so you can see whether hits sit on the lines.</li>
+            <li><strong>Heard.</strong> The tempos the detector found, often the real one plus half and double time. One click switches tempo and lines the grid up.</li>
+            <li><strong>Tempo.</strong> ÷2, −1, −0.1, +0.1, +1, ×2, Tap and Detect. In range listens only inside the preview range, for songs whose intro has no clear beat.</li>
+            <li><strong>Grid.</strong> Move beat 1 by a frame, or by a whole beat when bar 1 is wrong. Fit grid slides beat 1 onto the hits without changing bar numbers.</li>
+            <li><strong>Metronome.</strong> A click on every beat, higher on each bar, to check the grid by ear. It's muted in renders.</li>
+          </ul>
+          <h3>Audio links</h3>
+          <p>Cuelight splits the song into bass, mid, high and overall energy, frame by frame, and saves it with the file. Any layer can follow a band: it can drive the layer's intensity, its speed, or any of its settings, with gain, threshold, attack and release.</p>
+
+          <h2 id="cues">Cues</h2>
+          <p>A cue is a named point in the song plus the layers that play from there until the next cue: Verse, Build, Drop.</p>
+          <ul>
+            <li><strong>Cue here</strong> adds a cue at the playhead, holding whatever plays there now. New cues snap to the bar.</li>
+            <li><strong>Choosing layers.</strong> With cues on, each layer gets a radio button that puts it in or out of the selected cue. The checkbox stays a mute that applies everywhere.</li>
+            <li><strong>Crossfades.</strong> A cue's fade (in beats) crossfades from the cue before it. A layer that's in both cues carries straight through.</li>
+            <li><strong>A dark stage.</strong> With cues on, every fixture the show uses sits at black unless the current cue lights it.</li>
+            <li><strong>On the beat.</strong> Cues stay on their beat when the tempo changes, and show as ▸ markers on the timeline, with jump buttons in the panel.</li>
+          </ul>
+
+          <h2 id="timeline">Timeline lanes</h2>
+          <p>Turn on <strong>Cuelight</strong> in the header of a Timeline or Dope Sheet, and every layer becomes a bar you can move with the mouse.</p>
+          <figure class="screen"><img src="../../assets/img/studios/cuelight/lanes.jpg" width="1320" height="440" alt="Effect layers as bars on Blender's Timeline under Verse, Build and Drop cues, with fades and a selected layer." loading="lazy" decoding="async"><figcaption class="mono">Eight layers under three cues.</figcaption></figure>
+          <ul>
+            <li><strong>Drag</strong> a bar to move it, an end to trim it, and the small handles on its top corners to set fades.</li>
+            <li><strong>Snapping</strong> to beats by default, to bars with Shift, none with Ctrl.</li>
+            <li><strong>Right-click</strong> a bar to mute, duplicate, trim to the playhead, snap or delete it.</li>
+            <li><strong>Clicks off a bar</strong> go straight to Blender, so scrubbing and selecting work as usual. Lanes need some height: drag the Timeline taller.</li>
+          </ul>
+
+          <h2 id="presets">Presets</h2>
+          <p>Eight built-in show sections drop in at the playhead, and your own effects and shows save to a library or a JSON file you can share.</p>
+          <div class="docs-table"><table>
+            <thead><tr><th>Built-in show</th><th>Length</th><th>What it does</th></tr></thead>
+            <tbody>
+              <tr><td>EDM Drop</td><td>8 bars</td><td>Rainbow chases and circles, pixel hits, quarter-beat strobes, fanning lasers</td></tr>
+              <tr><td>Slow Ballad Wash</td><td>16 bars</td><td>Warm breathing colour and slow drifting spots</td></tr>
+              <tr><td>Rock Chase</td><td>8 bars</td><td>Bouncing white and amber chases over a red wash</td></tr>
+              <tr><td>Strobe Build</td><td>8 bars</td><td>The strobe rate doubles every two bars while the rig fades up</td></tr>
+              <tr><td>Laser Fan Sweep</td><td>8 bars</td><td>Lasers fanning open and closed while tilting</td></tr>
+              <tr><td>Rainbow Pixel Wave</td><td>8 bars</td><td>A rainbow rolling down every LED pixel</td></tr>
+              <tr><td>Breakdown Breathe</td><td>8 bars</td><td>Everything slows to a blue and violet breath</td></tr>
+              <tr><td>Blackout Hits</td><td>4 bars</td><td>Full-rig white hits every other beat, black between</td></tr>
+            </tbody>
+          </table></div>
+          <p>Built-ins target roles (spots, wash, LEDs, lasers, strobes), not group names, so they fit any rig. Positions are stored in beats, so a show saved at 128 BPM lands on the same bars in a song at 96.</p>
+
+          <h2 id="rendering">Rendering</h2>
+          <p>Live preview plays the show as you scrub; <strong>Bake show</strong> writes it to keyframes, so a render never depends on Cuelight.</p>
+          <ul>
+            <li><strong>Bake</strong> runs the same engine for every frame and writes keyframes only for what an effect touched. With Simplify on, it keeps only the keys needed to stay within a hair of the live show.</li>
+            <li><strong>Clear bake</strong> removes only Cuelight's keyframes, so your own animation stays.</li>
+            <li><strong>Render farms.</strong> A baked file renders on a machine without Cuelight, with auto-run scripts off: <code>blender -b show.blend -a</code>.</li>
+            <li><strong>File size.</strong> Busy shows bake to a lot of keyframes. Save with Compress on: about nine times smaller.</li>
+            <li><strong>Glow.</strong> EEVEE dropped bloom in Blender 4.2. A compositor Glare node set to Bloom brings it back.</li>
+          </ul>
+
+          <h2 id="demo">The demo stage</h2>
+          <p>One script builds a full rig and cues a show to any song. It reads the song's loudness bar by bar to find the quiet, building and full stretches, then lights each one.</p>
+          <ul>
+            <li><strong>The rig.</strong> 8 moving heads, 4 washes, a 12-bar LED floor, 4 lasers over the crowd, 2 strobes, haze, a camera and bloom.</li>
+            <li><strong>The song.</strong> It finds the tempo on the chosen stretch to within 0.02 BPM and starts the show on a downbeat.</li>
+            <li><strong>The show.</strong> Blue breathing for breakdowns, white chases and a speeding strobe for builds, colour, circles and lasers when the band is full, a cue at every change, and a fade to black at the end.</li>
+          </ul>
+          <pre><code>blender --python demo/build_demo_stage.py -- --song "song.mp3" --start 2:30 --bars 40 --save show.blend</code></pre>
+          <p>Without a song it makes its own track. Songs are never copied into the file: the demo links to the song where it sits.</p>
+
+          <h2 id="extending">Writing an effect</h2>
+          <p>A new effect is one function and one decorator, in a module under <code>cuelight/effects/builtin/</code>.</p>
+          <pre><code>from ..registry import Param, register_effect
+
+@register_effect("heartbeat", "Heartbeat", {"intensity"},
+                 params=[Param("level", 1.0, min=0.0, max=1.0, label="Level")],
+                 speed=(1.0, 'BEATS'))
+def heartbeat(idx, n, t, p):
+    ph = p.phase(idx, n, t) % 1.0          # spread and direction already applied
+    thump = (ph &lt; 0.08) | ((ph &gt; 0.18) &amp; (ph &lt; 0.26))
+    return {"intensity": thump * p.level}</code></pre>
+          <ul>
+            <li><strong>It receives</strong> each head's place in the group (<code>idx</code>, so one call covers the whole group), the group size, cycles elapsed with tempo already applied, and its settings.</li>
+            <li><strong>It returns</strong> any of intensity, colour, pan, tilt, zoom and strobe. Anything it leaves out passes through.</li>
+            <li><strong>It gets for free</strong> sliders in the panel, presets, baking, cues and audio links.</li>
+          </ul>
+
+          <h2 id="how">How it works</h2>
+          <p>Effects never touch a light: they write six control properties on each fixture, and plain drivers carry those to the lights. That one rule is why a baked show renders anywhere.</p>
+          <figure class="dia-wrap">
+            <svg class="dia" viewBox="12 60 736 280" role="img" aria-label="Effect layers, cues and audio feed the evaluator; live preview and bake write the control properties; simple drivers carry them to the lights and the render.">
+              <defs><marker id="dia-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah"/></marker></defs>
+              <g class="ln"><path d="M175 96L213 132" marker-end="url(#dia-arrow)"/><path d="M175 152H213" marker-end="url(#dia-arrow)"/><path d="M175 208L213 172" marker-end="url(#dia-arrow)"/><path d="M365 136L393 112" marker-end="url(#dia-arrow)"/><path d="M365 168L393 192" marker-end="url(#dia-arrow)"/><path d="M545 104L558 136" marker-end="url(#dia-arrow)"/><path d="M545 200L558 168" marker-end="url(#dia-arrow)"/><path d="M648 188V270" marker-end="url(#dia-arrow)"/><path d="M560 300H532" marker-end="url(#dia-arrow)"/><path d="M330 300H277" marker-end="url(#dia-arrow)"/></g>
+              <rect class="bx" x="25" y="76" width="150" height="40" rx="8"/><text x="100" y="100">Effect layers</text>
+              <rect class="bx" x="25" y="132" width="150" height="40" rx="8"/><text x="100" y="156">Cues</text>
+              <rect class="bx" x="25" y="188" width="150" height="40" rx="8"/><text x="100" y="212">Audio bands</text>
+              <rect class="bx" x="215" y="116" width="150" height="72" rx="8"/><text class="nm" x="290" y="140">Evaluator</text><text class="q" x="290" y="160">numpy, one call</text><text class="q" x="290" y="176">per layer per group</text>
+              <rect class="bx" x="395" y="72" width="150" height="56" rx="8"/><text class="nm" x="470" y="96">Live preview</text><text class="q" x="470" y="114">every frame change</text>
+              <rect class="bx" x="395" y="176" width="150" height="56" rx="8"/><text class="nm" x="470" y="200">Bake</text><text class="q" x="470" y="218">keyframes, once</text>
+              <rect class="bx key" x="560" y="116" width="176" height="72" rx="8"/><text class="nm" x="648" y="140">Control properties</text><text x="648" y="160">intensity, colour, pan,</text><text x="648" y="176">tilt, zoom, strobe</text>
+              <rect class="bx" x="560" y="272" width="176" height="56" rx="8"/><text class="nm" x="648" y="296">Simple drivers</text><text class="q" x="648" y="314">no Python, auto-run off</text>
+              <rect class="bx" x="330" y="272" width="200" height="56" rx="8"/><text class="nm" x="430" y="296">Lights and glowing parts</text><text class="q" x="430" y="314">spots, lenses, pixels, beams</text>
+              <rect class="bx" x="85" y="272" width="190" height="56" rx="8"/><text class="nm" x="180" y="296">Render</text><text class="q" x="180" y="314">EEVEE or Cycles</text>
+            </svg>
+            <figcaption class="mono">How a frame is lit: three inputs, two paths, one rule.</figcaption>
+          </figure>
+          <ul>
+            <li><strong>Live preview</strong> runs on every frame change and writes only the values that changed.</li>
+            <li><strong>Bake</strong> runs the same evaluator over every frame, so a baked show matches what you saw while scrubbing.</li>
+            <li><strong>Drivers</strong> use Blender's simple expressions only, so a baked file needs no Python at all.</li>
+          </ul>
+          <div class="docs-table"><table>
+            <thead><tr><th>Measured on 108 fixtures, 228 lights, 6 layers</th><th>Time</th></tr></thead>
+            <tbody>
+              <tr><td>Evaluating every layer, per frame</td><td>1.3 ms</td></tr>
+              <tr><td>Evaluating and writing changed values, per frame</td><td>3.5 ms</td></tr>
+              <tr><td>A full frame change in Blender, drivers included</td><td>18 ms</td></tr>
+              <tr><td>Baking 30 seconds at 24 fps</td><td>5.4 s</td></tr>
+            </tbody>
+          </table></div>
+          <p>153 automated tests cover every fixture, effect, blend mode and cue rule, baking and rendering without Cuelight installed, tempo detection and presets. A separate test drags the timeline lanes with real mouse input.</p>
+
+          <h2 id="limits">Known limits</h2>
+          <div class="docs-table"><table>
+            <thead><tr><th>Limit</th><th>Workaround</th></tr></thead>
+            <tbody>
+              <tr><td>EEVEE can't project gobos through haze</td><td>The beam cone shows the pattern as streaks; Cycles projects it</td></tr>
+              <tr><td>LED bars and lasers don't light other surfaces in EEVEE</td><td>Render in Cycles, or add a few low fill lights</td></tr>
+              <tr><td>Keyframes on pan or tilt win over effects on the same channel</td><td>Use movement effects, or keyframe the fixture object instead</td></tr>
+              <tr><td>One tempo per song</td><td>Split a tempo change into two scenes</td></tr>
+              <tr><td>A short Timeline has no room for lanes</td><td>Drag it taller, or use a Dope Sheet</td></tr>
+            </tbody>
+          </table></div>
+          <p>Questions, bugs or a show you'd like lit? <a href="/studios/contact">Get in touch</a>, or email <a href="mailto:ruytham4a@gmail.com">ruytham4a@gmail.com</a>.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="w">
+    <a class="logo" href="/studios" aria-label="Ruytha Studios"><i class="logo-glyph" aria-hidden="true"></i><span aria-hidden="true">studios</span></a>
+    <a href="/studios/services">Services</a><a href="/studios/toolkit">Toolkit</a><a href="/studios/shutter">Shutter</a><a href="/studios/slate">Slate</a><a href="/studios/cuelight">Cuelight</a><a href="/studios/tools">Tools</a><a href="/studios/contact">Contact</a>
+    <a href="/">Ruytha's site</a>
+    <a href="/studios/legal">Legal</a>
+    <small>© 2026 Ruytha Studios · Australia</small>
+  </div>
+</footer>
+<script src="../../assets/studios.js"></script>
+</body>
+</html>

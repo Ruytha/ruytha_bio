@@ -233,3 +233,49 @@ h1,h2,h3,.h2,.hero h1,.moves h3,.steps h3,.legal-body h2,.next b,.kit b,.facts b
 .partner img{width:96px;height:96px;flex-shrink:0;border-radius:22px}
 .partner h3{font-size:26px;line-height:1.1}
 .partner p{margin:8px 0 0;color:var(--t2)}
+
+/* cuelight page: the product mark beside the name, a three-up row of stills */
+.product{display:flex;align-items:center;gap:.16em}
+.product-glyph{width:.84em;height:.84em;flex-shrink:0;background:currentColor;-webkit-mask:url(img/studios/cuelight/mark.svg) center/contain no-repeat;mask:url(img/studios/cuelight/mark.svg) center/contain no-repeat}
+.kit.three{grid-template-columns:repeat(3,1fr)}
+.kit.three b{font-size:clamp(20px,2vw,24px)}
+.kit.three .mono{margin:0 0 10px}
+@media(max-width:900px){.kit.three{grid-template-columns:1fr}.kit.three div{border-right:0}.kit.three div:last-child{border-bottom:0}}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
+.trio .screen{margin:0}
+@media(max-width:900px){.trio{grid-template-columns:1fr}}
+/* cuelight hero: the demo render behind the name. The lasers sit right of centre, the words on the dark left */
+.cl-hero .reel-video{object-position:62% 45%}
+.cl-hero .hero .eyebrow{color:var(--t2)}
+.cl-hero .hero .note-line{color:var(--t2)}
+.cl-hero .product-glyph{width:.8em;height:.8em}
+.faq p a{color:var(--t1)}
+
+/* cuelight docs: the legal layout, plus tables, code, figures and a diagram */
+.docs .legal-toc{position:sticky;top:24px}
+.docs .legal-toc .dl{color:var(--t1);text-decoration:none}
+.docs-body h3{margin:28px 0 8px;font-size:20px;letter-spacing:-.01em}
+.docs-body ol{padding-left:22px;display:grid;gap:8px}
+.docs-body strong{color:var(--t1);font-weight:600}
+.docs-table{overflow-x:auto;margin:20px 0}
+.docs-body table{width:100%;border-collapse:collapse;font-size:15px}
+.docs-body th,.docs-body td{text-align:left;padding:10px 12px 10px 0;border-bottom:1px solid var(--line);vertical-align:top;color:var(--t2);line-height:1.5}
+.docs-body th{color:var(--t3);font:500 12.5px/1.4 var(--mono);border-bottom-color:var(--line2)}
+.docs-body td:first-child{color:var(--t1);padding-right:20px;min-width:7em}
+.docs-body code{font:500 .88em var(--mono);background:var(--bg3);padding:2px 6px;border-radius:4px;color:var(--t1)}
+.docs-body pre{margin:20px 0;padding:18px 20px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+.docs-body pre code{background:none;padding:0;font-size:13.5px;line-height:1.65;color:var(--t2)}
+.docs-body .screen{margin:28px 0 8px}
+.dia-wrap{margin:28px 0;padding:20px;border:1px solid var(--line);border-radius:12px;background:var(--bg2)}
+.dia-wrap figcaption{margin-top:12px;color:var(--t3)}
+.dia{display:block;width:100%;height:auto}
+.dia text{fill:var(--t1);font:13px var(--font);text-anchor:middle}
+.dia .nm{font-weight:600}
+.dia .q{fill:var(--t3);font-size:11.5px}
+.dia .bx{fill:none;stroke:var(--line2);stroke-width:1.25}
+.dia .bx.key{fill:rgba(250,250,250,.06);stroke:var(--t1);stroke-width:2}
+.dia .ln path{fill:none;stroke:var(--line2);stroke-width:1.25}
+.dia .ah{fill:var(--line2)}
+/* the diagram breaks out of the reading column into the empty space beside it */
+@media(min-width:1100px){.dia-wrap{width:min(860px,calc(100vw - 420px))}}
+@media(max-width:700px){.dia-wrap{overflow-x:auto}.dia{min-width:620px}}
