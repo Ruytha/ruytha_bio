@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blog · Ruytha</title>
+<meta name="description" content="Reviews, thoughts and things I've been up to.">
+<meta name="theme-color" content="#030718">
+<link rel="canonical" href="https://ruytha.dev/blog">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ruytha">
+<meta property="og:title" content="Ruytha's blog">
+<meta property="og:description" content="Reviews, thoughts and things I've been up to.">
+<meta property="og:url" content="https://ruytha.dev/blog">
+<link rel="icon" href="/assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Geist:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/blog/blog.css?v=1">
+</head>
+<body>
+<div class="w">
+  <header class="bar">
+    <a class="home" href="/">Ruytha</a>
+    <nav aria-label="Site"><a href="/">Home</a><a href="/blog" aria-current="page">Blog</a></nav>
+  </header>
+  <main>
+    <section class="intro">
+      <h1>Blog</h1>
+      <p>Reviews, thoughts and things I've been up to.</p>
+    </section>
+    <ul class="posts" id="posts"></ul>
+    <p class="empty" id="empty" hidden>No posts yet. Check back soon.</p>
+  </main>
+  <footer class="foot"><span>© Ruytha</span><a href="/">ruytha.dev</a></footer>
+</div>
+<script>
+(function(){
+  var list = document.getElementById('posts');
+  function el(tag, attrs, kids){
+    var n = document.createElement(tag);
+    for (var k in attrs || {}) { if (attrs[k] == null) continue; if (k === 'text') n.textContent = attrs[k]; else if (k === 'class') n.className = attrs[k]; else n.setAttribute(k, attrs[k]); }
+    (kids || []).forEach(function(c){ if (c) n.appendChild(c); });
+    return n;
+  }
+  function when(p){
+    var d = new Date(p.date + 'T12:00:00');
+    return d.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) + (p.minutes ? ' · ' + p.minutes + ' min read' : '');
+  }
+  // posts.json is written by the blog editor whenever a post is published; it lists published posts only.
+  fetch('/blog/posts.json', { cache: 'no-cache' }).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }).then(function(posts){
+    if (!posts.length) { document.getElementById('empty').hidden = false; return; }
+    posts.forEach(function(p){
+      list.appendChild(el('li', { class: 'pcard' + (p.cover ? '' : ' nocover') }, [el('a', { href: '/blog/' + p.slug }, [
+        el('div', { class: 'txt' }, [
+          el('span', { class: 'when', text: when(p) }),
+          el('h2', { text: p.title }),
+          p.description ? el('p', { text: p.description }) : null
+        ]),
+        p.cover ? el('div', { class: 'cover' }, [el('img', { src: p.cover, alt: '', loading: 'lazy', decoding: 'async' })]) : null
+      ])]));
+    });
+  });
+})();
+</script>
+</body>
+</html>

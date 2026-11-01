@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blog editor · Ruytha</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#030718">
+<link rel="icon" href="/assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Geist:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/blog/blog.css?v=1">
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<style>
+  body{font-size:15px;line-height:1.5}
+  .w{max-width:1400px}
+  .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:10px;padding:8px 14px;font:600 14px var(--font);cursor:pointer;text-decoration:none}
+  .btn:hover{background:var(--surface-2)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn.danger{color:#ff9a8f}
+  .btn:disabled{opacity:.45;cursor:default}
+  .in{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:9px 12px;font:15px var(--font);min-width:0}
+  .in:focus{outline:none;border-color:var(--accent)}
+  label.f{display:block}
+  label.f > span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:0 0 5px}
+
+  .panel{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:22px}
+  #lock{max-width:460px;margin:60px auto 0;text-align:center}
+  #lock h1{font:800 34px var(--display);letter-spacing:-.03em;margin:0 0 8px}
+  #lock p{color:var(--muted);margin:0 0 18px}
+  #signIn{display:flex;justify-content:center;min-height:120px}
+  .err{color:#ff9a8f;font-size:14px}
+
+  /* post list */
+  .listhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 18px}
+  .listhead h1{font:800 40px var(--display);letter-spacing:-.03em;margin:0}
+  .plist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+  .plist li{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+  .plist .t{flex:1 1 240px;min-width:0}
+  .plist .t b{display:block;font:700 18px var(--display);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .plist .t span{color:var(--faint);font-size:13px}
+  .tag{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+  .tag.live{background:rgba(110,220,150,.15);color:#8fe3ad}
+
+  /* editor */
+  .edhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:16px 0 18px}
+  .edhead .status{flex:1 1 200px;color:var(--muted);font-size:14px}
+  .title-in{font:800 clamp(28px,4vw,42px)/1.1 var(--display);letter-spacing:-.03em;background:none;border:0;border-bottom:1px solid transparent;border-radius:0;padding:4px 0;width:100%;color:var(--text)}
+  .title-in:focus{outline:none;border-bottom-color:var(--line)}
+  .title-in::placeholder{color:var(--faint)}
+  .fields{display:grid;grid-template-columns:1.2fr .7fr 2fr 1fr;gap:12px;margin:14px 0 0}
+  label.f > .slugwrap{display:flex;margin:0;align-items:center;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;padding-left:10px;color:var(--faint);font-size:14px}
+  .slugwrap .in{border:0;background:none;padding-left:2px}
+  .slugwrap:focus-within{border-color:var(--accent)}
+
+  .toolbar{display:flex;flex-wrap:wrap;gap:4px;padding:8px;margin:18px 0 0;border:1px solid var(--line);border-bottom:0;border-radius:14px 14px 0 0;background:var(--surface-2)}
+  .toolbar button{min-width:36px;height:36px;padding:0 10px;border:1px solid transparent;border-radius:8px;background:none;color:var(--text);font:600 14px var(--font);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+  .toolbar button:hover{background:rgba(255,255,255,.08);border-color:var(--line)}
+  .toolbar .sep{width:1px;background:var(--line);margin:6px 4px}
+  .toolbar svg{width:18px;height:18px}
+  .toolbar .lbl{font-size:13px}
+  .tabs{display:none}
+  .split{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:0 0 14px 14px;overflow:hidden;min-height:65vh}
+  #md{width:100%;height:100%;min-height:65vh;resize:vertical;border:0;border-right:1px solid var(--line);background:rgba(0,0,0,.28);color:var(--text);
+    padding:20px 22px;font:15px/1.7 var(--mono);tab-size:2}
+  #md:focus{outline:none;background:rgba(0,0,0,.36)}
+  .split.drag #md{background:rgba(156,199,242,.08)}
+  #preview{padding:24px 28px;overflow:auto;max-height:80vh;font-size:16.5px;line-height:1.7}
+  #preview h1.pt{font:800 34px/1.05 var(--display);letter-spacing:-.03em;margin:0 0 6px}
+  #preview .meta{color:var(--faint);font-size:14px;margin:0 0 24px}
+  .prose .pending{outline:2px dashed rgba(156,199,242,.5);outline-offset:3px}
+  .hints{color:var(--faint);font-size:13px;margin:10px 0 0}
+  .hints kbd{font:12px var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+
+  @media (max-width:900px){
+    .fields{grid-template-columns:1fr 1fr}
+    .fields .desc{grid-column:1/-1}
+    .tabs{display:flex;gap:4px;margin:12px 0 0}
+    .tabs button{flex:1;padding:9px;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:10px;font:600 14px var(--font)}
+    .tabs button[aria-selected="true"]{background:var(--surface-2);color:var(--text)}
+    .toolbar{margin-top:10px}
+    .split{grid-template-columns:1fr}
+    .split[data-tab="write"] #preview,.split[data-tab="preview"] #md{display:none}
+    #md{border-right:0}
+    #preview{max-height:none}
+    .toolbar .lbl{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="w">
+  <header class="bar">
+    <a class="home" href="/blog/write">Blog editor</a>
+    <nav aria-label="Site"><a href="/blog" target="_blank" rel="noopener">View blog ↗</a><a href="/admin">Admin</a></nav>
+  </header>
+
+  <section id="lock" class="panel">
+    <h1>Sign in to write</h1>
+    <p>Use your site admin account.</p>
+    <div id="signIn"></div>
+    <p class="err" id="lockErr" hidden></p>
+  </section>
+
+  <section id="listView" hidden>
+    <div class="listhead">
+      <h1>Posts</h1>
+      <button class="btn primary" type="button" id="newBtn">+ New post</button>
+    </div>
+    <ul class="plist" id="plist"></ul>
+    <p class="empty" id="noPosts" hidden>No posts yet. Press “New post” to write your first one.</p>
+  </section>
+
+  <section id="editView" hidden>
+    <div class="edhead">
+      <button class="btn" type="button" id="backBtn">← Posts</button>
+      <span class="status" id="status" role="status"></span>
+      <a class="btn" id="viewLink" href="#" target="_blank" rel="noopener" hidden>View live ↗</a>
+      <button class="btn" type="button" id="draftBtn">Save draft</button>
+      <button class="btn primary" type="button" id="publishBtn">Publish</button>
+    </div>
+
+    <input class="title-in" id="title" placeholder="Post title" aria-label="Post title" autocomplete="off">
+    <div class="fields">
+      <label class="f"><span>Address</span><span class="slugwrap">/blog/<input class="in" id="slug" aria-label="Post address" autocomplete="off" spellcheck="false"></span></label>
+      <label class="f"><span>Date</span><input class="in" id="date" type="date"></label>
+      <label class="f desc"><span>Short description (shown in link previews and the post list)</span><input class="in" id="desc" maxlength="200" autocomplete="off"></label>
+      <label class="f"><span>Cover image</span><select class="in" id="cover"></select></label>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Editor view">
+      <button type="button" role="tab" aria-selected="true" data-tab="write">Write</button>
+      <button type="button" role="tab" aria-selected="false" data-tab="preview">Preview</button>
+    </div>
+    <div class="toolbar" role="toolbar" aria-label="Formatting" id="toolbar">
+      <button type="button" data-act="bold" title="Bold (Ctrl+B)" aria-label="Bold"><b>B</b></button>
+      <button type="button" data-act="italic" title="Italic (Ctrl+I)" aria-label="Italic"><i style="font-family:Georgia,serif">I</i></button>
+      <button type="button" data-act="strike" title="Strikethrough" aria-label="Strikethrough"><s>S</s></button>
+      <button type="button" data-act="highlight" title="Highlight" aria-label="Highlight"><span style="background:rgba(156,199,242,.35);padding:0 4px;border-radius:3px">H</span></button>
+      <span class="sep"></span>
+      <button type="button" data-act="h2" title="Big heading" aria-label="Big heading">H2</button>
+      <button type="button" data-act="h3" title="Small heading" aria-label="Small heading">H3</button>
+      <span class="sep"></span>
+      <button type="button" data-act="ul" title="Bullet list" aria-label="Bullet list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg></button>
+      <button type="button" data-act="ol" title="Numbered list" aria-label="Numbered list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 6h10M10 12h10M10 18h10M4 4.5h1.5V9M3.5 9h3M3.5 14.5c.4-.6 1-1 1.7-1 .9 0 1.5.6 1.5 1.3 0 1.2-3.2 2.2-3.2 4.2h3.4"/></svg></button>
+      <button type="button" data-act="quote" title="Quote" aria-label="Quote"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 18v-4.5C4 9.3 6 6.7 9.5 6l.6 1.6C8 8.4 7 9.9 7 12h3v6H4zm10 0v-4.5c0-4.2 2-6.8 5.5-7.5l.6 1.6C18 8.4 17 9.9 17 12h3v6h-6z"/></svg></button>
+      <button type="button" data-act="code" title="Code" aria-label="Code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg></button>
+      <button type="button" data-act="hr" title="Divider line" aria-label="Divider line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18"/></svg></button>
+      <span class="sep"></span>
+      <button type="button" data-act="link" title="Link (Ctrl+K)" aria-label="Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span class="lbl">Link</span></button>
+      <button type="button" data-act="image" title="Add image (or paste / drop one)" aria-label="Add image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m21 16-5-5-9 9"/></svg><span class="lbl">Image</span></button>
+      <button type="button" data-act="youtube" title="YouTube video" aria-label="YouTube video"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15V9l5.2 3L10 15z"/></svg><span class="lbl">Video</span></button>
+    </div>
+    <div class="split" id="split" data-tab="write">
+      <textarea id="md" aria-label="Post text (Markdown)" spellcheck="true" placeholder="Start writing…
+
+Leave a blank line between paragraphs. Use the buttons above for bold, headings, images and more."></textarea>
+      <article id="preview" aria-label="Preview"><h1 class="pt" id="pvTitle"></h1><p class="meta" id="pvMeta"></p><div class="prose" id="pvBody"></div></article>
+    </div>
+    <p class="hints">Shortcuts: <kbd>Ctrl</kbd>+<kbd>B</kbd> bold, <kbd>Ctrl</kbd>+<kbd>I</kbd> italic, <kbd>Ctrl</kbd>+<kbd>K</kbd> link, <kbd>Ctrl</kbd>+<kbd>S</kbd> save. Paste or drag an image straight into the text. Paste a YouTube link on its own line to embed the video. Add a caption to an image by putting it in quotes after the address: <code>![alt](/blog/images/x.jpg "Caption")</code>.</p>
+    <input type="file" id="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden multiple>
+  </section>
+
+  <footer class="foot"><span>Posts go live about a minute after you publish.</span><a href="/blog">ruytha.dev/blog</a></footer>
+</div>
+
+<script>
+(function(){
+  var API = '/api/blog';
+  var SITE = 'https://ruytha.dev';             // link previews need the public address, whichever address you write from
+  var RESERVED = ['index', 'write', 'posts', 'images', 'blog'];
+  var $ = function(id){ return document.getElementById(id); };
+  var md = $('md');
+  var clerk = null, posts = [], cur = null, dirty = false;
+  var pending = {};                            // image path -> { sha, url } uploaded this session, not yet committed
+
+  function el(tag, attrs, kids){
+    var n = document.createElement(tag);
+    for (var k in attrs || {}) {
+      if (attrs[k] == null) continue;
+      if (k === 'text') n.textContent = attrs[k];
+      else if (k === 'class') n.className = attrs[k];
+      else if (k.slice(0, 2) === 'on') n.addEventListener(k.slice(2), attrs[k]);
+      else n.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(function(c){ if (c) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return n;
+  }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function slugify(s){ return String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60); }
+  function today(){ var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function niceDate(iso){ return new Date(iso + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }); }
+  function minutes(text){ return Math.max(1, Math.round(text.trim().split(/\s+/).filter(Boolean).length / 220)); }
+  function status(t){ $('status').textContent = t || ''; }
+
+  // ---------- API ----------
+  async function api(method, action, body, query){
+    var token = clerk && clerk.session ? await clerk.session.getToken() : '';
+    var res = await fetch(API + '?action=' + action + (query || ''), {
+      method: method, headers: { 'content-type': 'application/json', authorization: 'Bearer ' + token },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    var data = await res.json().catch(function(){ return {}; });
+    if (!res.ok) throw new Error(data.error || data.message || 'Request failed (' + res.status + ')');
+    return data;
+  }
+
+  // ---------- Markdown ----------
+  // Front matter at the top of each .md file keeps the post's details with its text.
+  function toFile(m, text){
+    return '---\n' + ['title', 'date', 'description', 'cover'].map(function(k){ return k + ': ' + JSON.stringify(m[k] || ''); }).join('\n') +
+      '\ndraft: ' + (m.draft ? 'true' : 'false') + '\n---\n\n' + text.replace(/\s+$/, '') + '\n';
+  }
+  function fromFile(src){
+    var meta = {}, body = src;
+    var m = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/.exec(src);
+    if (m) {
+      body = src.slice(m[0].length).replace(/^\r?\n/, '');
+      m[1].split(/\r?\n/).forEach(function(line){
+        var i = line.indexOf(':'); if (i < 0) return;
+        var k = line.slice(0, i).trim(), v = line.slice(i + 1).trim();
+        try { meta[k] = v.charAt(0) === '"' ? JSON.parse(v) : v === 'true' ? true : v === 'false' ? false : v; } catch (e) { meta[k] = v; }
+      });
+    }
+    return { meta: meta, body: body };
+  }
+  function images(text){
+    var out = [], re = /!\[[^\]]*\]\(\s*([^)\s]+)/g, m;
+    while ((m = re.exec(text))) if (out.indexOf(m[1]) < 0) out.push(m[1]);
+    return out;
+  }
+  var YT = /^https?:\/\/(?:www\.|m\.)?(?:youtube\.com\/watch\?(?:.*&)?v=|youtu\.be\/|youtube\.com\/shorts\/)([\w-]{11})/;
+  // Markdown -> HTML, then tidy: lone images become figures (title = caption), lone YouTube links become players.
+  function render(text, forPreview){
+    var box = document.createElement('div');
+    box.innerHTML = marked.parse(text, { gfm: true, breaks: false });
+    box.querySelectorAll('p').forEach(function(p){
+      var kids = Array.prototype.filter.call(p.childNodes, function(n){ return !(n.nodeType === 3 && !n.textContent.trim()); });
+      if (kids.length === 1 && kids[0].nodeName === 'IMG') {
+        var img = kids[0], fig = document.createElement('figure');
+        fig.appendChild(img);
+        if (img.title) { var cap = document.createElement('figcaption'); cap.textContent = img.title; fig.appendChild(cap); img.removeAttribute('title'); }
+        p.replaceWith(fig);
+      } else if (kids.length === 1 && kids[0].nodeName === 'A' && YT.test(kids[0].getAttribute('href') || '')) {
+        var id = YT.exec(kids[0].getAttribute('href'))[1];
+        var wrap = document.createElement('div'); wrap.className = 'video';
+        wrap.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '" title="YouTube video" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+        p.replaceWith(wrap);
+      }
+    });
+    box.querySelectorAll('img').forEach(function(img){
+      img.setAttribute('loading', 'lazy'); img.setAttribute('decoding', 'async');
+      var src = img.getAttribute('src');
+      if (forPreview && pending[src]) { img.src = pending[src].url; img.className = 'pending'; }
+    });
+    box.querySelectorAll('a[href^="http"]').forEach(function(a){
+      if (a.host !== location.host) { a.target = '_blank'; a.rel = 'noopener'; }
+    });
+    return box.innerHTML;
+  }
+
+  // The finished page for one post. Written as static HTML, so link previews (Discord, X) see the real title and image.
+  function page(m, html, text){
+    var origin = SITE, url = origin + '/blog/' + m.slug, img = m.cover ? origin + m.cover : '';
+    var mins = minutes(text);
+    return '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+      '<title>' + esc(m.title) + ' · Ruytha</title>\n' +
+      (m.description ? '<meta name="description" content="' + esc(m.description) + '">\n' : '') +
+      '<meta name="theme-color" content="#030718">\n<link rel="canonical" href="' + esc(url) + '">\n' +
+      '<meta property="og:type" content="article">\n<meta property="og:site_name" content="Ruytha">\n' +
+      '<meta property="og:title" content="' + esc(m.title) + '">\n' +
+      (m.description ? '<meta property="og:description" content="' + esc(m.description) + '">\n' : '') +
+      '<meta property="og:url" content="' + esc(url) + '">\n' +
+      (img ? '<meta property="og:image" content="' + esc(img) + '">\n<meta name="twitter:card" content="summary_large_image">\n' : '<meta name="twitter:card" content="summary">\n') +
+      '<meta property="article:published_time" content="' + esc(m.date) + '">\n' +
+      '<link rel="icon" href="/assets/img/favicon.png">\n<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+      '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Geist:wght@400;500;600&display=swap">\n' +
+      '<link rel="stylesheet" href="/blog/blog.css?v=1">\n</head>\n<body>\n<div class="w narrow">\n' +
+      '<header class="bar">\n<a class="home" href="/">Ruytha</a>\n<nav aria-label="Site"><a href="/">Home</a><a href="/blog">Blog</a></nav>\n</header>\n' +
+      '<main class="post">\n<a class="back" href="/blog">← All posts</a>\n<article>\n<h1>' + esc(m.title) + '</h1>\n' +
+      '<p class="meta"><time datetime="' + esc(m.date) + '">' + esc(niceDate(m.date)) + '</time> · ' + mins + ' min read</p>\n' +
+      '<div class="prose">\n' + html + '\n</div>\n</article>\n</main>\n' +
+      '<footer class="foot"><a href="/blog">← More posts</a><a href="/">ruytha.dev</a></footer>\n</div>\n</body>\n</html>\n';
+  }
+
+  // ---------- views ----------
+  function show(view){ ['lock', 'listView', 'editView'].forEach(function(id){ $(id).hidden = id !== view; }); }
+
+  async function openList(){
+    if (dirty && !confirm('Leave without saving your changes?')) return;
+    dirty = false; cur = null; show('listView');
+    $('plist').replaceChildren(el('li', { text: 'Loading posts…' }));
+    try { posts = (await api('GET', 'list')).posts || []; }
+    catch (e) { $('plist').replaceChildren(el('li', { class: 'err', text: e.message })); return; }
+    renderList();
+  }
+  function renderList(){
+    var list = $('plist'); list.replaceChildren();
+    $('noPosts').hidden = posts.length > 0;
+    posts.slice().sort(function(a, b){ return b.date.localeCompare(a.date); }).forEach(function(p){
+      list.appendChild(el('li', {}, [
+        el('div', { class: 't' }, [el('b', { text: p.title }), el('span', { text: niceDate(p.date) + ' · /blog/' + p.slug })]),
+        el('span', { class: 'tag' + (p.draft ? '' : ' live'), text: p.draft ? 'Draft' : 'Live' }),
+        p.draft ? null : el('a', { class: 'btn', href: '/blog/' + p.slug, target: '_blank', rel: 'noopener', text: 'View' }),
+        el('button', { class: 'btn', type: 'button', text: 'Edit', onclick: function(){ openPost(p); } }),
+        el('button', { class: 'btn danger', type: 'button', text: 'Delete', onclick: function(){ removePost(p); } })
+      ]));
+    });
+  }
+
+  function fill(m, text){
+    cur = m;
+    $('title').value = m.title || ''; $('slug').value = m.slug || ''; $('date').value = m.date || today(); $('desc').value = m.description || '';
+    $('slug').disabled = !m.isNew;           // a published address never changes, so links keep working
+    md.value = text || '';
+    $('viewLink').hidden = !!(m.isNew || m.draft); $('viewLink').href = '/blog/' + (m.slug || '');
+    $('publishBtn').textContent = m.isNew || m.draft ? 'Publish' : 'Update post';
+    dirty = false; status(m.isNew ? 'New post' : m.draft ? 'Draft' : 'Live'); refreshCover(); preview(); show('editView');
+  }
+  function newPost(){ pending = {}; fill({ isNew: true, draft: true, title: '', slug: '', date: today(), description: '', cover: '' }, ''); $('title').focus(); }
+  async function openPost(p){
+    pending = {}; status('Loading…');
+    try {
+      var f = fromFile((await api('GET', 'source', null, '&slug=' + p.slug)).markdown);
+      fill({ isNew: false, draft: !!p.draft, slug: p.slug, title: f.meta.title || p.title, date: f.meta.date || p.date, description: f.meta.description || '', cover: f.meta.cover || '' }, f.body);
+    } catch (e) { alert(e.message); }
+  }
+
+  function refreshCover(){
+    var sel = $('cover'), list = images(md.value), want = cur && cur.cover;
+    sel.replaceChildren(el('option', { value: '', text: list.length ? 'First image in the post' : 'No images yet' }));
+    list.forEach(function(src){ sel.appendChild(el('option', { value: src, text: src.split('/').pop(), selected: src === want ? '' : null })); });
+  }
+  var timer = null;
+  function preview(){
+    clearTimeout(timer);
+    timer = setTimeout(function(){
+      $('pvTitle').textContent = $('title').value || 'Untitled post';
+      $('pvMeta').textContent = niceDate($('date').value || today()) + ' · ' + minutes(md.value) + ' min read';
+      $('pvBody').innerHTML = render(md.value, true);
+    }, 120);
+  }
+  function touched(){ dirty = true; status('Unsaved changes'); preview(); }
+
+  $('title').addEventListener('input', function(){ if (cur && cur.isNew && !cur.slugEdited) $('slug').value = slugify(this.value); touched(); });
+  $('slug').addEventListener('input', function(){ cur.slugEdited = true; this.value = this.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'); touched(); });
+  ['date', 'desc'].forEach(function(id){ $(id).addEventListener('input', touched); });
+  $('cover').addEventListener('change', function(){ cur.cover = this.value; touched(); });
+  md.addEventListener('input', function(){ touched(); refreshCover(); });
+
+  // ---------- toolbar ----------
+  function sel(){ return { a: md.selectionStart, b: md.selectionEnd, text: md.value.slice(md.selectionStart, md.selectionEnd) }; }
+  // Insert through the browser's editing command where possible, so Ctrl+Z still works.
+  function put(text, selectFrom, selectTo){
+    md.focus();
+    var a = md.selectionStart;
+    if (!document.execCommand || !document.execCommand('insertText', false, text)) md.setRangeText(text, md.selectionStart, md.selectionEnd, 'end');
+    if (selectFrom != null) md.setSelectionRange(a + selectFrom, a + selectTo);
+    touched(); refreshCover();
+  }
+  function wrap(before, after, placeholder){
+    var s = sel(), inner = s.text || placeholder;
+    // Toggle off when the selection is already wrapped.
+    if (s.text && md.value.slice(s.a - before.length, s.a) === before && md.value.slice(s.b, s.b + after.length) === after) {
+      md.setSelectionRange(s.a - before.length, s.b + after.length); put(s.text, 0, s.text.length); return;
+    }
+    put(before + inner + after, before.length, before.length + inner.length);
+  }
+  function lines(fn){
+    var v = md.value, a = v.lastIndexOf('\n', md.selectionStart - 1) + 1, b = v.indexOf('\n', md.selectionEnd); if (b < 0) b = v.length;
+    md.setSelectionRange(a, b);
+    var out = v.slice(a, b).split('\n').map(fn).join('\n');
+    put(out, 0, out.length);
+  }
+  function block(text){
+    var a = md.selectionStart, v = md.value;
+    var pre = a === 0 ? '' : v.slice(Math.max(0, a - 2), a) === '\n\n' ? '' : v.charAt(a - 1) === '\n' ? '\n' : '\n\n';
+    put(pre + text + '\n\n');
+  }
+  var ACTIONS = {
+    bold: function(){ wrap('**', '**', 'bold text'); },
+    italic: function(){ wrap('*', '*', 'italic text'); },
+    strike: function(){ wrap('~~', '~~', 'crossed out'); },
+    highlight: function(){ wrap('<mark>', '</mark>', 'highlighted'); },
+    h2: function(){ lines(function(l){ return /^## /.test(l) ? l.slice(3) : '## ' + l.replace(/^#+\s*/, ''); }); },
+    h3: function(){ lines(function(l){ return /^### /.test(l) ? l.slice(4) : '### ' + l.replace(/^#+\s*/, ''); }); },
+    ul: function(){ lines(function(l){ return /^- /.test(l) ? l.slice(2) : '- ' + l.replace(/^\d+\.\s/, ''); }); },
+    ol: function(){ var n = 0; lines(function(l){ return /^\d+\.\s/.test(l) ? l.replace(/^\d+\.\s/, '') : (++n) + '. ' + l.replace(/^- /, ''); }); },
+    quote: function(){ lines(function(l){ return /^> ?/.test(l) ? l.replace(/^> ?/, '') : '> ' + l; }); },
+    code: function(){ var s = sel(); if (s.text.indexOf('\n') > -1) put('```\n' + s.text + '\n```'); else wrap('`', '`', 'code'); },
+    hr: function(){ block('---'); },
+    link: function(){
+      var s = sel(), url = prompt('Link address', 'https://');
+      if (!url || url === 'https://') return;
+      var label = s.text || 'link text';
+      put('[' + label + '](' + url.trim() + ')', 1, 1 + label.length);
+    },
+    image: function(){ $('file').click(); },
+    youtube: function(){
+      var url = prompt('Paste a YouTube link');
+      if (!url) return;
+      if (!YT.test(url.trim())) { alert('That doesn’t look like a YouTube video link.'); return; }
+      block(url.trim());
+    }
+  };
+  $('toolbar').addEventListener('click', function(e){ var b = e.target.closest('button[data-act]'); if (b) ACTIONS[b.dataset.act](); });
+  md.addEventListener('keydown', function(e){
+    if (!(e.ctrlKey || e.metaKey)) return;
+    var k = e.key.toLowerCase();
+    if (k === 'b' || k === 'i' || k === 'k') { e.preventDefault(); ACTIONS[{ b: 'bold', i: 'italic', k: 'link' }[k]](); }
+  });
+  document.addEventListener('keydown', function(e){
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's' && !$('editView').hidden) { e.preventDefault(); save(cur.isNew || cur.draft); }
+  });
+
+  // ---------- images ----------
+  // Photos are shrunk to at most 1600px wide in the browser before upload; GIFs go up as they are, to keep the animation.
+  function shrink(file){
+    return new Promise(function(resolve, reject){
+      if (file.type === 'image/gif') {
+        if (file.size > 3 * 1024 * 1024) { reject(new Error('That GIF is over 3 MB. Try a smaller one.')); return; }
+        resolve({ blob: file, ext: 'gif' }); return;
+      }
+      var img = new Image(), url = URL.createObjectURL(file);
+      img.onload = function(){
+        var scale = Math.min(1, 1600 / img.naturalWidth), c = document.createElement('canvas');
+        c.width = Math.round(img.naturalWidth * scale); c.height = Math.round(img.naturalHeight * scale);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        var png = file.type === 'image/png';
+        c.toBlob(function(b){ b ? resolve({ blob: b, ext: png ? 'png' : 'jpg' }) : reject(new Error('Could not read that image.')); }, png ? 'image/png' : 'image/jpeg', 0.86);
+      };
+      img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error('Could not read that image.')); };
+      img.src = url;
+    });
+  }
+  function base64(blob){
+    return new Promise(function(resolve){ var r = new FileReader(); r.onload = function(){ resolve(String(r.result).split(',')[1]); }; r.readAsDataURL(blob); });
+  }
+  async function addImages(files){
+    for (var i = 0; i < files.length; i++) {
+      var f = files[i]; if (!/^image\//.test(f.type)) continue;
+      status('Uploading image…');
+      try {
+        var out = await shrink(f);
+        var path = '/blog/images/' + (slugify($('slug').value) || 'post') + '-' + Math.random().toString(36).slice(2, 8) + '.' + out.ext;
+        var res = await api('POST', 'image', { data: await base64(out.blob) });
+        pending[path] = { sha: res.sha, url: URL.createObjectURL(out.blob) };
+        block('![Describe this image](' + path + ')');
+        // Select the description so it can be typed over straight away.
+        var at = md.value.lastIndexOf('![Describe this image](' + path);
+        md.setSelectionRange(at + 2, at + 21);
+      } catch (e) { alert(e.message); }
+    }
+    status('Unsaved changes');
+  }
+  $('file').addEventListener('change', function(){ addImages(Array.prototype.slice.call(this.files)); this.value = ''; });
+  md.addEventListener('paste', function(e){
+    var files = Array.prototype.slice.call((e.clipboardData && e.clipboardData.files) || []).filter(function(f){ return /^image\//.test(f.type); });
+    if (files.length) { e.preventDefault(); addImages(files); }
+  });
+  md.addEventListener('dragover', function(e){ if (e.dataTransfer && Array.prototype.some.call(e.dataTransfer.items, function(it){ return it.kind === 'file'; })) { e.preventDefault(); $('split').classList.add('drag'); } });
+  md.addEventListener('dragleave', function(){ $('split').classList.remove('drag'); });
+  md.addEventListener('drop', function(e){
+    $('split').classList.remove('drag');
+    if (e.dataTransfer && e.dataTransfer.files.length) { e.preventDefault(); addImages(Array.prototype.slice.call(e.dataTransfer.files)); }
+  });
+
+  // ---------- save / publish / delete ----------
+  function publicList(all){
+    return all.filter(function(p){ return !p.draft; }).sort(function(a, b){ return b.date.localeCompare(a.date); })
+      .map(function(p){ return { slug: p.slug, title: p.title, date: p.date, description: p.description, cover: p.cover, minutes: p.minutes }; });
+  }
+  async function save(publish){
+    var m = {
+      slug: slugify($('slug').value), title: $('title').value.trim(), date: $('date').value || today(),
+      description: $('desc').value.trim(), cover: $('cover').value, draft: !publish
+    };
+    if (!m.title) { alert('Give the post a title first.'); $('title').focus(); return; }
+    if (!m.slug || RESERVED.indexOf(m.slug) > -1) { alert('Pick a different address for this post.'); $('slug').focus(); return; }
+    var text = md.value;
+    var wasLive = !cur.isNew && !cur.draft;
+    if (!publish && wasLive && !confirm('This post is live. Saving it as a draft takes it off the blog until you publish again. Continue?')) return;
+
+    $('publishBtn').disabled = $('draftBtn').disabled = true;
+    status(publish ? 'Publishing…' : 'Saving draft…');
+    try {
+      var all = (await api('GET', 'list')).posts || [];
+      if (cur.isNew && all.some(function(p){ return p.slug === m.slug; })) throw new Error('There’s already a post at /blog/' + m.slug + '. Change the address.');
+      var cover = m.cover || images(text)[0] || '';
+      var entry = { slug: m.slug, title: m.title, date: m.date, description: m.description, cover: cover, minutes: minutes(text), draft: m.draft, updated: Date.now() };
+      all = all.filter(function(p){ return p.slug !== m.slug; }).concat([entry]);
+
+      var files = [
+        { path: 'blog/posts/' + m.slug + '.md', content: toFile(m, text) },
+        { path: 'blog/posts/index.json', content: JSON.stringify(all, null, 2) + '\n' },
+        { path: 'blog/posts.json', content: JSON.stringify(publicList(all), null, 2) + '\n' }
+      ];
+      if (publish) files.push({ path: 'blog/' + m.slug + '.html', content: page(Object.assign({}, m, { cover: cover }), render(text, false), text) });
+      images(text).forEach(function(src){ if (pending[src]) files.push({ path: src.slice(1), sha: pending[src].sha }); });
+      var deletes = !publish && wasLive ? ['blog/' + m.slug + '.html'] : [];
+
+      await api('POST', 'commit', { message: (publish ? (wasLive ? 'Update post: ' : 'Publish post: ') : 'Save draft: ') + m.title, files: files, deletes: deletes });
+      images(text).forEach(function(src){ delete pending[src]; });
+      posts = all;
+      fill(Object.assign({ isNew: false }, m), text);
+      status(publish ? 'Published. Live at /blog/' + m.slug + ' in about a minute.' : 'Draft saved. Only you can see it here.');
+    } catch (e) {
+      status(e.message);
+    } finally { $('publishBtn').disabled = $('draftBtn').disabled = false; }
+  }
+  $('publishBtn').addEventListener('click', function(){ save(true); });
+  $('draftBtn').addEventListener('click', function(){ save(false); });
+  $('backBtn').addEventListener('click', openList);
+  $('newBtn').addEventListener('click', newPost);
+
+  async function removePost(p){
+    if (!confirm('Delete “' + p.title + '”? It comes off the blog and can’t be undone here.')) return;
+    try {
+      var all = ((await api('GET', 'list')).posts || []).filter(function(x){ return x.slug !== p.slug; });
+      var deletes = ['blog/posts/' + p.slug + '.md'].concat(p.draft ? [] : ['blog/' + p.slug + '.html']);
+      await api('POST', 'commit', { message: 'Delete post: ' + p.title, deletes: deletes, files: [
+        { path: 'blog/posts/index.json', content: JSON.stringify(all, null, 2) + '\n' },
+        { path: 'blog/posts.json', content: JSON.stringify(publicList(all), null, 2) + '\n' }
+      ] });
+      posts = all; renderList();
+    } catch (e) { alert(e.message); }
+  }
+
+  // Phone: switch between writing and preview.
+  document.querySelectorAll('.tabs button').forEach(function(b){
+    b.addEventListener('click', function(){
+      $('split').dataset.tab = b.dataset.tab;
+      document.querySelectorAll('.tabs button').forEach(function(x){ x.setAttribute('aria-selected', String(x === b)); });
+    });
+  });
+  window.addEventListener('beforeunload', function(e){ if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+  // ---------- sign-in (same Clerk setup as /admin) ----------
+  function clerkFrontendApi(key){
+    var enc = key.replace(/^pk_(?:test|live)_/, '').replace(/-/g, '+').replace(/_/g, '/');
+    return atob(enc + '='.repeat((4 - enc.length % 4) % 4)).replace(/\$$/, '');
+  }
+  function loadScript(src, attrs){
+    return new Promise(function(resolve, reject){
+      var s = document.createElement('script'); s.src = src; s.crossOrigin = 'anonymous';
+      Object.entries(attrs || {}).forEach(function(a){ s.setAttribute(a[0], a[1]); });
+      s.onload = resolve; s.onerror = function(){ reject(new Error('Could not load sign-in. Check your connection.')); };
+      document.head.appendChild(s);
+    });
+  }
+  async function checkAdmin(){
+    var token = await clerk.session.getToken();
+    var res = await fetch('/api/auth', { headers: { authorization: 'Bearer ' + token } });
+    if (!res.ok) { var d = await res.json().catch(function(){ return {}; }); throw new Error(d.error || 'This account can’t write posts.'); }
+  }
+  async function enter(){
+    try { await checkAdmin(); openList(); }
+    catch (e) { $('lockErr').textContent = e.message; $('lockErr').hidden = false; }
+  }
+  (async function start(){
+    try {
+      var config = await fetch('/api/auth-config').then(function(r){ return r.json(); });
+      if (!config.configured) throw new Error('Sign-in isn’t set up on this site yet.');
+      var host = clerkFrontendApi(config.publishableKey);
+      await loadScript('https://' + host + '/npm/@clerk/ui@1/dist/ui.browser.js');
+      await loadScript('https://' + host + '/npm/@clerk/clerk-js@6/dist/clerk.browser.js', { 'data-clerk-publishable-key': config.publishableKey });
+      await window.Clerk.load({ publishableKey: config.publishableKey, ui: { ClerkUI: window.__internal_ClerkUICtor } });
+      clerk = window.Clerk;
+      if (clerk.session) return enter();
+      clerk.mountSignIn($('signIn'), { afterSignInUrl: location.href, afterSignUpUrl: location.href });
+      clerk.addListener(function(e){ if (e.session && !$('lock').hidden) enter(); });
+    } catch (e) { $('lockErr').textContent = e.message || 'Could not start sign-in.'; $('lockErr').hidden = false; }
+  })();
+})();
+</script>
+</body>
+</html>

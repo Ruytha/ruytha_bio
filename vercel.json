@@ -2,6 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/blog/posts/:path*", "destination": "/blog", "permanent": false }
+  ],
   "functions": {
     "api/motion-cover.js": {
       "maxDuration": 60,
