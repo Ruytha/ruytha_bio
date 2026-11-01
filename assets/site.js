@@ -72,10 +72,36 @@
     var img = t.image && (t.image[3] || t.image[2]) && (t.image[3] || t.image[2])['#text'];
     return img && img.indexOf('2a96cbd8b46e442fc41c2b86b821562f') < 0 ? img : '';   // Last.fm's blank star means no art
   }
+  // The /api/lastfm route keeps the key private when it's configured on Vercel;
+  // otherwise ask Last.fm straight from the browser with the key in config.js.
+  var CFG = window.RUYTHA_CONFIG || {};
+  function lastfm(q) {
+    var user = String(CFG.lastfmUser || '').trim(), key = CFG.lastfmApiKey;
+    if (!user || !key) return Promise.reject(new Error('not configured'));
+    return fetch('https://ws.audioscrobbler.com/2.0/?format=json&user=' + encodeURIComponent(user) + '&api_key=' + encodeURIComponent(key) + q)
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); });
+  }
+  function api(path) { return fetch(path).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); }
+  function weekDirect() {
+    var since = Math.floor(Date.now() / 1000) - 7 * 86400;
+    var many = function (x) { return x ? (Array.isArray(x) ? x : [x]) : []; };
+    return Promise.all([
+      lastfm('&method=user.gettopartists&period=7day&limit=5'),
+      lastfm('&method=user.gettoptracks&period=7day&limit=5'),
+      lastfm('&method=user.getrecenttracks&limit=1&from=' + since)
+    ]).then(function (r) {
+      return {
+        plays: parseInt(r[2].recenttracks && r[2].recenttracks['@attr'] && r[2].recenttracks['@attr'].total, 10) || 0,
+        artists: many(r[0].topartists && r[0].topartists.artist).map(function (a) { return { name: a.name, plays: +a.playcount, url: a.url }; }),
+        tracks: many(r[1].toptracks && r[1].toptracks.track).map(function (t) { return { name: t.name, artist: t.artist && t.artist.name, plays: +t.playcount, url: t.url }; })
+      };
+    });
+  }
+
   var list = $('tracks');
   list.innerHTML = new Array(8).join('<li class="sk"></li>') + '<li class="sk"></li>';
-  fetch('/api/lastfm?limit=8', { headers: { accept: 'application/json' } })
-    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+  api('/api/lastfm?limit=8')
+    .catch(function () { return lastfm('&method=user.getrecenttracks&limit=8'); })
     .then(function (d) {
       var tracks = (d.recenttracks && d.recenttracks.track) || [];
       if (!Array.isArray(tracks)) tracks = [tracks];
@@ -103,8 +129,8 @@
     })
     .then(function () { list.removeAttribute('aria-busy'); });
 
-  fetch('/api/lastfm?view=week')
-    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+  api('/api/lastfm?view=week')
+    .catch(weekDirect)
     .then(function (w) {
       $('weekPlays').textContent = w.plays.toLocaleString();
       var max = Math.max.apply(null, w.artists.map(function (a) { return a.plays; }).concat([1]));
