@@ -22,7 +22,7 @@
 <link rel="apple-touch-icon" href="assets/img/avatar.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Archivo:wdth,wght@112,900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400;500;600&family=Archivo:wdth,wght@112,900&display=swap">
 <link rel="stylesheet" href="assets/site.css">
 </head>
 
@@ -58,7 +58,11 @@
       </span>
     </a>
   </div>
-  <p class="stage-hint" id="stageHint" aria-hidden="true">Move your cursor to light the set</p>
+  <p class="stage-hint" id="stageHint" aria-hidden="true">Move your cursor to light the set · click for action</p>
+  <a class="spin" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener" aria-label="Open to collabs. Say hi on Discord">
+    <svg viewBox="0 0 200 200" aria-hidden="true"><defs><path id="ring" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"/></defs><text><textPath href="#ring">open to collabs ✦ say hi on discord ✦ open to collabs ✦ </textPath></text></svg>
+    <span class="spin-dot" aria-hidden="true">✦</span>
+  </a>
 </section>
 
 <section class="sec about" id="about">
@@ -188,20 +192,15 @@
 </section>
 
 <section class="sec favs" id="favourites">
-  <div class="sec-head fav-head" data-rise>
-    <div>
-      <h2 class="h2">Watching and playing</h2>
-      <p class="lede">The anime and games I keep going back to.</p>
-    </div>
-    <div class="filters" id="favFilters" role="group" aria-label="Show">
-      <button type="button" data-filter="all" aria-pressed="true">All</button>
-      <button type="button" data-filter="anime" aria-pressed="false">Anime</button>
-      <button type="button" data-filter="game" aria-pressed="false">Games</button>
-      <button type="button" data-filter="top" aria-pressed="false">Top picks</button>
-    </div>
+  <div class="sec-head" data-rise>
+    <h2 class="h2">Now showing</h2>
+    <p class="lede">The anime and games I keep going back to. Hover a reel to pause it.</p>
   </div>
-  <ul class="posters" id="posters" data-rise></ul>
 </section>
+<div class="reels" aria-label="Favourite anime and games">
+  <div class="strip" data-rise><h3 class="strip-label">Anime</h3><div class="reel"><ul class="reel-track" id="reelAnime"></ul></div></div>
+  <div class="strip strip-back" data-rise><h3 class="strip-label">Games</h3><div class="reel"><ul class="reel-track" id="reelGames"></ul></div></div>
+</div>
 
 <section class="sec guestbook" id="guestbook">
   <div class="sec-head" data-rise>
@@ -250,7 +249,7 @@
       <a href="/tools/textflag/terms">TextFlag terms</a>
       <a href="https://ko-fi.com/ruytha" target="_blank" rel="noopener">Support this website</a>
     </nav>
-    <p class="end-copy">© <span id="year">2026</span> Ruytha</p>
+    <p class="end-copy"><a class="again" href="#top">Watch it again ↺</a> · © <span id="year">2026</span> Ruytha</p>
   </div>
 </footer>
 

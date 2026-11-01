@@ -21,7 +21,7 @@
   (function () {
     var stage = document.querySelector('.stage'), name = $('stageName'), hint = $('stageHint');
     if (!stage || !name) return;
-    if (matchMedia('(hover: none)').matches) hint.textContent = 'Drag across the name to light the set';
+    if (matchMedia('(hover: none)').matches) hint.textContent = 'Drag across the name to light the set · tap for action';
     var steered = 0, raf = 0, x = 0.3, y = 0.5;
     function aim(px, py) {
       var s = stage.getBoundingClientRect(), n = name.getBoundingClientRect();
@@ -37,6 +37,22 @@
     }
     stage.addEventListener('pointermove', fromEvent);
     stage.addEventListener('pointerdown', fromEvent);
+
+    // Click the set: "Action!" pops up where you clicked and the lights come all the way up for a moment.
+    var WORDS = ['Action!', 'Rolling!', 'Take two!', 'Lights!', 'Cut!', 'Speed!', 'Mark!'];
+    var shout = 0, flash = 0;
+    stage.addEventListener('click', function (e) {
+      if (e.target.closest('a, button')) return;
+      var s = stage.getBoundingClientRect(), pop = document.createElement('span');
+      pop.className = 'pop'; pop.setAttribute('aria-hidden', 'true');
+      pop.textContent = WORDS[shout++ % WORDS.length];
+      pop.style.left = (e.clientX - s.left) + 'px'; pop.style.top = (e.clientY - s.top) + 'px';
+      stage.appendChild(pop);
+      setTimeout(function () { pop.remove(); }, reduce ? 900 : 1200);
+      stage.classList.add('action');
+      clearTimeout(flash);
+      flash = setTimeout(function () { stage.classList.remove('action'); }, 900);
+    });
     function drift(t) {
       raf = requestAnimationFrame(drift);
       if (performance.now() - steered < 2500) return;
@@ -161,21 +177,21 @@
     ['fears-to-fathom', 'Fears to Fathom', 'game', 'Horror', 2021],
     ['minecraft', 'Minecraft', 'game', 'Sandbox', 2011]
   ];
-  var posters = $('posters');
-  function showFavs(filter) {
-    posters.innerHTML = FAVS.filter(function (f) {
-      return filter === 'all' || (filter === 'top' ? f[5] : f[2] === filter);
-    }).map(function (f) {
-      return '<li class="poster"><img src="assets/img/media/' + f[0] + '.jpg" alt="' + esc(f[1]) + ' cover art" loading="lazy" decoding="async">' +
-        '<b>' + esc(f[1]) + '</b><span>' + (f[2] === 'anime' ? 'Anime' : 'Game') + ' · ' + esc(f[3]) + ' · ' + f[4] +
-        (f[5] ? ' · <span class="top">Top pick</span>' : '') + '</span></li>';
+  // Two filmstrips. When they scroll, the reel holds the list twice so the loop has no seam.
+  function frames(kind) {
+    return FAVS.filter(function (f) { return f[2] === kind; }).map(function (f) {
+      return '<li class="frame"><img src="assets/img/media/' + f[0] + '.jpg" alt="' + esc(f[1]) + ' cover art" loading="lazy" decoding="async">' +
+        '<b>' + esc(f[1]) + '</b><span>' + esc(f[3]) + ' · ' + f[4] + '</span>' + (f[5] ? '<span class="top">★ Top pick</span>' : '') + '</li>';
     }).join('');
   }
-  showFavs('all');
-  $('favFilters').addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b) return;
-    this.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
-    showFavs(b.dataset.filter);
+  [['reelAnime', 'anime'], ['reelGames', 'game']].forEach(function (r) {
+    var html = frames(r[1]), track = $(r[0]);
+    track.innerHTML = html;
+    if (reduce) return;
+    // a second copy for the seamless loop, hidden from screen readers; repeat short lists so the strip is never half empty
+    var copies = Math.max(2, Math.ceil(2400 / Math.max(1, track.scrollWidth)) * 2);
+    for (var i = 1; i < copies; i++) track.insertAdjacentHTML('beforeend', html.replace(/<li class="frame"/g, '<li class="frame" aria-hidden="true"'));
+    track.querySelectorAll('[aria-hidden="true"] img').forEach(function (img) { img.alt = ''; });
   });
 
   /* ---------- guestbook ---------- */
@@ -183,8 +199,14 @@
     var form = $('gbForm'), wall = $('gbWall'), status = $('gbStatus'), count = $('gbCount');
     var submit = form.querySelector('button[type="submit"]'), msg = form.elements.msg;
     var entries = [], shown = 12, online = false;
-    function note(e, fresh) {
-      return '<li' + (fresh ? ' class="gb-new"' : '') + '><q>' + esc(e.msg) + '</q><span class="who"><b>' + esc(e.name) + '</b><span>' + ago(e.t) + '</span></span></li>';
+    // Each note is a movie ticket in one of the fun colours, set at a slight angle.
+    var INKS = ['var(--pop)', 'var(--sky)', 'var(--cherry)', 'var(--mint)', 'var(--lilac)', 'var(--amber)'];
+    function hash(str) { var h = 0; for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0; return Math.abs(h); }
+    function note(e) {
+      var h = hash(String(e.id || e.name + e.t));
+      return '<li class="ticket" style="--tc:' + INKS[h % INKS.length] + ';--tilt:' + ((h % 5) - 2) * 0.8 + 'deg">' +
+        '<span class="stub" aria-hidden="true">Admit one</span>' +
+        '<span class="ticket-body"><q>' + esc(e.msg) + '</q><span class="who"><b>' + esc(e.name) + '</b><span>' + ago(e.t) + '</span></span></span></li>';
     }
     function draw() {
       if (!entries.length) { wall.innerHTML = '<li class="gb-empty">No notes yet. Be the first to sign.</li>'; return; }
@@ -208,7 +230,7 @@
         .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
         .then(function (res) {
           if (!res.ok) throw new Error(res.j.message || 'Something went wrong. Try again in a bit.');
-          if (res.j.entry) { entries.unshift(res.j.entry); draw(); wall.firstChild.className = 'gb-new'; }
+          if (res.j.entry) { entries.unshift(res.j.entry); draw(); }
           form.reset(); count.textContent = '0/160';
           say('Signed. Thank you!', 'ok');
         })
