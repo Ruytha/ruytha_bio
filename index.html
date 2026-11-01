@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Ruytha · Director, editor and lighting artist</title>
-<meta name="description" content="Ruytha is an Australian director, editor and lighting artist who makes short films and music videos, and builds the tools to make them.">
-<meta name="theme-color" content="#0e0c0b">
+<title>Ruytha · director, editor, lighting and lyric sync</title>
+<meta name="description" content="Ruytha is an Australian director, editor and lighting artist who makes short films and music videos, syncs lyrics for Spicy Lyrics and builds the tools to make it all.">
+<meta name="theme-color" content="#070b1f">
 <meta name="color-scheme" content="dark">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Ruytha">
-<meta property="og:description" content="Director, editor and lighting artist from Australia. Short films, music videos and the tools to make them.">
+<meta property="og:description" content="Director, editor and lighting artist from Australia. Short films, music videos, lyric syncs and the tools to make them.">
 <meta property="og:url" content="https://ruytha.dev/">
 <meta property="og:image" content="https://ruytha.dev/assets/img/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -23,92 +23,101 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400;500;600&family=Archivo:wdth,wght@112,900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800&text=%E3%81%8A%E3%81%8C%E3%81%8D%E3%81%93%E3%81%99%E3%81%9F%E3%81%A1%E3%81%A7%E3%81%A8%E3%81%AB%E3%81%AD%E3%81%AF%E3%81%B0%E3%81%BE%E3%82%8A%E3%82%8B%E3%82%93%E3%82%AF%E3%82%B2%E3%82%B9%E3%83%83%E3%83%88%E3%83%96%E4%BB%8B%E4%BD%9C%E5%85%88%E5%85%A5%E5%93%81%E5%B7%B1%E6%A5%BD%E6%B0%97%E7%B4%B9%E7%B5%A1%E8%87%AA%E9%80%A3%E9%9F%B3%EF%BC%81&display=swap">
 <link rel="stylesheet" href="assets/site.css">
+<!-- femboy mode is applied before first paint, so the page never flashes the wrong colours -->
+<script>try { if (localStorage.getItem('ruytha-femboy') === '1') document.documentElement.classList.add('femboy'); } catch (e) {}</script>
 </head>
 
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="bar">
-  <a class="mark" href="#top">Ruytha</a>
+  <a class="mark" href="#top"><img src="assets/img/avatar.png" alt="" width="30" height="30">Ruytha</a>
   <nav class="bar-links" aria-label="Sections">
     <a href="#about">About</a>
-    <a href="#credits">Credits</a>
     <a href="#projects">Projects</a>
     <a href="#studios">Studios</a>
-    <a href="#listening">Listening</a>
+    <a href="#listening">Music</a>
+    <a href="#favourites">Favourites</a>
     <a href="#guestbook">Guestbook</a>
   </nav>
-  <a class="btn btn-light bar-cta" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">Say hi on Discord</a>
+  <button class="fem" id="femBtn" type="button" role="switch" aria-checked="false">
+    <span class="fem-track" aria-hidden="true"><span class="fem-knob">♡</span></span>femboy mode
+  </button>
 </header>
 
 <main id="main">
 
-<!-- The set: the name sits in the dark and a key light follows your cursor (or finger). -->
-<section class="stage" id="top" aria-label="Introduction">
-  <div class="stage-light" aria-hidden="true"></div>
-  <h1 class="stage-name" id="stageName"><span class="name-dark">Ruytha</span><span class="name-lit" aria-hidden="true">Ruytha</span></h1>
-  <div class="stage-foot">
-    <p class="stage-line">Director, editor and lighting artist. I make short films and music videos in Australia, and build the tools to make them.</p>
-    <a class="np" id="np" href="#listening" data-state="loading">
+<section class="hero" id="top" aria-label="Introduction">
+  <div class="hero-text">
+    <p class="hi"><span class="ja" lang="ja">こんにちは</span> hi, i'm</p>
+    <h1 class="name">Ruytha</h1>
+    <p class="sing" id="sing">i direct short films and music videos</p>
+    <p class="meta"><span class="live-dot" aria-hidden="true"></span>Open to collabs · Australia · <span id="clock">my time</span></p>
+    <div class="cta">
+      <a class="btn btn-pop" href="#projects">See my projects</a>
+      <a class="btn btn-glass" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">Say hi on Discord</a>
+    </div>
+  </div>
+  <div class="hero-side">
+    <div class="me">
+      <img src="assets/img/avatar.png" alt="Ruytha's avatar: an anime-style character with dark blue hair" width="320" height="320" decoding="async">
+      <span class="spark s1" aria-hidden="true"></span><span class="spark s2" aria-hidden="true"></span><span class="spark s3" aria-hidden="true"></span>
+    </div>
+    <a class="np glass" id="np" href="#listening" data-state="loading">
       <span class="np-art" id="npArt" aria-hidden="true"></span>
       <span class="np-text">
         <span class="np-label" id="npLabel">Checking what's playing</span>
-        <span class="np-track" id="npTrack">One second…</span>
+        <span class="np-track" id="npTrack">one sec…</span>
       </span>
+      <span class="np-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
     </a>
   </div>
-  <p class="stage-hint" id="stageHint" aria-hidden="true">Move your cursor to light the set · click for action</p>
-  <a class="spin" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener" aria-label="Open to collabs. Say hi on Discord">
-    <svg viewBox="0 0 200 200" aria-hidden="true"><defs><path id="ring" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"/></defs><text><textPath href="#ring">open to collabs ✦ say hi on discord ✦ open to collabs ✦ </textPath></text></svg>
-    <span class="spin-dot" aria-hidden="true">✦</span>
-  </a>
 </section>
 
 <section class="sec about" id="about">
-  <figure class="about-still" data-rise>
-    <img src="assets/img/avatar.png" alt="Ruytha's avatar: an anime-style character with dark blue hair" width="560" height="560" loading="lazy" decoding="async">
-    <figcaption>Ruytha, probably editing something</figcaption>
+  <figure class="polaroid" data-rise>
+    <img src="assets/img/avatar.png" alt="" width="420" height="420" loading="lazy" decoding="async">
+    <figcaption>me, probably editing something</figcaption>
   </figure>
-  <div class="about-text" data-rise>
-    <h2 class="h2">About</h2>
+  <div data-rise>
+    <h2 class="h2">About <span class="ja" lang="ja">自己紹介</span></h2>
     <p class="statement">An Australian director, editor and lighting artist who makes short films and music videos, and builds the tools to make them.</p>
     <p>Most projects run end to end through my hands: animating and rigging in Blender, cutting in DaVinci Resolve, Premiere Pro and After Effects, lighting virtual sets and real ones, and shooting stills on a Canon EOS 7D. I write HTML, CSS, JavaScript and Python, and I'm building VCap Motion, a VR motion capture system for the upcoming YouTube series <em>Borderline Obsession</em>.</p>
-    <p>I also sync and review TTML lyric files for Spicy Lyrics and I'm learning Japanese. Open to collaborations on editing, lighting and short-form film. The quickest way to reach me is Discord, <strong>@ruytha</strong>.</p>
-    <dl class="facts">
-      <div><dt>Based in</dt><dd>Australia</dd></div>
-      <div><dt>Shoots on</dt><dd>Canon EOS 7D</dd></div>
-      <div><dt>Cuts in</dt><dd>DaVinci Resolve</dd></div>
-      <div><dt>Learning</dt><dd>Japanese</dd></div>
-      <div><dt>Favourite AI</dt><dd>Claude</dd></div>
-      <div><dt>Played Rec Room</dt><dd>2021 to 2026</dd></div>
-    </dl>
+    <p>I sync and review TTML lyric files for Spicy Lyrics, learn Japanese (<span lang="ja">がんばります</span>!), and play RDR2 and Forza with Tame Impala on in the background. Say hi on Discord, <strong>@ruytha</strong>.</p>
+    <ul class="stickers" aria-label="Quick facts">
+      <li><b>Australia</b><span>based in</span></li>
+      <li><b>Canon EOS 7D</b><span>shoots on</span></li>
+      <li><b>Japanese</b><span>learning</span></li>
+      <li><b>Claude</b><span>favourite AI</span></li>
+      <li><b>2021 to 2026</b><span>played Rec Room</span></li>
+      <li><b>a femboy</b><span>yes, i am</span></li>
+    </ul>
   </div>
 </section>
 
-<!-- What I do, set as the end credits of a film. -->
-<section class="sec credits" id="credits">
-  <h2 class="h2" data-rise>Credits</h2>
-  <p class="credits-intro" data-rise>Everything on a Ruytha film, and who did it.</p>
-  <dl class="roll" data-rise>
-    <div><dt>Directed by</dt><dd>Ruytha <span>short films and music videos</span></dd></div>
-    <div><dt>Edited by</dt><dd>Ruytha <span>Resolve, Premiere Pro and After Effects</span></dd></div>
-    <div><dt>Lighting by</dt><dd>Ruytha <span>virtual sets and real ones</span></dd></div>
-    <div><dt>Animation and rigging by</dt><dd>Ruytha <span>in Blender</span></dd></div>
-    <div><dt>Photography by</dt><dd>Ruytha <span>a Canon EOS 7D and an iPhone 12</span></dd></div>
-    <div><dt>Lyrics synced by</dt><dd>Ruytha <span>for Spicy Lyrics</span></dd></div>
-    <div><dt>Music, occasionally, by</dt><dd>Ruytha <span>FL Studio, opened and closed five minutes later</span></dd></div>
-    <div><dt>Website by</dt><dd>Ruytha <span>and Claude, honestly mostly Claude</span></dd></div>
-  </dl>
+<section class="sec skills" id="skills">
+  <h2 class="h2" data-rise>What I do <span class="ja" lang="ja">できること</span></h2>
+  <ul class="skill-grid" data-rise>
+    <li><b>Directing</b><span>Short films and music videos.</span></li>
+    <li><b>Editing</b><span>Resolve, Premiere Pro and After Effects. DM me if you want to collab.</span></li>
+    <li><b>Lighting</b><span>Virtual sets and real ones.</span></li>
+    <li><b>Blender</b><span>Mostly animation and rigging.</span></li>
+    <li><b>Photography</b><span>A Canon EOS 7D and an iPhone 12.</span></li>
+    <li><b>Lyric sync</b><span>Word-by-word TTMLs for Spicy Lyrics.</span></li>
+    <li><b>Music, sometimes</b><span>I open FL Studio and close it five minutes later.</span></li>
+    <li><b>Code</b><span>HTML, CSS, JavaScript and Python. Claude helps. A lot.</span></li>
+  </ul>
 </section>
 
 <section class="sec projects" id="projects">
   <div class="sec-head" data-rise>
-    <h2 class="h2">In production</h2>
+    <h2 class="h2">Projects <span class="ja" lang="ja">作品</span></h2>
     <p class="lede">What I'm making right now. Borderline Obsession is waiting on VCap Motion, no pressure.</p>
   </div>
   <div class="proj-grid">
-    <article class="proj proj-lead" data-rise>
+    <article class="proj proj-lead glass" data-rise>
       <img src="assets/img/project-vcap.png" alt="" loading="lazy" decoding="async">
       <div class="proj-body">
         <p class="status status-soon">Coming soon</p>
@@ -116,7 +125,7 @@
         <p>A VR motion capture system I'm building. Borderline Obsession gets made with it.</p>
       </div>
     </article>
-    <article class="proj" data-rise>
+    <article class="proj glass" data-rise>
       <img src="assets/img/project-bo.png" alt="" loading="lazy" decoding="async">
       <div class="proj-body">
         <p class="status">In the queue</p>
@@ -124,7 +133,7 @@
         <p>A short YouTube series, written and edited by me. Production starts once VCap Motion is stable.</p>
       </div>
     </article>
-    <article class="proj" data-rise>
+    <article class="proj glass" data-rise>
       <img src="assets/img/project-ddfc.png" alt="" loading="lazy" decoding="async">
       <div class="proj-body">
         <p class="status status-on">Ongoing</p>
@@ -132,7 +141,7 @@
         <p>Word-by-word timed lyrics for Spicy Lyrics. <a href="https://spicylyrics.org/ruytha" target="_blank" rel="noopener">See my profile</a>.</p>
       </div>
     </article>
-    <article class="proj" data-rise>
+    <article class="proj glass" data-rise>
       <img src="assets/img/project-website.png" alt="" loading="lazy" decoding="async">
       <div class="proj-body">
         <p class="status status-on">In progress</p>
@@ -164,26 +173,22 @@
 
 <section class="sec listening" id="listening">
   <div class="sec-head" data-rise>
-    <h2 class="h2">Listening</h2>
-    <p class="lede">Pulled live from my Last.fm. No judging.</p>
+    <h2 class="h2">Music <span class="ja" lang="ja">音楽</span></h2>
+    <p class="lede">Pulled live from my Last.fm and set like a lyric sheet. Some straight bangers. No judging.</p>
   </div>
   <div class="listen-grid">
-    <div class="week" id="week" data-rise>
+    <ol class="sheet" id="tracks" aria-label="Recently played" data-rise></ol>
+    <aside class="week glass" id="week" data-rise>
       <p class="week-num" id="weekPlays">…</p>
-      <p class="week-cap">songs in the last seven days</p>
+      <p class="week-cap">songs this week</p>
       <ol class="artists" id="weekArtists"></ol>
       <p class="week-top" id="weekTop"></p>
-    </div>
-    <div data-rise>
-      <h3 class="h3">Recently played</h3>
-      <ol class="tracks" id="tracks" aria-busy="true"></ol>
-      <p class="small"><a href="https://www.last.fm/user/ruytha" target="_blank" rel="noopener">Full history on Last.fm</a></p>
-    </div>
+    </aside>
   </div>
   <a class="feature" href="https://open.spotify.com/artist/5INjqkS1o8h1imAzPqGZBb" target="_blank" rel="noopener" data-rise>
     <img src="assets/img/tame-impala.jpg" alt="Kevin Parker of Tame Impala" loading="lazy" decoding="async">
-    <span class="feature-text">
-      <span class="feature-kicker">On repeat</span>
+    <span class="feature-text glass">
+      <span class="feature-kicker">On repeat forever</span>
       <span class="feature-title">Tame Impala</span>
       <span class="feature-sub">One of the best artists of all time. Start with “Let It Happen”.</span>
       <span class="arrow-link">Open in Spotify <span aria-hidden="true">→</span></span>
@@ -192,27 +197,32 @@
 </section>
 
 <section class="sec favs" id="favourites">
-  <div class="sec-head" data-rise>
-    <h2 class="h2">Now showing</h2>
-    <p class="lede">The anime and games I keep going back to. Hover a reel to pause it.</p>
+  <div class="sec-head fav-head" data-rise>
+    <div>
+      <h2 class="h2">Favourites <span class="ja" lang="ja">お気に入り</span></h2>
+      <p class="lede">The anime and games I keep going back to.</p>
+    </div>
+    <div class="filters" id="favFilters" role="group" aria-label="Show">
+      <button type="button" data-filter="all" aria-pressed="true">All</button>
+      <button type="button" data-filter="anime" aria-pressed="false">Anime</button>
+      <button type="button" data-filter="game" aria-pressed="false">Games</button>
+      <button type="button" data-filter="top" aria-pressed="false">★ Top picks</button>
+    </div>
   </div>
+  <ul class="posters" id="posters" data-rise></ul>
 </section>
-<div class="reels" aria-label="Favourite anime and games">
-  <div class="strip" data-rise><h3 class="strip-label">Anime</h3><div class="reel"><ul class="reel-track" id="reelAnime"></ul></div></div>
-  <div class="strip strip-back" data-rise><h3 class="strip-label">Games</h3><div class="reel"><ul class="reel-track" id="reelGames"></ul></div></div>
-</div>
 
 <section class="sec guestbook" id="guestbook">
   <div class="sec-head" data-rise>
-    <h2 class="h2">Guestbook</h2>
-    <p class="lede">Leave a line in the credits. Be nice, I read every one.</p>
+    <h2 class="h2">Guestbook <span class="ja" lang="ja">ゲストブック</span></h2>
+    <p class="lede">Leave a note on the wall. Be nice, I read every one.</p>
   </div>
   <div class="gb">
-    <form class="gb-form" id="gbForm" autocomplete="off" data-rise>
-      <label><span>Your name</span><input name="name" maxlength="24" required placeholder="Your name"></label>
-      <label><span>Message <em id="gbCount">0/160</em></span><textarea name="msg" maxlength="160" rows="4" required placeholder="Say something nice"></textarea></label>
+    <form class="gb-form glass" id="gbForm" autocomplete="off" data-rise>
+      <label><span>Your name</span><input name="name" maxlength="24" required placeholder="clawd"></label>
+      <label><span>Message <em id="gbCount">0/160</em></span><textarea name="msg" maxlength="160" rows="4" required placeholder="hi ruytha! cool site"></textarea></label>
       <label class="gb-hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
-      <button class="btn btn-amber" type="submit">Sign the guestbook</button>
+      <button class="btn btn-pop" type="submit">Stick it on the wall</button>
       <p class="gb-status" id="gbStatus" aria-live="polite"></p>
     </form>
     <ul class="gb-wall" id="gbWall" aria-live="polite" data-rise><li class="gb-empty">Loading notes…</li></ul>
@@ -221,25 +231,25 @@
 
 <section class="sec links" id="links">
   <div class="sec-head" data-rise>
-    <h2 class="h2">Find me</h2>
+    <h2 class="h2">Find me <span class="ja" lang="ja">連絡先</span></h2>
     <p class="lede">Anywhere on this list works. Discord is where I reply fastest.</p>
   </div>
   <ul class="link-list" data-rise>
-    <li><a href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener"><b>Discord</b><span>@ruytha</span></a></li>
-    <li><a href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener"><b>Discord server</b><span>come say something</span></a></li>
-    <li><a href="https://open.spotify.com/user/31wqsddt5oxby3p4ta7rx52mt6nu" target="_blank" rel="noopener"><b>Spotify</b><span>the actual evidence</span></a></li>
-    <li><a href="https://spicylyrics.org/ruytha" target="_blank" rel="noopener"><b>Spicy Lyrics</b><span>my TTML profile</span></a></li>
-    <li><a href="https://ruytha.blogspot.com" target="_blank" rel="noopener"><b>Blog</b><span>anime and other opinions</span></a></li>
-    <li><a href="https://yoursit.ee/ruytha" target="_blank" rel="noopener"><b>Sitee</b><span>yoursit.ee/ruytha</span></a></li>
-    <li><a href="https://ko-fi.com/ruytha" target="_blank" rel="noopener"><b>Ko-fi</b><span>support my work</span></a></li>
+    <li><a class="glass" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener"><b>Discord</b><span>@ruytha</span></a></li>
+    <li><a class="glass" href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener"><b>Discord server</b><span>come say something</span></a></li>
+    <li><a class="glass" href="https://open.spotify.com/user/31wqsddt5oxby3p4ta7rx52mt6nu" target="_blank" rel="noopener"><b>Spotify</b><span>the actual evidence</span></a></li>
+    <li><a class="glass" href="https://spicylyrics.org/ruytha" target="_blank" rel="noopener"><b>Spicy Lyrics</b><span>my TTML profile</span></a></li>
+    <li><a class="glass" href="/blog"><b>Blog</b><span>reviews and opinions</span></a></li>
+    <li><a class="glass" href="https://yoursit.ee/ruytha" target="_blank" rel="noopener"><b>Sitee</b><span>yoursit.ee/ruytha</span></a></li>
+    <li><a class="glass" href="https://ko-fi.com/ruytha" target="_blank" rel="noopener"><b>Ko-fi</b><span>support my work</span></a></li>
   </ul>
 </section>
 
 </main>
 
 <footer class="end">
-  <p class="end-thanks">Thanks for watching.</p>
-  <p class="end-name" aria-hidden="true">Ruytha</p>
+  <p class="bye"><span lang="ja">またね！</span></p>
+  <p class="bye-en">see you next time</p>
   <div class="end-row">
     <nav class="end-links" aria-label="More pages">
       <a href="/links">Links page</a>
@@ -249,9 +259,11 @@
       <a href="/tools/textflag/terms">TextFlag terms</a>
       <a href="https://ko-fi.com/ruytha" target="_blank" rel="noopener">Support this website</a>
     </nav>
-    <p class="end-copy"><a class="again" href="#top">Watch it again ↺</a> · © <span id="year">2026</span> Ruytha</p>
+    <p class="end-copy">© <span id="year">2026</span> Ruytha</p>
   </div>
 </footer>
+
+<div class="hearts" id="hearts" aria-hidden="true"></div>
 
 <script src="assets/config.js"></script>
 <script src="assets/site.js" defer></script>
