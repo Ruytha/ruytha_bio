@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Server shops</title>
+<meta name="description" content="Every shop on the Minecraft server, with prices compared.">
+<link rel="icon" href="/assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#f5f4f0; --card:#ffffff; --line:#e6e3dc; --line2:#d6d2c8;
+    --ink:#16171a; --ink2:#5d5f66; --ink3:#8a8c92;
+    --accent:#0f9d58; --accent-ink:#0b6b3d; --accent-soft:#e3f5ea;
+    --field:#ffffff; --shadow:0 1px 2px rgba(20,20,30,.05),0 8px 24px -12px rgba(20,20,30,.12);
+    --shadow-up:0 2px 4px rgba(20,20,30,.06),0 18px 40px -16px rgba(20,20,30,.22);
+    --tile-l:93%; --tile-s:55%; --red:#c0392b;
+    --display:'Bricolage Grotesque',Inter,system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#111214; --card:#1a1b1f; --line:#2a2b30; --line2:#3a3c42;
+      --ink:#f2f2f3; --ink2:#a8aab1; --ink3:#7c7e86;
+      --accent:#34c77b; --accent-ink:#5ee09a; --accent-soft:rgba(52,199,123,.14);
+      --field:#141518; --shadow:0 1px 2px rgba(0,0,0,.3); --shadow-up:0 18px 40px -16px rgba(0,0,0,.6);
+      --tile-l:20%; --tile-s:30%; --red:#ff7b6b;
+    }
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none !important}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .w{max-width:1120px;margin:0 auto;padding:0 16px}
+  button,input,select{font:inherit;color:inherit}
+  button{cursor:pointer}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  img.tex{image-rendering:pixelated;display:block}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  /* header */
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 0}
+  .brand{display:flex;align-items:center;gap:10px;font:700 18px var(--display);letter-spacing:-.01em}
+  .brand-mark{width:34px;height:34px;border-radius:10px;background:var(--ink);display:grid;place-items:center}
+  .brand-mark img{width:22px;height:22px}
+  .hero{padding:40px 0 8px}
+  .hero h1{font:800 clamp(40px,7vw,72px)/.98 var(--display);letter-spacing:-.035em;margin:0;max-width:14ch}
+  .hero .note{color:var(--ink2);font-size:clamp(16px,2vw,19px);margin:16px 0 0;max-width:56ch}
+  .hero .meta{display:inline-flex;align-items:center;gap:8px;margin:18px 0 0;padding:6px 12px 6px 8px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;color:var(--ink2)}
+  .hero .meta img{width:18px;height:18px}
+
+  /* toolbar */
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:32px 0 0}
+  .search{flex:1 1 280px;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0 16px;box-shadow:var(--shadow);min-width:0}
+  .search:focus-within{border-color:var(--accent)}
+  .search svg{flex-shrink:0;color:var(--ink3)}
+  .search input{flex:1;min-width:0;border:0;background:none;outline:none;padding:14px 0;font-size:16px}
+  .sort{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0 12px;box-shadow:var(--shadow);font-size:14px;color:var(--ink2)}
+  .sort select{border:0;background:none;padding:14px 4px;font-weight:600;color:var(--ink);outline:none}
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 0;padding:0;list-style:none}
+  .pills button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 16px;font-size:14px;font-weight:600;color:var(--ink2);transition:background .15s,color .15s,border-color .15s}
+  .pills button:hover{border-color:var(--line2);color:var(--ink)}
+  .pills button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+  .pills .n{opacity:.6;font-weight:500;margin-left:4px}
+  .legend{color:var(--ink3);font-size:14px;margin:14px 0 0}
+
+  /* product grid */
+  section.cat{margin:44px 0 0}
+  .cat-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 16px}
+  .cat h2{font:700 28px var(--display);letter-spacing:-.02em;margin:0}
+  .cat .count{color:var(--ink3);font-size:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;margin:0;padding:0;list-style:none}
+  .card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+  .card:hover{transform:translateY(-4px);box-shadow:var(--shadow-up)}
+  .thumb{position:relative;aspect-ratio:4/3;display:grid;place-items:center;
+    background:radial-gradient(70% 70% at 50% 40%,hsl(var(--h) var(--tile-s) calc(var(--tile-l) + 4%)),hsl(var(--h) var(--tile-s) var(--tile-l)))}
+  .thumb img{width:72px;height:72px;filter:drop-shadow(0 10px 8px rgba(0,0,0,.18));transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+  .thumb .emoji{font-size:56px;line-height:1}
+  .card:hover .thumb img{transform:translateY(-6px) scale(1.08) rotate(-4deg)}
+  .badge{position:absolute;top:12px;left:12px;background:var(--accent);color:#fff;font-size:12px;font-weight:700;letter-spacing:.02em;padding:4px 10px;border-radius:999px}
+  .body{display:flex;flex-direction:column;gap:2px;padding:14px 16px 16px;flex:1}
+  .name{font:700 17px/1.25 var(--display);letter-spacing:-.01em;margin:0}
+  .unit{color:var(--ink3);font-size:13px;margin:0}
+  .priceline{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding-top:12px}
+  .price{display:inline-flex;align-items:center;gap:6px;font:800 24px var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .price img{width:22px;height:22px}
+  .price.na{font:600 14px Inter,sans-serif;color:var(--ink3)}
+  .curtext{font:600 14px Inter,sans-serif;color:var(--ink2)}
+  .others{list-style:none;margin:12px 0 0;padding:10px 0 0;border-top:1px dashed var(--line2);display:grid;gap:4px;font-size:13px}
+  .others li{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--ink2);padding:2px 6px;margin:0 -6px;border-radius:6px}
+  .others li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .others .op{display:inline-flex;align-items:center;gap:4px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+  .others .op img{width:14px;height:14px}
+  .others li.best{background:var(--accent-soft);color:var(--accent-ink)}
+  .others li.best .op{color:var(--accent-ink)}
+  .empty{padding:64px 16px;text-align:center;color:var(--ink3)}
+  .empty b{display:block;font:700 22px var(--display);color:var(--ink);margin-bottom:4px}
+
+  @media (prefers-reduced-motion:no-preference){
+    html{scroll-behavior:smooth}
+    .card{animation:rise .45s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0) * 30ms)}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}}
+  }
+  @media (prefers-reduced-motion:reduce){.card,.thumb img{transition:none}.card:hover{transform:none}.card:hover .thumb img{transform:none}}
+
+  footer{margin:72px 0 40px;padding-top:20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;color:var(--ink3);font-size:14px}
+
+  /* buttons + fields */
+  .btn{border:1px solid var(--line2);background:var(--card);border-radius:10px;padding:9px 16px;font-weight:600;font-size:15px}
+  .btn:hover{border-color:var(--ink3)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{filter:brightness(1.07)}
+  .btn.danger{color:var(--red)}
+  .btn.small{padding:6px 12px;font-size:14px;border-radius:8px}
+  .btn.ghost{background:none;border-color:transparent;color:var(--ink3)}
+  .btn.ghost:hover{color:var(--ink)}
+  .btn:disabled{opacity:.45;cursor:default}
+  .in{width:100%;min-width:0;background:var(--field);border:1px solid var(--line2);border-radius:9px;padding:8px 10px}
+  .in:focus{border-color:var(--accent);outline:none}
+  .in.num{text-align:right;font-variant-numeric:tabular-nums}
+
+  /* edit mode */
+  .editbar{display:none;align-items:center;gap:10px;flex-wrap:wrap;margin:24px 0 0;padding:14px 16px;border-radius:14px;background:var(--accent-soft);border:1px solid var(--accent)}
+  .editbar .status{flex:1 1 200px;font-weight:600;color:var(--accent-ink)}
+  .editing .editbar{display:flex}
+  .editing .view-only{display:none}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);margin:20px 0 0}
+  .panel h2{font:700 20px var(--display);margin:0}
+  .settings{display:grid;grid-template-columns:2fr 1fr;gap:0 12px}
+  .settings .wide{grid-column:1/-1}
+  .field{display:block;margin:12px 0 0}
+  .field > span{display:block;font-size:13px;font-weight:600;color:var(--ink2);margin-bottom:4px}
+  .hint{color:var(--ink3);font-size:13px;margin:8px 0 0}
+  .curpick{display:flex;gap:8px;align-items:center}
+  .mini{width:38px;height:38px;flex-shrink:0;border-radius:9px;display:grid;place-items:center;background:var(--bg);border:1px solid var(--line);font-size:20px}
+  .mini img{width:26px;height:26px}
+  .etable{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+  .erow{display:grid;grid-template-columns:190px minmax(0,1fr) 130px 100px auto;gap:10px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}
+  .erow.head{border-top:0;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);padding:10px 14px}
+  .erow.head span:nth-child(4){text-align:right}
+  .iconpick{display:flex;gap:8px;align-items:center;min-width:0}
+  .rowbtns{display:flex;gap:4px}
+  .rowbtns .btn{padding:5px 9px;font-size:13px;line-height:1.2}
+  .cathead{display:flex;gap:8px;align-items:center;margin:36px 0 12px}
+  .cathead .in{font:700 20px var(--display);max-width:320px}
+  .addrow{padding:10px 14px;border-top:1px solid var(--line)}
+  .mlabel{display:none}
+
+  dialog{border:1px solid var(--line);border-radius:18px;background:var(--card);color:var(--ink);padding:24px;max-width:min(440px,calc(100vw - 32px));width:100%;box-shadow:var(--shadow-up)}
+  dialog::backdrop{background:rgba(10,10,15,.5)}
+  dialog h2{font:700 24px var(--display);margin:0 0 6px}
+  dialog p{color:var(--ink2);margin:0 0 12px;font-size:14px}
+  #signIn{min-height:120px;display:flex;justify-content:center}
+  .err{color:var(--red);font-size:14px;margin:8px 0 0}
+
+
+  /* several shops */
+  a{color:inherit}
+  .brand{text-decoration:none}
+  .back{display:inline-flex;align-items:center;gap:6px;color:var(--ink2);text-decoration:none;font-weight:600;font-size:14px;margin:0 0 14px}
+  .back:hover{color:var(--ink)}
+  .owner{color:var(--ink2);font-size:17px;margin:10px 0 0}
+  .owner b{color:var(--ink)}
+  .notice{margin:20px 0 0;padding:12px 16px;border-radius:12px;background:var(--accent-soft);color:var(--accent-ink);font-weight:500}
+  .notice.warn{background:rgba(192,57,43,.1);color:var(--red)}
+  .others li a{color:inherit;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .others li a:hover{text-decoration:underline}
+  .shopchip{display:inline-block;max-width:100%;margin:0 0 6px;font-size:12px;font-weight:600;color:var(--ink2);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .shopchip:hover{color:var(--accent-ink)}
+  .shops{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin:0;padding:0;list-style:none}
+  .scard > a{display:flex;flex-direction:column;height:100%;text-decoration:none}
+  .collage{position:relative;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;gap:10px;
+    background:radial-gradient(80% 90% at 50% 30%,hsl(var(--h) var(--tile-s) calc(var(--tile-l) + 4%)),hsl(var(--h) var(--tile-s) var(--tile-l)))}
+  .collage img{width:48px;height:48px;filter:drop-shadow(0 8px 6px rgba(0,0,0,.18));transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+  .collage img:nth-child(even){transform:translateY(8px)}
+  .scard:hover .collage img{transform:translateY(-6px)}
+  .scard:hover .collage img:nth-child(even){transform:translateY(2px)}
+  .scard h3{font:700 21px/1.2 var(--display);letter-spacing:-.015em;margin:0}
+  .scard .by{color:var(--ink2);font-size:14px;margin:2px 0 0}
+  .scard .facts{display:flex;align-items:center;gap:6px;color:var(--ink3);font-size:13px;margin-top:auto;padding-top:12px}
+  .scard .facts img{width:16px;height:16px}
+  .manage .shoplist{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+  .manage .shoplist li{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+  .manage .shoplist .who{flex:1 1 180px;min-width:0}
+  .manage .shoplist .who a{font-weight:700;text-decoration:none}
+  .manage .shoplist .who span{display:block;color:var(--ink3);font-size:13px}
+  .createrow{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin:12px 0 0}
+  .linkbox{flex-basis:100%;display:flex;gap:8px;align-items:center;margin:4px 0 0;padding:10px;border-radius:10px;background:var(--accent-soft)}
+  .linkbox p{margin:0 0 6px;font-size:13px;color:var(--accent-ink);font-weight:600}
+  .linkbox .in{font:13px ui-monospace,monospace}
+  .linkbox > div{flex:1;min-width:0}
+
+  @media (max-width:640px){
+    .hero{padding-top:20px}
+    .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .thumb img{width:56px;height:56px}
+    .body{padding:12px}
+    .name{font-size:15px}
+    .price{font-size:20px}
+    .price img{width:18px;height:18px}
+    .badge{top:8px;left:8px;font-size:11px;padding:3px 8px}
+    .sort{flex:1 1 auto}
+    .sort select{flex:1}
+    .settings{grid-template-columns:1fr}
+    .createrow{grid-template-columns:1fr}
+    .shops{grid-template-columns:1fr}
+    .linkbox{flex-wrap:wrap}
+    .erow{grid-template-columns:1fr 1fr;row-gap:8px;align-items:end}
+    .erow.head{display:none}
+    .erow > .iconpick,.erow > .name-in,.erow .rowbtns{grid-column:1/-1}
+    .erow .rowbtns{justify-content:flex-end}
+    .mlabel{display:block;font-size:12px;color:var(--ink3);margin:0 0 2px}
+  }
+</style>
+</head>
+<body>
+<div class="w">
+  <div class="top">
+    <a class="brand" href="/mc"><span class="brand-mark"><img class="tex" id="brandIcon" alt="" width="22" height="22"></span><span>Server shops</span></a>
+    <button class="btn small ghost view-only" type="button" id="editBtn" hidden>Edit shop</button>
+  </div>
+
+  <main id="app">
+    <section class="hero">
+      <a class="back" id="back" href="/mc" hidden>← All shops</a>
+      <h1 id="title">Server shops</h1>
+      <p class="owner" id="owner" hidden></p>
+      <p class="note" id="note"></p>
+      <p class="meta"><img class="tex" id="metaIcon" alt="" width="18" height="18"><span id="meta"></span></p>
+    </section>
+    <p class="notice" id="notice" role="status" hidden></p>
+
+    <div class="editbar" role="region" aria-label="Editing">
+      <span class="status" id="status">Editing. Changes go live when you save.</span>
+      <button class="btn" type="button" id="cancelBtn">Cancel</button>
+      <button class="btn primary" type="button" id="saveBtn">Save shop</button>
+    </div>
+
+    <div id="settings"></div>
+    <div id="manage"></div>
+
+    <div class="view-only">
+      <div class="toolbar">
+        <label class="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="Search" autocomplete="off" aria-label="Search">
+        </label>
+        <label class="sort" id="sortWrap">Sort
+          <select id="sort" aria-label="Sort items">
+            <option value="featured">Featured</option>
+            <option value="low">Price: low to high</option>
+            <option value="high">Price: high to low</option>
+            <option value="name">Name</option>
+          </select>
+        </label>
+      </div>
+      <ul class="pills" id="pills" aria-label="Categories"></ul>
+      <p class="legend" id="legend" hidden></p>
+    </div>
+
+    <div id="list"></div>
+  </main>
+
+  <footer>
+    <span>Prices can change. Check here before you trade.</span>
+    <button class="btn small ghost" type="button" id="manageBtn" hidden>Manage shops</button>
+  </footer>
+</div>
+
+<dialog id="authDialog" aria-labelledby="authTitle">
+  <h2 id="authTitle">Sign in</h2>
+  <p>Only the site admin can do this. Shop owners edit with the link they were sent.</p>
+  <div id="signIn"></div>
+  <p class="err" id="authErr" hidden></p>
+  <form method="dialog"><button class="btn small" type="submit">Close</button></form>
+</dialog>
+
+<datalist id="texlist"></datalist>
+
+<script>
+(function(){
+  // Item and block textures (Minecraft 1.21.4), loaded from jsDelivr.
+  var TEX = 'https://cdn.jsdelivr.net/gh/InventivetalentDev/minecraft-assets@1.21.4/assets/minecraft/textures/';
+  var API = '/api/mc-shops';
+  // Suggestions for the icon box; any texture name works, e.g. "oak_planks" or "block/oak_log_top".
+  var COMMON = ('diamond iron_ingot gold_ingot emerald netherite_ingot netherite_scrap copper_ingot coal redstone lapis_lazuli quartz amethyst_shard ' +
+    'ancient_debris diamond_block iron_block gold_block emerald_block netherite_block obsidian crying_obsidian oak_log spruce_log birch_log oak_planks ' +
+    'cobblestone stone stone_bricks deepslate glass sand gravel dirt grass_block clay terracotta white_wool tnt bookshelf sea_lantern glowstone beacon ' +
+    'shulker_box ender_chest cooked_beef cooked_porkchop bread golden_carrot golden_apple apple cake ender_pearl ender_eye blaze_rod gunpowder ' +
+    'slime_ball string bone leather feather spider_eye rotten_flesh ghast_tear phantom_membrane nether_star dragon_breath experience_bottle ' +
+    'enchanted_book book name_tag saddle elytra totem_of_undying firework_rocket arrow trident diamond_sword netherite_sword diamond_pickaxe ' +
+    'netherite_pickaxe bow crossbow shield diamond_chestplate netherite_chestplate wheat sugar_cane cactus pumpkin melon_slice').split(' ');
+  // Built-in currencies show their item texture; anything else is shown as typed.
+  var CURRENCIES = {
+    diamond: { name: 'Diamonds', tex: 'item/diamond', one: 'diamond', many: 'diamonds' },
+    iron: { name: 'Iron ingots', tex: 'item/iron_ingot', one: 'iron ingot', many: 'iron ingots' },
+    emerald: { name: 'Emeralds', tex: 'item/emerald', one: 'emerald', many: 'emeralds' },
+    gold: { name: 'Gold ingots', tex: 'item/gold_ingot', one: 'gold ingot', many: 'gold ingots' },
+    netherite: { name: 'Netherite ingots', tex: 'item/netherite_ingot', one: 'netherite ingot', many: 'netherite ingots' }
+  };
+
+  // Shown until the first shop is created, so the page is never empty.
+  var EXAMPLES = [
+    { slug: 'spawn-market', title: 'Spawn Market', owner: 'Ruytha', currency: 'diamond',
+      note: 'Everything you need, right by spawn. Prices are per item unless it says otherwise.',
+      categories: [
+        { name: 'Ores & minerals', items: [
+          { icon: 'iron_ingot', name: 'Iron ingot', unit: 'per stack', buy: 3 },
+          { icon: 'gold_ingot', name: 'Gold ingot', unit: 'per stack', buy: 4 },
+          { icon: 'emerald', name: 'Emerald', unit: 'per stack', buy: 6 },
+          { icon: 'lapis_lazuli', name: 'Lapis lazuli', unit: 'per stack', buy: 2 },
+          { icon: 'ancient_debris', name: 'Ancient debris', unit: '', buy: 9 },
+          { icon: 'netherite_ingot', name: 'Netherite ingot', unit: '', buy: 40 }
+        ]},
+        { name: 'Blocks', items: [
+          { icon: 'oak_log', name: 'Oak log', unit: 'per stack', buy: 1 },
+          { icon: 'stone_bricks', name: 'Stone bricks', unit: 'per stack', buy: 1 },
+          { icon: 'glass', name: 'Glass', unit: 'per stack', buy: 2 },
+          { icon: 'obsidian', name: 'Obsidian', unit: 'per stack', buy: 6 }
+        ]},
+        { name: 'Gear', items: [
+          { icon: 'totem_of_undying', name: 'Totem of undying', unit: '', buy: 10 },
+          { icon: 'enchanted_book', name: 'Mending book', unit: '', buy: 8 },
+          { icon: 'elytra', name: 'Elytra', unit: '', buy: 128 }
+        ]}
+      ]},
+    { slug: 'steves-shop', title: 'Steve’s Shop', owner: 'Steve', currency: 'diamond',
+      note: 'Farm-fresh drops and the cheapest iron around.',
+      categories: [
+        { name: 'Mob drops', items: [
+          { icon: 'ender_pearl', name: 'Ender pearl', unit: 'per 16', buy: 2 },
+          { icon: 'blaze_rod', name: 'Blaze rod', unit: 'per stack', buy: 5 },
+          { icon: 'slime_ball', name: 'Slimeball', unit: 'per stack', buy: 4 },
+          { icon: 'gunpowder', name: 'Gunpowder', unit: 'per stack', buy: 3 }
+        ]},
+        { name: 'Basics', items: [
+          { icon: 'iron_ingot', name: 'Iron ingot', unit: 'per stack', buy: 2 },
+          { icon: 'gold_ingot', name: 'Gold ingot', unit: 'per stack', buy: 5 },
+          { icon: 'glass', name: 'Glass', unit: 'per stack', buy: 2 },
+          { icon: 'elytra', name: 'Elytra', unit: '', buy: 110 }
+        ]}
+      ]},
+    { slug: 'iron-emporium', title: 'Iron Emporium', owner: 'Alex', currency: 'iron',
+      note: 'No diamonds? No problem. Everything here is paid in iron.',
+      categories: [
+        { name: 'Food', items: [
+          { icon: 'bread', name: 'Bread', unit: 'per stack', buy: 3 },
+          { icon: 'cooked_beef', name: 'Steak', unit: 'per stack', buy: 6 },
+          { icon: 'golden_carrot', name: 'Golden carrot', unit: 'per stack', buy: 24 }
+        ]},
+        { name: 'Building', items: [
+          { icon: 'oak_log', name: 'Oak log', unit: 'per stack', buy: 4 },
+          { icon: 'cobblestone', name: 'Cobblestone', unit: 'per stack', buy: 1 },
+          { icon: 'sea_lantern', name: 'Sea lantern', unit: '', buy: 3 }
+        ]}
+      ]}
+  ];
+
+  var params = new URLSearchParams(location.search);
+  var current = (params.get('shop') || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
+  var shops = [], example = false, shop = null;
+  var draft = null, editing = false, dirty = false, clerk = null, admin = false, filter = 'all';
+  var $ = function(id){ return document.getElementById(id); };
+
+  // Edit keys this browser has been given, by shop. A shop's edit link puts its key after #key=.
+  var keys = {};
+  try { keys = JSON.parse(localStorage.getItem('mcShopKeys') || '{}') || {}; } catch (e) { keys = {}; }
+  function saveKeys(){ try { localStorage.setItem('mcShopKeys', JSON.stringify(keys)); } catch (e) {} }
+  var freshKey = false;
+  if (current && location.hash.indexOf('#key=') === 0) {
+    keys[current] = decodeURIComponent(location.hash.slice(5)); saveKeys(); freshKey = true;
+    history.replaceState(null, '', location.pathname + location.search);   // keep the key out of the address bar
+  }
+
+  function el(tag, attrs, kids){
+    var n = document.createElement(tag);
+    for (var k in attrs || {}) {
+      if (attrs[k] == null) continue;
+      if (k === 'text') n.textContent = attrs[k];
+      else if (k === 'class') n.className = attrs[k];
+      else if (k.slice(0, 2) === 'on') n.addEventListener(k.slice(2), attrs[k]);
+      else n.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(function(c){ if (c) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return n;
+  }
+  function fmt(n){ return n == null ? null : Number(n).toLocaleString(undefined, { maximumFractionDigits: 2 }); }
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  function hue(s){ var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return h; }
+  function shopUrl(slug){ return '/mc?shop=' + encodeURIComponent(slug); }
+  function notice(text, warn){ var n = $('notice'); n.textContent = text || ''; n.hidden = !text; n.className = 'notice' + (warn ? ' warn' : ''); }
+  function itemCount(s){ return s.categories.reduce(function(n, c){ return n + c.items.length; }, 0); }
+
+  // ---------- textures ----------
+  var TEXNAME = /^[a-z0-9_]+(\/[a-z0-9_]+)?$/;
+  // A plain name could be an item or a block (or one face of a block), so try those in turn.
+  function candidates(name){
+    if (name.indexOf('/') > -1) return [name];
+    return ['item/' + name, 'block/' + name, 'block/' + name + '_side', 'block/' + name + '_front', 'block/' + name + '_top'];
+  }
+  var found = {};                              // name -> texture path that loaded, or false
+  function setTexture(img, name, onFail){
+    if (found[name] === false) { if (onFail) onFail(); return; }
+    var list = found[name] ? [found[name]] : candidates(name), i = 0;
+    img.onload = function(){ found[name] = list[i]; };
+    img.onerror = function(){
+      i++;
+      if (i < list.length) img.src = TEX + list[i] + '.png';
+      else { found[name] = false; if (onFail) onFail(); }
+    };
+    img.src = TEX + list[0] + '.png';
+  }
+  // The item picture: a texture name, or an emoji as a fallback.
+  function picture(icon, size, cls){
+    var v = (icon || '').trim().toLowerCase();
+    var wrap = el('span', { class: cls, 'aria-hidden': 'true' });
+    if (TEXNAME.test(v)) {
+      var img = el('img', { class: 'tex', alt: '', width: size, height: size, decoding: 'async' });
+      setTexture(img, v, function(){ img.remove(); wrap.textContent = '📦'; });
+      wrap.appendChild(img);
+    } else wrap.appendChild(el('span', { class: 'emoji', text: icon || '📦' }));
+    return wrap;
+  }
+  function texImg(name, size){ var img = el('img', { class: 'tex', alt: '', width: size, height: size }); setTexture(img, name); return img; }
+  function priceEl(v, currency, cls, size){
+    var c = CURRENCIES[currency];
+    return el('span', { class: cls, 'aria-label': fmt(v) + ' ' + (c ? (v === 1 ? c.one : c.many) : currency) }, [
+      fmt(v), c ? texImg(c.tex, size) : el('span', { class: 'curtext', text: currency })
+    ]);
+  }
+  function currencyName(cur){ var c = CURRENCIES[cur]; return c ? c.many : cur; }
+
+  // ---------- comparison ----------
+  // Items match across shops when they have the same icon (or name) and unit, in the same currency.
+  function itemKey(it){ return ((it.icon || it.name || '').trim().toLowerCase()) + '|' + (it.unit || '').trim().toLowerCase(); }
+  var index = {};
+  function buildIndex(){
+    index = {};
+    shops.forEach(function(s){
+      s.categories.forEach(function(c){ c.items.forEach(function(it){
+        if (it.buy == null) return;
+        var k = s.currency + '#' + itemKey(it);
+        (index[k] = index[k] || []).push({ shop: s, buy: it.buy });
+      }); });
+    });
+  }
+  function rivals(it, s){
+    return (index[s.currency + '#' + itemKey(it)] || []).filter(function(r){ return r.shop.slug !== s.slug; })
+      .sort(function(a, b){ return a.buy - b.buy; });
+  }
+
+  // ---------- view ----------
+  function card(it, s, i, showShop){
+    var others = rivals(it, s);
+    var all = others.map(function(r){ return r.buy; }).concat(it.buy != null ? [it.buy] : []);
+    var best = all.length > 1 ? Math.min.apply(null, all) : null;
+    var oursBest = it.buy != null && best != null && it.buy === best;
+    return el('li', { class: 'card', style: '--i:' + i }, [
+      el('div', { class: 'thumb', style: '--h:' + hue(it.icon || it.name) }, [
+        picture(it.icon, 72, ''),
+        oursBest ? el('span', { class: 'badge', text: 'Best price' }) : null
+      ]),
+      el('div', { class: 'body' }, [
+        showShop ? el('a', { class: 'shopchip', href: shopUrl(s.slug), text: s.title }) : null,
+        el('h3', { class: 'name', text: it.name }),
+        it.unit ? el('p', { class: 'unit', text: it.unit }) : null,
+        el('div', { class: 'priceline' }, [
+          it.buy != null ? priceEl(it.buy, s.currency, 'price', 22) : el('span', { class: 'price na', text: 'Not for sale' })
+        ]),
+        !showShop && others.length ? el('ul', { class: 'others', 'aria-label': 'Other shops selling this' }, others.slice(0, 4).map(function(r){
+          var isBest = r.buy === best;
+          return el('li', { class: isBest ? 'best' : null }, [
+            el('a', { href: shopUrl(r.shop.slug), text: r.shop.title }),
+            el('span', {}, [priceEl(r.buy, s.currency, 'op', 14), isBest ? el('span', { class: 'sr', text: ' (cheapest)' }) : null])
+          ]);
+        })) : null
+      ])
+    ]);
+  }
+
+  function sorted(items){
+    var how = $('sort').value, list = items.slice();
+    if (how === 'low') list.sort(function(a, b){ return (a.buy == null ? Infinity : a.buy) - (b.buy == null ? Infinity : b.buy); });
+    else if (how === 'high') list.sort(function(a, b){ return (b.buy == null ? -1 : b.buy) - (a.buy == null ? -1 : a.buy); });
+    else if (how === 'name') list.sort(function(a, b){ return a.name.localeCompare(b.name); });
+    return list;
+  }
+
+  function hero(o){
+    $('title').textContent = o.title;
+    document.title = o.title;
+    $('back').hidden = !o.back;
+    $('owner').hidden = !o.owner;
+    $('owner').replaceChildren(o.owner ? el('span', {}, ['Run by ', el('b', { text: o.owner })]) : '');
+    $('note').textContent = o.note || '';
+    $('meta').textContent = o.meta;
+    var src = TEX + (o.metaTex || 'item/emerald') + '.png';
+    $('metaIcon').src = src;
+    $('brandIcon').src = TEX + 'item/emerald.png';
+  }
+
+  // All shops, plus an item search across every shop.
+  function renderDirectory(){
+    var total = shops.reduce(function(n, s){ return n + itemCount(s); }, 0);
+    hero({ title: 'Server shops', note: 'Every shop on the server in one place. Search for an item to see who sells it and who’s cheapest.',
+      meta: (example ? 'Example shops · ' : '') + shops.length + (shops.length === 1 ? ' shop · ' : ' shops · ') + total + ' items' });
+    $('q').placeholder = 'Search every shop for an item'; $('q').setAttribute('aria-label', $('q').placeholder);
+    $('sortWrap').hidden = true; $('pills').replaceChildren(); $('legend').hidden = true;
+    $('editBtn').hidden = true; $('manageBtn').hidden = false;
+    renderManage();
+
+    var q = $('q').value.trim().toLowerCase();
+    var list = $('list'); list.replaceChildren();
+    if (q) {
+      var hits = [];
+      shops.forEach(function(s){ s.categories.forEach(function(c){ c.items.forEach(function(it){
+        if (it.name.toLowerCase().indexOf(q) > -1) hits.push({ it: it, s: s });
+      }); }); });
+      hits.sort(function(a, b){ return a.it.name.localeCompare(b.it.name) || (a.it.buy == null) - (b.it.buy == null) || a.it.buy - b.it.buy; });
+      list.appendChild(hits.length ? el('section', { class: 'cat', 'aria-label': 'Search results' }, [
+        el('div', { class: 'cat-head' }, [el('h2', { text: 'Results' }), el('span', { class: 'count', text: hits.length + (hits.length === 1 ? ' item' : ' items') })]),
+        el('ul', { class: 'grid' }, hits.slice(0, 60).map(function(h, i){ return card(h.it, h.s, i, true); }))
+      ]) : el('div', { class: 'empty' }, [el('b', { text: 'Nobody sells “' + $('q').value.trim() + '” yet' }), 'Try another name.']));
+      return;
+    }
+    if (!shops.length) { list.appendChild(el('div', { class: 'empty' }, [el('b', { text: 'No shops yet' }), 'Check back soon.'])); return; }
+    list.appendChild(el('section', { class: 'cat', 'aria-label': 'Shops' }, [
+      el('div', { class: 'cat-head' }, [el('h2', { text: 'Shops' })]),
+      el('ul', { class: 'shops' }, shops.map(function(s, i){
+        var icons = [];
+        s.categories.forEach(function(c){ c.items.forEach(function(it){ if (icons.length < 4 && it.icon) icons.push(it.icon); }); });
+        var c = CURRENCIES[s.currency];
+        return el('li', { class: 'card scard', style: '--i:' + i }, [el('a', { href: shopUrl(s.slug) }, [
+          el('div', { class: 'collage', style: '--h:' + hue(s.slug), 'aria-hidden': 'true' }, icons.map(function(ic){ return picture(ic, 48, '').firstChild; })),
+          el('div', { class: 'body' }, [
+            el('h3', { text: s.title }),
+            s.owner ? el('p', { class: 'by', text: 'Run by ' + s.owner }) : null,
+            el('p', { class: 'facts' }, [
+              c ? texImg(c.tex, 16) : null,
+              itemCount(s) + (itemCount(s) === 1 ? ' item' : ' items') + ' · paid in ' + currencyName(s.currency)
+            ])
+          ])
+        ])]);
+      }))
+    ]));
+  }
+
+  function renderPills(){
+    var pills = $('pills'); pills.replaceChildren();
+    [{ key: 'all', name: 'All', n: itemCount(shop) }].concat(shop.categories.map(function(c, i){ return { key: String(i), name: c.name, n: c.items.length }; }))
+      .forEach(function(p){
+        pills.appendChild(el('li', {}, [el('button', { type: 'button', 'aria-pressed': String(filter === p.key), onclick: function(){ filter = p.key; renderShop(); } },
+          [p.name, el('span', { class: 'n', text: p.n })])]));
+      });
+  }
+
+  function renderShop(){
+    if (filter !== 'all' && !shop.categories[+filter]) filter = 'all';
+    var c = CURRENCIES[shop.currency];
+    hero({ title: shop.title, owner: shop.owner, note: shop.note, back: true, metaTex: c ? c.tex : null,
+      meta: (example ? 'Example shop' : shop.updated ? 'Updated ' + new Date(shop.updated).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) : 'New shop')
+        + ' · Paid in ' + currencyName(shop.currency) });
+    $('q').placeholder = 'Search ' + shop.title; $('q').setAttribute('aria-label', $('q').placeholder);
+    $('sortWrap').hidden = false; $('editBtn').hidden = false; $('manageBtn').hidden = true;
+    $('editBtn').textContent = keys[shop.slug] ? 'Edit your shop' : 'Edit shop';
+    $('settings').replaceChildren(); $('manage').replaceChildren();
+    renderPills();
+
+    var compared = shop.categories.some(function(cat){ return cat.items.some(function(it){ return rivals(it, shop).length; }); });
+    $('legend').hidden = !compared;
+    $('legend').textContent = 'Cards show what other shops charge for the same item. The cheapest is highlighted.';
+
+    var q = $('q').value.trim().toLowerCase();
+    var list = $('list'); list.replaceChildren();
+    var shown = 0, i = 0;
+    shop.categories.forEach(function(cat, ci){
+      if (filter !== 'all' && filter !== String(ci)) return;
+      var items = sorted(cat.items.filter(function(it){ return !q || it.name.toLowerCase().indexOf(q) > -1; }));
+      if (!items.length) return;
+      shown += items.length;
+      list.appendChild(el('section', { class: 'cat', 'aria-label': cat.name }, [
+        el('div', { class: 'cat-head' }, [el('h2', { text: cat.name }), el('span', { class: 'count', text: items.length + (items.length === 1 ? ' item' : ' items') })]),
+        el('ul', { class: 'grid' }, items.map(function(it){ return card(it, shop, i++, false); }))
+      ]));
+    });
+    if (!shown) list.appendChild(el('div', { class: 'empty' }, [
+      el('b', { text: q ? 'Nothing matches “' + $('q').value.trim() + '”' : 'No items yet' }),
+      q ? 'Try another name, or pick All.' : (keys[shop.slug] ? 'Press “Edit your shop” to add some.' : 'Check back soon.')
+    ]));
+  }
+
+  function renderMissing(){
+    hero({ title: 'Shop not found', note: 'That shop doesn’t exist, or it was removed.', back: true, meta: 'Try the list of all shops' });
+    ['sortWrap', 'editBtn', 'manageBtn'].forEach(function(id){ $(id).hidden = true; });
+    document.querySelector('.view-only').hidden = true;
+    $('list').replaceChildren();
+  }
+
+  function renderView(){
+    $('settings').replaceChildren();
+    if (!current) return renderDirectory();
+    shop = shops.filter(function(s){ return s.slug === current; })[0];
+    shop ? renderShop() : renderMissing();
+  }
+
+  // ---------- admin: create shops and hand out edit links ----------
+  function linkBox(s, key){
+    var url = location.origin + shopUrl(s.slug) + '#key=' + encodeURIComponent(key);
+    var field = el('input', { class: 'in', value: url, readonly: '', 'aria-label': 'Edit link for ' + s.title, onfocus: function(e){ e.target.select(); } });
+    var copy = el('button', { class: 'btn small', type: 'button', text: 'Copy', onclick: function(){
+      (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(function(){ copy.textContent = 'Copied'; },
+        function(){ field.focus(); field.select(); copy.textContent = 'Press Ctrl+C'; });
+    } });
+    return el('div', { class: 'linkbox' }, [
+      el('div', {}, [el('p', { text: 'Send this to ' + (s.owner || 'the owner') + '. It’s only shown once.' }), field]), copy
+    ]);
+  }
+  var shownLinks = {};                         // slug -> key just created, so its link stays visible after a re-render
+  function renderManage(){
+    var m = $('manage'); m.replaceChildren();
+    if (!admin || current) return;
+    var nameIn = el('input', { class: 'in', placeholder: 'Shop name', 'aria-label': 'New shop name' });
+    var ownerIn = el('input', { class: 'in', placeholder: 'Owner’s name', 'aria-label': 'Owner’s name' });
+    var msg = el('p', { class: 'err', hidden: '' });
+    var create = el('button', { class: 'btn primary', type: 'button', text: 'Create shop', onclick: async function(){
+      if (!nameIn.value.trim()) { nameIn.focus(); return; }
+      create.disabled = true; msg.hidden = true;
+      try {
+        var d = await adminCall('POST', API + '?action=create', { title: nameIn.value, owner: ownerIn.value });
+        if (example) { shops = []; example = false; }
+        shops.push(d.shop); shops.sort(function(a, b){ return a.title.localeCompare(b.title); });
+        shownLinks[d.shop.slug] = d.editKey; buildIndex(); renderView();
+      } catch (e) { msg.textContent = e.message; msg.hidden = false; create.disabled = false; }
+    } });
+    m.appendChild(el('div', { class: 'panel manage' }, [
+      el('h2', { text: 'Manage shops' }),
+      el('p', { class: 'hint', text: 'Create a shop for someone, then send them its edit link. Anyone with the link can edit that shop only. You can edit every shop yourself by opening it.' }),
+      el('div', { class: 'createrow' }, [nameIn, ownerIn, create]), msg,
+      example ? null : el('ul', { class: 'shoplist' }, shops.map(function(s){
+        return el('li', {}, [
+          el('div', { class: 'who' }, [el('a', { href: shopUrl(s.slug), text: s.title }), el('span', { text: (s.owner ? s.owner + ' · ' : '') + itemCount(s) + ' items' })]),
+          el('button', { class: 'btn small', type: 'button', text: 'New edit link', onclick: async function(){
+            if (!confirm('Make a new edit link for “' + s.title + '”? The old link will stop working.')) return;
+            try { var d = await adminCall('POST', API + '?action=rotate&slug=' + s.slug); shownLinks[s.slug] = d.editKey; renderManage(); }
+            catch (e) { alert(e.message); }
+          } }),
+          el('button', { class: 'btn small danger', type: 'button', text: 'Delete', onclick: async function(){
+            if (!confirm('Delete “' + s.title + '” and all its prices? This can’t be undone.')) return;
+            try { await adminCall('DELETE', API + '?slug=' + s.slug); shops = shops.filter(function(x){ return x !== s; }); buildIndex(); renderView(); }
+            catch (e) { alert(e.message); }
+          } }),
+          shownLinks[s.slug] ? linkBox(s, shownLinks[s.slug]) : null
+        ]);
+      }))
+    ]));
+  }
+  async function adminCall(method, url, body){
+    var token = await clerk.session.getToken();
+    var res = await fetch(url, { method: method, headers: { 'content-type': 'application/json', authorization: 'Bearer ' + token }, body: body ? JSON.stringify(body) : undefined });
+    var data = await res.json().catch(function(){ return {}; });
+    if (!res.ok) throw new Error(data.message || data.error || 'Request failed (' + res.status + ')');
+    return data;
+  }
+
+  // ---------- edit a shop ----------
+  function touch(){ dirty = true; $('status').textContent = 'Unsaved changes.'; }
+  function input(value, cls, label, onchange, type){
+    return el('input', { class: 'in ' + (cls || ''), value: value == null ? '' : value, 'aria-label': label, placeholder: label, type: type || 'text',
+      inputmode: type === 'number' ? 'decimal' : null, min: type === 'number' ? '0' : null, step: type === 'number' ? 'any' : null,
+      oninput: function(e){ onchange(e.target.value); touch(); } });
+  }
+  function num(v){ return v === '' ? null : Math.max(0, Number(v)); }
+
+  // Icon box with a live preview next to it.
+  function iconPicker(it){
+    var wrap = el('div', { class: 'iconpick' });
+    var preview = picture(it.icon, 26, 'mini');
+    var box = input(it.icon, '', 'Icon, e.g. diamond', function(v){
+      it.icon = v.trim();
+      var fresh = picture(it.icon, 26, 'mini'); wrap.replaceChild(fresh, preview); preview = fresh;
+    });
+    box.setAttribute('list', 'texlist'); box.setAttribute('autocapitalize', 'off'); box.setAttribute('spellcheck', 'false');
+    wrap.append(preview, box);
+    return wrap;
+  }
+
+  function currencyPicker(){
+    var known = !!CURRENCIES[draft.currency];
+    var preview = el('span', { class: 'mini', 'aria-hidden': 'true' });
+    function paint(){
+      preview.replaceChildren();
+      var c = CURRENCIES[draft.currency];
+      if (c) preview.appendChild(texImg(c.tex, 26));
+    }
+    var custom = input(known ? '' : draft.currency, '', 'Currency name, e.g. coins', function(v){ draft.currency = v; });
+    custom.hidden = known; custom.style.marginTop = '8px';
+    var select = el('select', { class: 'in', 'aria-label': 'Currency', onchange: function(e){
+      var v = e.target.value;
+      custom.hidden = v !== 'other';
+      draft.currency = v === 'other' ? custom.value : v;
+      if (v === 'other') custom.focus();
+      paint(); touch();
+    } }, Object.keys(CURRENCIES).map(function(k){
+      return el('option', { value: k, text: CURRENCIES[k].name, selected: draft.currency === k ? '' : null });
+    }).concat([el('option', { value: 'other', text: 'Other…', selected: known ? null : '' })]));
+    paint();
+    return el('div', {}, [el('div', { class: 'curpick' }, [preview, select]), custom]);
+  }
+
+  function renderEdit(){
+    $('manage').replaceChildren();
+    $('settings').replaceChildren(
+      el('div', { class: 'panel' }, [
+        el('h2', { text: 'Shop details' }),
+        el('div', { class: 'settings' }, [
+          el('label', { class: 'field' }, [el('span', { text: 'Shop name' }), input(draft.title, '', 'Shop name', function(v){ draft.title = v; })]),
+          el('div', { class: 'field' }, [el('span', { text: 'Currency' }), currencyPicker()]),
+          el('label', { class: 'field' }, [el('span', { text: 'Run by' }), input(draft.owner, '', 'Owner’s name', function(v){ draft.owner = v; })]),
+          el('label', { class: 'field wide' }, [el('span', { text: 'Tagline' }), input(draft.note, '', 'Tagline', function(v){ draft.note = v; })])
+        ]),
+        el('p', { class: 'hint', text: 'Icons are Minecraft texture names like diamond, oak_log or golden_apple (an emoji works too). Items with the same icon and unit are compared with other shops automatically. Leave the price empty if an item isn’t for sale.' })
+      ])
+    );
+
+    var list = $('list'); list.replaceChildren();
+    draft.categories.forEach(function(cat, ci){
+      var table = el('div', { class: 'etable' }, [
+        el('div', { class: 'erow head' }, ['Icon', 'Item', 'Unit', 'Price', ''].map(function(t){ return el('span', { text: t }); }))
+      ]);
+      cat.items.forEach(function(it, ii){
+        table.appendChild(el('div', { class: 'erow' }, [
+          iconPicker(it),
+          input(it.name, 'name-in', 'Item name', function(v){ it.name = v; }),
+          input(it.unit, '', 'Unit, e.g. per stack', function(v){ it.unit = v; }),
+          el('span', {}, [el('span', { class: 'mlabel', text: 'Price', 'aria-hidden': 'true' }), input(it.buy, 'num', 'Price', function(v){ it.buy = num(v); }, 'number')]),
+          el('div', { class: 'rowbtns' }, [
+            el('button', { class: 'btn', type: 'button', text: '↑', 'aria-label': 'Move ' + (it.name || 'item') + ' up', disabled: ii === 0 ? '' : null,
+              onclick: function(){ cat.items.splice(ii - 1, 0, cat.items.splice(ii, 1)[0]); touch(); renderEdit(); } }),
+            el('button', { class: 'btn', type: 'button', text: '↓', 'aria-label': 'Move ' + (it.name || 'item') + ' down', disabled: ii === cat.items.length - 1 ? '' : null,
+              onclick: function(){ cat.items.splice(ii + 1, 0, cat.items.splice(ii, 1)[0]); touch(); renderEdit(); } }),
+            el('button', { class: 'btn danger', type: 'button', text: '✕', 'aria-label': 'Remove ' + (it.name || 'item'),
+              onclick: function(){ cat.items.splice(ii, 1); touch(); renderEdit(); } })
+          ])
+        ]));
+      });
+      table.appendChild(el('div', { class: 'addrow' }, [
+        el('button', { class: 'btn small', type: 'button', text: '+ Add item', onclick: function(){
+          cat.items.push({ icon: '', name: '', unit: '', buy: null }); touch(); renderEdit();
+          var rows = $('list').querySelectorAll('section')[ci].querySelectorAll('.erow:not(.head)');
+          rows[rows.length - 1].querySelector('.name-in').focus();
+        } })
+      ]));
+      list.appendChild(el('section', {}, [
+        el('div', { class: 'cathead' }, [
+          input(cat.name, '', 'Category name', function(v){ cat.name = v; }),
+          el('button', { class: 'btn small', type: 'button', text: '↑', 'aria-label': 'Move category up', disabled: ci === 0 ? '' : null,
+            onclick: function(){ draft.categories.splice(ci - 1, 0, draft.categories.splice(ci, 1)[0]); touch(); renderEdit(); } }),
+          el('button', { class: 'btn small danger', type: 'button', text: 'Delete category', onclick: function(){
+            if (cat.items.length && !confirm('Delete “' + cat.name + '” and its ' + cat.items.length + ' items?')) return;
+            draft.categories.splice(ci, 1); touch(); renderEdit();
+          } })
+        ]),
+        table
+      ]));
+    });
+    list.appendChild(el('p', { style: 'margin:24px 0 0' }, [
+      el('button', { class: 'btn', type: 'button', text: '+ Add category', onclick: function(){
+        draft.categories.push({ name: 'New category', items: [] }); touch(); renderEdit();
+        var heads = $('list').querySelectorAll('.cathead input'); heads[heads.length - 1].select();
+      } })
+    ]));
+  }
+
+  function render(){ document.body.classList.toggle('editing', editing); editing ? renderEdit() : renderView(); }
+
+  function startEditing(){
+    notice('');
+    draft = clone(shop); editing = true; dirty = false;
+    $('status').textContent = 'Editing. Changes go live when you save.';
+    render(); window.scrollTo(0, 0);
+  }
+  function stopEditing(){ editing = false; dirty = false; draft = null; render(); }
+
+  $('cancelBtn').addEventListener('click', function(){
+    if (dirty && !confirm('Discard your changes?')) return;
+    stopEditing();
+  });
+  $('saveBtn').addEventListener('click', async function(){
+    var btn = this; btn.disabled = true; $('status').textContent = 'Saving…';
+    try {
+      var headers = { 'content-type': 'application/json' };
+      if (keys[shop.slug]) headers['x-shop-key'] = keys[shop.slug];
+      else headers.authorization = 'Bearer ' + (clerk && clerk.session ? await clerk.session.getToken() : '');
+      var res = await fetch(API + '?slug=' + shop.slug, { method: 'PUT', headers: headers, body: JSON.stringify({ shop: draft }) });
+      var data = await res.json().catch(function(){ return {}; });
+      if (!res.ok) throw new Error(data.message || data.error || 'Save failed (' + res.status + ')');
+      shops = shops.map(function(s){ return s.slug === shop.slug ? data.shop : s; });
+      buildIndex(); stopEditing();
+      notice('Saved. Your changes are live.');
+    } catch (err) {
+      $('status').textContent = err.message;
+    } finally { btn.disabled = false; }
+  });
+  window.addEventListener('beforeunload', function(e){ if (editing && dirty) { e.preventDefault(); e.returnValue = ''; } });
+  $('q').addEventListener('input', renderView);
+  $('sort').addEventListener('change', renderView);
+
+  // ---------- sign-in (same Clerk setup as /admin) ----------
+  function clerkFrontendApi(key){
+    var enc = key.replace(/^pk_(?:test|live)_/, '').replace(/-/g, '+').replace(/_/g, '/');
+    return atob(enc + '='.repeat((4 - enc.length % 4) % 4)).replace(/\$$/, '');
+  }
+  function loadScript(src, attrs){
+    return new Promise(function(resolve, reject){
+      var s = document.createElement('script'); s.src = src; s.crossOrigin = 'anonymous';
+      Object.entries(attrs || {}).forEach(function(a){ s.setAttribute(a[0], a[1]); });
+      s.onload = resolve; s.onerror = function(){ reject(new Error('Could not load sign-in. Check your connection.')); };
+      document.head.appendChild(s);
+    });
+  }
+  async function loadClerk(){
+    if (clerk) return clerk;
+    var config = await fetch('/api/auth-config').then(function(r){ return r.json(); });
+    if (!config.configured) throw new Error('Sign-in isn’t set up on this site yet.');
+    var api = clerkFrontendApi(config.publishableKey);
+    await loadScript('https://' + api + '/npm/@clerk/ui@1/dist/ui.browser.js');
+    await loadScript('https://' + api + '/npm/@clerk/clerk-js@6/dist/clerk.browser.js', { 'data-clerk-publishable-key': config.publishableKey });
+    await window.Clerk.load({ publishableKey: config.publishableKey, ui: { ClerkUI: window.__internal_ClerkUICtor } });
+    clerk = window.Clerk;
+    return clerk;
+  }
+  async function checkAdmin(){
+    var token = await clerk.session.getToken();
+    var res = await fetch('/api/auth', { headers: { authorization: 'Bearer ' + token } });
+    if (!res.ok) { var d = await res.json().catch(function(){ return {}; }); throw new Error(d.error || 'This account can’t manage shops.'); }
+  }
+  // Runs then() once the admin is signed in, showing the Clerk sign-in first if needed.
+  async function asAdmin(then){
+    var dlg = $('authDialog'), err = $('authErr');
+    err.hidden = true;
+    try {
+      await loadClerk();
+      if (clerk.session) { await checkAdmin(); admin = true; then(); return; }
+      dlg.showModal();
+      clerk.mountSignIn($('signIn'), { afterSignInUrl: location.href, afterSignUpUrl: location.href });
+      clerk.addListener(async function(e){
+        if (!e.session || admin) return;
+        try { await checkAdmin(); admin = true; dlg.close(); then(); }
+        catch (x) { err.textContent = x.message; err.hidden = false; }
+      });
+    } catch (x) {
+      if (!dlg.open) dlg.showModal();
+      err.textContent = x.message; err.hidden = false;
+    }
+  }
+  $('editBtn').addEventListener('click', function(){ keys[shop.slug] ? startEditing() : asAdmin(startEditing); });
+  $('manageBtn').addEventListener('click', function(){ asAdmin(renderView); });
+
+  // ---------- load ----------
+  $('texlist').append.apply($('texlist'), COMMON.map(function(n){ return el('option', { value: n }); }));
+  function start(list){
+    example = !list || !list.length;
+    shops = example ? clone(EXAMPLES) : list;
+    buildIndex(); render();
+  }
+  fetch(API).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){ start(d && d.shops); }, function(){ start(null); })
+    .then(function(){
+      if (!current || !keys[current] || example) return;
+      // Check the edit key is still good; a reset link replaces it.
+      fetch(API + '?action=verify&slug=' + current, { method: 'POST', headers: { 'x-shop-key': keys[current] } }).then(function(r){
+        if (r.ok) { if (freshKey) notice('You can edit this shop. This browser will remember your edit link.'); return; }
+        delete keys[current]; saveKeys(); render();
+        notice('That edit link has been replaced. Ask the server admin for a new one.', true);
+      });
+    });
+})();
+</script>
+</body>
+</html>
