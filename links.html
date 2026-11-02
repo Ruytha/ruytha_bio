@@ -19,11 +19,15 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Gochi+Hand&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Gochi+Hand&display=swap">
 <link rel="stylesheet" href="assets/styles.css">
 <link rel="stylesheet" href="assets/home.css">
 <link rel="stylesheet" href="assets/player.css">
 <style>
+  /* same rounded font as the home page */
+  :root { --font: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", system-ui, sans-serif; }
+  .lk-name, .tile-title { font-family: var(--font); letter-spacing: -0.02em; }
+
   /* ---------- layout: one column for phones, culture cards either side on desktop ---------- */
   main.lk {
     display: block;
@@ -315,9 +319,13 @@
         <span class="blob" data-lobes="6"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.4h9M4 11h13M4 15.6h7"/><path d="M17.6 14.2V7.4l3.4-.8"/><circle cx="16.2" cy="16.6" r="2"/></svg></span>
         <span class="tile-text"><span class="tile-title">Spicy Lyrics</span><span class="tile-sub">my TTML profile</span></span><span class="chev" aria-hidden="true">›</span></a></li>
 
-      <li><a class="tile" href="https://ruytha.blogspot.com" target="_blank" rel="noopener">
+      <li><a class="tile" href="/blog">
         <span class="blob" data-lobes="5"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3.4h8.6L19 8.8v11.8H5Z"/><path d="M13.4 3.4v5.4H19M8 13h8M8 16.6h5.4"/></svg></span>
-        <span class="tile-text"><span class="tile-title">Blog</span><span class="tile-sub">anime and other opinions</span></span><span class="chev" aria-hidden="true">›</span></a></li>
+        <span class="tile-text"><span class="tile-title">Blog</span><span class="tile-sub">reviews and opinions</span></span><span class="chev" aria-hidden="true">›</span></a></li>
+
+      <li><a class="tile" href="https://www.youtube.com/@ruytha.m4a" target="_blank" rel="noopener">
+        <span class="blob" data-lobes="5"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.8" y="5.4" width="18.4" height="13.2" rx="4"/><path d="M10.2 9.4v5.2l4.4-2.6Z"/></svg></span>
+        <span class="tile-text"><span class="tile-title">YouTube</span><span class="tile-sub">@ruytha.m4a</span></span><span class="chev" aria-hidden="true">›</span></a></li>
 
       <li><a class="tile" href="https://yoursit.ee/ruytha" target="_blank" rel="noopener">
         <span class="blob" data-lobes="4"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.4"/><path d="M2.8 12h18.4M12 2.6a14.4 14.4 0 0 1 0 18.8 14.4 14.4 0 0 1 0-18.8"/></svg></span>

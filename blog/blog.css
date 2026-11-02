@@ -1,30 +1,42 @@
-/* Blog: the list at /blog and every post page. Matches the main site (navy, Geist, Bricolage Grotesque). */
+/* Blog: the list at /blog and every post page. Matches the main site (night sky, M PLUS Rounded 1c). */
 :root{
   --bg:#030718; --surface:rgba(140,165,235,.06); --surface-2:rgba(140,165,235,.11); --line:rgba(190,205,255,.13);
-  --text:#eef1fa; --muted:#9aa3bf; --faint:#6f7894; --accent:#9cc7f2; --accent-ink:#08142e;
-  --font:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  --display:"Bricolage Grotesque",var(--font);
+  --text:#eef1fa; --muted:#a6aed3; --faint:#7a83a8; --accent:#ffb3d9; --accent-2:#a8d8ff; --accent-ink:#1a1430;
+  --star:rgba(255,255,255,.5);
+  --font:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN",system-ui,sans-serif;
+  --display:var(--font);
   --mono:ui-monospace,"Cascadia Code",Consolas,monospace;
 }
 *{box-sizing:border-box}
 [hidden]{display:none !important}
 html{background:var(--bg)}
 body{margin:0;min-height:100vh;color:var(--text);font:17px/1.7 var(--font);-webkit-font-smoothing:antialiased;
-  background:radial-gradient(70% 45% at 50% -8%,rgba(70,100,220,.18),transparent 70%),var(--bg) no-repeat}
+  /* the same still night sky as the home page */
+  background:
+    radial-gradient(60% 40% at 15% -5%,rgba(90,120,255,.22),transparent 70%),
+    radial-gradient(45% 35% at 95% 25%,rgba(255,140,200,.12),transparent 70%),
+    radial-gradient(1.2px 1.2px at 20px 30px,var(--star),transparent 100%),
+    radial-gradient(1px 1px at 120px 80px,var(--star),transparent 100%),
+    radial-gradient(1.4px 1.4px at 200px 160px,var(--star),transparent 100%),
+    radial-gradient(1px 1px at 60px 210px,var(--star),transparent 100%),
+    var(--bg);
+  background-size:100% 1400px,100% 1400px,300px 260px,300px 260px,300px 260px,300px 260px,auto;
+  background-repeat:no-repeat,no-repeat,repeat,repeat,repeat,repeat,repeat}
 a{color:var(--accent);text-underline-offset:3px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
 .w{max-width:1040px;margin:0 auto;padding:0 20px}
 .narrow{max-width:720px}
 
 .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 0}
-.bar .home{font:700 18px var(--display);color:var(--text);text-decoration:none;letter-spacing:-.01em}
+.bar .home{font:700 18px var(--display);color:var(--text);text-decoration:none;letter-spacing: -0.005em}
 .bar nav{display:flex;gap:4px}
 .bar nav a{color:var(--muted);text-decoration:none;font-size:15px;padding:6px 12px;border-radius:999px}
 .bar nav a:hover,.bar nav a[aria-current]{color:var(--text);background:var(--surface-2)}
 
 /* list */
 .intro{padding:48px 0 12px}
-.intro h1{font:800 clamp(44px,8vw,80px)/.95 var(--display);letter-spacing:-.04em;margin:0}
+.intro h1{font:800 clamp(44px,8vw,80px)/.95 var(--display);letter-spacing: -0.025em;margin:0;
+  background:linear-gradient(100deg,var(--text) 30%,var(--accent-2) 70%,var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
 .intro p{color:var(--muted);font-size:clamp(17px,2vw,20px);margin:16px 0 0;max-width:52ch}
 .posts{list-style:none;margin:40px 0 0;padding:0;display:grid;gap:18px}
 .pcard a{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:24px;align-items:center;padding:16px;border:1px solid var(--line);border-radius:20px;
@@ -32,7 +44,7 @@ a{color:var(--accent);text-underline-offset:3px}
 .pcard a:hover{background:var(--surface-2);border-color:rgba(190,205,255,.22);transform:translateY(-2px)}
 .pcard .txt{padding:8px 8px 8px 12px;min-width:0}
 .pcard .when{color:var(--faint);font-size:14px}
-.pcard h2{font:700 clamp(22px,3vw,30px)/1.15 var(--display);letter-spacing:-.02em;margin:6px 0 0}
+.pcard h2{font:700 clamp(22px,3vw,30px)/1.15 var(--display);letter-spacing: -0.01em;margin:6px 0 0}
 .pcard p{color:var(--muted);margin:10px 0 0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .pcard .cover{aspect-ratio:16/10;border-radius:14px;overflow:hidden;background:var(--surface-2)}
 .pcard .cover img{width:100%;height:100%;object-fit:cover;display:block}
@@ -47,13 +59,13 @@ a{color:var(--accent);text-underline-offset:3px}
 .post{padding:40px 0 0}
 .back{display:inline-block;color:var(--muted);text-decoration:none;font-size:15px;margin:0 0 22px}
 .back:hover{color:var(--text)}
-.post h1{font:800 clamp(36px,6vw,58px)/1.02 var(--display);letter-spacing:-.035em;margin:0}
+.post h1{font:800 clamp(36px,6vw,58px)/1.02 var(--display);letter-spacing: -0.0175em;margin:0}
 .post .meta{color:var(--faint);font-size:15px;margin:16px 0 0}
 .prose{margin:36px 0 0;overflow-wrap:break-word}
 .prose > *:first-child{margin-top:0}
 .prose p,.prose ul,.prose ol,.prose blockquote,.prose pre,.prose figure,.prose table{margin:0 0 1.3em}
-.prose h2{font:700 30px/1.2 var(--display);letter-spacing:-.02em;margin:1.8em 0 .5em}
-.prose h3{font:700 23px/1.25 var(--display);letter-spacing:-.01em;margin:1.6em 0 .4em}
+.prose h2{font:700 30px/1.2 var(--display);letter-spacing: -0.01em;margin:1.8em 0 .5em}
+.prose h3{font:700 23px/1.25 var(--display);letter-spacing: -0.005em;margin:1.6em 0 .4em}
 .prose h4{font:600 19px var(--font);margin:1.4em 0 .3em}
 .prose strong{color:#fff;font-weight:650}
 .prose ul,.prose ol{padding-left:1.4em}

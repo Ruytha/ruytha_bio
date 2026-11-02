@@ -184,9 +184,10 @@
     $('posters').innerHTML = FAVS.filter(function (f) {
       return filter === 'all' || (filter === 'top' ? f[5] : f[2] === filter);
     }).map(function (f) {
-      return '<li class="poster"><img src="assets/img/media/' + f[0] + '.jpg" alt="' + esc(f[1]) + ' cover art" loading="lazy" decoding="async">' +
+      return '<li class="poster"><button class="poster-btn" type="button" data-fav="' + f[0] + '" aria-haspopup="dialog">' +
+        '<img src="assets/img/media/' + f[0] + '.jpg" alt="' + esc(f[1]) + ' cover art" loading="lazy" decoding="async">' +
         (f[5] ? '<span class="top">★ top pick</span>' : '') +
-        '<b>' + esc(f[1]) + '</b><span>' + (f[2] === 'anime' ? 'Anime' : 'Game') + ' · ' + esc(f[3]) + ' · ' + f[4] + '</span></li>';
+        '<b>' + esc(f[1]) + '</b><span>' + (f[2] === 'anime' ? 'Anime' : 'Game') + ' · ' + esc(f[3]) + ' · ' + f[4] + '</span></button></li>';
     }).join('');
   }
   showFavs('all');
@@ -238,6 +239,71 @@
         .then(function () { submit.disabled = false; });
     });
   })();
+
+
+  /* ---------- favourites popup: the summary for each one, from favs.json ---------- */
+  (function () {
+    var dlg = $('favPop'), data = null;
+    function open(id) {
+      var f = (data || []).filter(function (x) { return x.id === id; })[0];
+      if (!f) return;
+      $('favImg').src = 'assets/img/media/' + f.id + '.jpg';
+      $('favKind').textContent = (f.kind === 'anime' ? 'Anime' : 'Game') + (f.star ? ' · ★ top pick' : '');
+      $('favTitle').textContent = f.title;
+      $('favSub').textContent = f.sub || '';
+      $('favTags').innerHTML = (f.genres || []).map(function (g) { return '<li>' + esc(g) + '</li>'; }).join('');
+      $('favBody').innerHTML = (f.summary || []).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') +
+        (f.take ? '<p><b>My take:</b> ' + esc(f.take) + '</p>' : '');
+      var facts = [[f.kind === 'anime' ? 'Studio' : 'Made by', f.by], ['Year', f.year], ['Length', f.length], ['Based on', f.source], ['Plays on', f.platforms]];
+      $('favFacts').innerHTML = facts.filter(function (x) { return x[1]; }).map(function (x) { return '<dt>' + x[0] + '</dt><dd>' + esc(x[1]) + '</dd>'; }).join('');
+      if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+    }
+    $('posters').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-fav]'); if (!b) return;
+      if (data) return open(b.dataset.fav);
+      fetch('assets/favs.json').then(function (r) { return r.json(); }).then(function (d) { data = d; open(b.dataset.fav); });
+    });
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });   // click outside the card
+  })();
+
+  /* ---------- showreel: clips play while they're on screen; YouTube loads only when clicked ---------- */
+  (function () {
+    var vids = Array.prototype.slice.call(document.querySelectorAll('.clip video'));
+    vids.forEach(function (v) {
+      v.addEventListener('click', function () { v.paused ? v.play() : v.pause(); });
+    });
+    if (!reduce && 'IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting) { e.target.preload = 'auto'; var p = e.target.play(); if (p && p.catch) p.catch(function () {}); }
+          else e.target.pause();
+        });
+      }, { threshold: 0.35 });
+      vids.forEach(function (v) { io.observe(v); });
+    }
+    document.querySelectorAll('.yt-card').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var f = document.createElement('iframe');
+        f.className = 'yt-frame';
+        f.src = 'https://www.youtube-nocookie.com/embed/' + b.dataset.yt + '?autoplay=1&rel=0';
+        f.title = b.querySelector('b').textContent;
+        f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        f.allowFullscreen = true;
+        b.replaceWith(f);
+      });
+    });
+  })();
+
+  /* ---------- from the blog: the three newest posts, once there are any ---------- */
+  fetch('/blog/posts.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }).then(function (posts) {
+    if (!posts || !posts.length) return;
+    $('postList').innerHTML = posts.slice(0, 3).map(function (p) {
+      var d = new Date(p.date + 'T12:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+      return '<li><a class="glass" href="/blog/' + esc(p.slug) + '">' + (p.cover ? '<img src="' + esc(p.cover) + '" alt="" loading="lazy" decoding="async">' : '') +
+        '<span class="when">' + d + '</span><b>' + esc(p.title) + '</b>' + (p.description ? '<p>' + esc(p.description) + '</p>' : '') + '</a></li>';
+    }).join('');
+    $('blog').hidden = false;
+  });
 
   /* ---------- femboy mode (remembered under the same key the old site used) ---------- */
   (function () {

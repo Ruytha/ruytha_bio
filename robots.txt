@@ -1,8 +1,7 @@
 User-agent: *
+Allow: /$
+Allow: /blog
+Disallow: /blog/write
 Allow: /studios
-Allow: /assets/studios.css
-Allow: /assets/studios.js
-Allow: /assets/img/favicon.png
-Allow: /assets/img/studios/
-Allow: /assets/video/studios-reel
+Allow: /assets/
 Disallow: /
