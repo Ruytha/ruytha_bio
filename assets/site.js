@@ -367,6 +367,39 @@
     btn.addEventListener('click', function () { set(!root.classList.contains('femboy'), true); });
   })();
 
+  /* ---------- またね！ at the bottom: tap it to say bye another way, with sakura ---------- */
+  (function () {
+    var btn = $('bye'), word = $('byeWord'), en = $('byeEn'), layer = $('hearts');
+    if (!btn) return;
+    var BYES = [['またね！', 'see you next time'], ['じゃあね！', 'later!'], ['バイバイ！', 'bye bye!'], ['おやすみ！', 'good night!'], ['また明日！', 'see you tomorrow'], ['元気でね！', 'take care!']];
+    var at = 0;
+    function petals() {
+      if (reduce) return;
+      for (var i = 0; i < 26; i++) {
+        var p = document.createElement('span');
+        p.className = 'petal'; p.textContent = i % 3 ? '❀' : '✿';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.fontSize = (12 + Math.random() * 18) + 'px';
+        p.style.animationDelay = Math.random() * 1.2 + 's';
+        p.style.setProperty('--t', (3 + Math.random() * 2.5) + 's');
+        p.style.setProperty('--sway', (20 + Math.random() * 50) * (Math.random() < 0.5 ? -1 : 1) + 'px');
+        layer.appendChild(p);
+        p.addEventListener('animationend', function () { this.remove(); });
+      }
+    }
+    btn.addEventListener('click', function () {
+      at = (at + 1) % BYES.length;
+      word.innerHTML = '';
+      Array.prototype.forEach.call(BYES[at][0], function (ch, n) {
+        var i = document.createElement('i'); i.textContent = ch; i.style.setProperty('--n', n); word.appendChild(i);
+      });
+      en.textContent = BYES[at][1];
+      btn.setAttribute('aria-label', BYES[at][0] + ' ' + BYES[at][1] + '. Tap to say bye another way');
+      btn.classList.remove('wave'); void btn.offsetWidth; btn.classList.add('wave');
+      petals();
+    });
+  })();
+
   /* ---------- entrances: each part rises in once, staggered with its siblings ----------
      A plain scroll check, so nothing can stay hidden if an observer is throttled. */
   (function () {

@@ -351,7 +351,7 @@ button, input, textarea { font: inherit; color: inherit; }
   font: 800 clamp(18px, 1.6vw, 24px)/1 var(--ja); letter-spacing: 0.3em; color: var(--pink); opacity: 0.75;
 }
 .h3 .ja { margin-left: 8px; font-size: 0.7em; color: var(--pink); }
-.bye-en span[lang] { font-family: var(--ja); font-weight: 700; color: var(--pink); }
+.bye-en span[lang] { white-space: nowrap; font-family: var(--ja); font-weight: 700; color: var(--pink); }
 .feature-desc { margin: 6px 0 4px; font-size: 15px; line-height: 1.55; color: rgba(255, 255, 255, 0.86); }
 .feature-desc i { font-style: normal; font-weight: 700; color: #fff; }
 .feature .arrow-link { margin-top: 8px; color: var(--cool); }
@@ -455,10 +455,33 @@ button, input, textarea { font: inherit; color: inherit; }
 /* ============================================================
    Footer
    ============================================================ */
-.end { margin-top: clamp(140px, 15vw, 220px); padding: 0 var(--pad) 40px; text-align: center; overflow: hidden; }
+.end { margin-top: clamp(64px, 8vw, 120px); padding: 0 var(--pad) 40px; text-align: center; overflow: hidden; }
+/* full-width banner; its black wave is keyed out so the night sky shows through */
+.end-banner {
+  display: block; width: calc(100% + 2 * var(--pad)); max-width: none; height: auto; margin: 0 calc(-1 * var(--pad));
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%); mask-image: linear-gradient(to bottom, transparent, #000 14%);
+}
+.end-banner + .bye { position: relative; margin-top: -7vw; }
 .bye {
-  margin: 0; font: 800 clamp(96px, 17vw, 260px)/1 var(--ja); letter-spacing: -0.01em;
-  background: linear-gradient(100deg, var(--hot), var(--lilac), var(--cool)); -webkit-background-clip: text; background-clip: text; color: transparent;
+  margin: 0; padding: 0.08em 0 0; border: 0; background: none; cursor: pointer;
+  font: 800 clamp(60px, 15vw, 240px)/1 var(--ja); letter-spacing: -0.01em; color: var(--lilac);
+}
+.bye i { display: inline-block; font-style: normal; transition: translate 0.35s var(--boing), rotate 0.35s var(--boing); }
+.bye i:nth-child(1) { color: var(--hot); }
+.bye i:nth-child(2) { color: #e9b8f2; }
+.bye i:nth-child(3) { color: var(--lilac); }
+.bye i:nth-child(4) { color: #b8c8ff; }
+.bye i:nth-child(5) { color: var(--cool); }
+.bye i:hover { translate: 0 -0.12em; rotate: -6deg; }
+.bye.wave i { animation: hop 0.6s var(--boing) calc(var(--n) * 70ms) both; }
+@keyframes hop { 40% { translate: 0 -0.22em; rotate: 8deg; } }
+.bye-hint { margin: 10px 0 0; font-size: 14px; color: var(--muted); opacity: 0.7; }
+.petal { position: absolute; top: -40px; color: #ffc4e1; animation: fall var(--t) linear forwards; }
+@keyframes fall {
+  25% { translate: calc(var(--sway) * 1) 25vh; rotate: 90deg; }
+  50% { translate: calc(var(--sway) * -1) 50vh; rotate: 180deg; }
+  75% { translate: var(--sway) 75vh; rotate: 270deg; }
+  to { translate: 0 calc(100vh + 60px); rotate: 360deg; opacity: 0.6; }
 }
 .bye-en { margin: 4px 0 0; font: 700 clamp(20px, 2vw, 26px) var(--display); color: var(--muted); letter-spacing: -0.01em; }
 .end-row { max-width: calc(var(--max) - 2 * var(--pad)); margin: 64px auto 0; display: flex; justify-content: space-between; align-items: center; gap: 16px 32px; flex-wrap: wrap; text-align: left; }
@@ -635,4 +658,8 @@ button, input, textarea { font: inherit; color: inherit; }
 @media (max-width: 1000px) {
   .feature { background: rgba(10, 12, 30, 0.6); }
   .feature-text { position: static; max-width: none; border-radius: 0; background: none; }
+}
+@media (max-width: 640px) {
+  .end-banner { height: 240px; object-fit: cover; object-position: 88% 50%; }
+  .end-banner + .bye { margin-top: -40px; }
 }
