@@ -135,6 +135,11 @@
       $('npLabel').textContent = playing ? 'Now playing ♪' : 'Last played ' + (first.date ? ago(first.date.uts * 1000) : '');
       $('npTrack').textContent = first.name + ' · ' + artist(first);
       if (art(first)) { $('npArt').style.backgroundImage = 'url("' + art(first) + '")'; albumColours(art(first)); }
+      // While a song is playing Last.fm also returns its earlier scrobble right after it; show it once.
+      tracks = tracks.filter(function (t, i) {
+        var prev = tracks[i - 1];
+        return !(prev && prev['@attr'] && prev['@attr'].nowplaying === 'true' && prev.name === t.name && artist(prev) === artist(t));
+      });
       sheet.innerHTML = tracks.slice(0, 8).map(function (t) {
         var now = t['@attr'] && t['@attr'].nowplaying === 'true';
         return '<li><a href="' + esc(t.url) + '" target="_blank" rel="noopener"><span class="line">' + esc(t.name) + '</span>' +
@@ -156,10 +161,37 @@
       $('weekArtists').innerHTML = w.artists.map(function (a) {
         return '<li><a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.name) + '</a><i style="width:' + Math.max(6, a.plays / max * 100) + '%"></i><b>' + a.plays + '</b></li>';
       }).join('');
-      var t = w.tracks[0];
-      if (t) $('weekTop').innerHTML = 'Most played: <b>' + esc(t.name) + '</b> by ' + esc(t.artist) + ', ' + t.plays + ' times';
+      $('weekTracks').innerHTML = w.tracks.map(function (t) {
+        return '<li><a href="' + esc(t.url) + '" target="_blank" rel="noopener"><span class="t"><b>' + esc(t.name) + '</b><span>' + esc(t.artist) + '</span></span><span class="n">' + t.plays + ' plays</span></a></li>';
+      }).join('');
     })
-    .catch(function () { $('week').hidden = true; });
+    .catch(function () { $('week').hidden = true; $('weekTracks').closest('.charts').querySelector('.h3').hidden = true; });
+
+  // Albums on repeat this week; covers Last.fm doesn't have become a pastel tile with the album's name.
+  lastfm('&method=user.gettopalbums&period=7day&limit=6').then(function (d) {
+    var list = (d.topalbums && d.topalbums.album) || [];
+    if (!Array.isArray(list)) list = [list];
+    if (!list.length) throw new Error('none');
+    var TILES = ['var(--pink)', 'var(--blue)', 'var(--lemon)', 'var(--mint)', 'var(--lilac)', 'var(--peach)'];
+    $('weekAlbums').innerHTML = list.slice(0, 6).map(function (a, i) {
+      var img = art(a);
+      return '<li class="album"><a href="' + esc(a.url) + '" target="_blank" rel="noopener">' +
+        '<span class="cover" style="--tc:' + TILES[i % TILES.length] + (img ? ';background-image:url(&quot;' + esc(img) + '&quot;)' : '') + '">' + (img ? '' : esc(a.name)) + '</span>' +
+        '<b>' + esc(a.name) + '</b><span>' + esc(a.artist && a.artist.name) + ' · ' + a.playcount + ' plays</span></a></li>';
+    }).join('');
+  }).catch(function () { $('albumsBox').hidden = true; });
+
+  // All-time numbers from the Last.fm profile.
+  lastfm('&method=user.getinfo').then(function (d) {
+    var u = d.user, since = new Date(u.registered.unixtime * 1000);
+    var n = function (x) { return Number(x).toLocaleString(); };
+    $('lfmStats').innerHTML = [
+      [n(u.playcount), 'scrobbles, all time'],
+      [n(u.artist_count), 'artists'],
+      [n(u.track_count), 'different songs'],
+      [since.toLocaleDateString(undefined, { month: 'short', year: 'numeric' }), 'on Last.fm since']
+    ].map(function (s) { return '<li><b>' + s[0] + '</b><span>' + s[1] + '</span></li>'; }).join('');
+  }).catch(function () { $('lfmStats').hidden = true; });
 
   /* ---------- favourites ---------- */
   var FAVS = [

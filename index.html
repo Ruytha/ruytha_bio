@@ -37,13 +37,13 @@
 <header class="bar">
   <a class="mark" href="#top"><img src="assets/img/avatar.png" alt="" width="30" height="30">Ruytha</a>
   <nav class="bar-links" aria-label="Sections">
-    <a href="#about">About</a>
-    <a href="#projects">Projects</a>
-    <a href="#studios">Studios</a>
-    <a href="#reel">Showreel</a>
-    <a href="#listening">Music</a>
-    <a href="#favourites">Favourites</a>
-    <a href="#guestbook">Guestbook</a>
+    <a href="#about" data-ja="自己紹介">About</a>
+    <a href="#projects" data-ja="作品">Projects</a>
+    <a href="#studios" data-ja="スタジオ">Studios</a>
+    <a href="#reel" data-ja="映像">Showreel</a>
+    <a href="#listening" data-ja="音楽">Music</a>
+    <a href="#favourites" data-ja="お気に入り">Favourites</a>
+    <a href="#guestbook" data-ja="ゲストブック">Guestbook</a>
   </nav>
   <button class="fem" id="femBtn" type="button" role="switch" aria-checked="false">
     <span class="fem-track" aria-hidden="true"><span class="fem-knob">♡</span></span>femboy mode
@@ -64,6 +64,7 @@
     </div>
   </div>
   <div class="hero-side">
+    <p class="tate" lang="ja" aria-hidden="true">ようこそ、いらっしゃい</p>
     <div class="me">
       <img src="assets/img/avatar.png" alt="Ruytha's avatar: an anime-style character with dark blue hair" width="320" height="320" decoding="async">
       <span class="spark s1" aria-hidden="true"></span><span class="spark s2" aria-hidden="true"></span><span class="spark s3" aria-hidden="true"></span>
@@ -222,16 +223,27 @@
     <ol class="sheet" id="tracks" aria-label="Recently played" data-rise></ol>
     <aside class="week glass" id="week" data-rise>
       <p class="week-num" id="weekPlays">…</p>
-      <p class="week-cap">songs this week</p>
+      <p class="week-cap">songs this week <span lang="ja">今週</span></p>
       <ol class="artists" id="weekArtists"></ol>
-      <p class="week-top" id="weekTop"></p>
     </aside>
+  </div>
+  <div class="music-more">
+    <div class="albums" id="albumsBox" data-rise>
+      <h3 class="h3">Albums on repeat this week <span class="ja" lang="ja">今週のアルバム</span></h3>
+      <ul class="album-grid" id="weekAlbums"></ul>
+    </div>
+    <div class="charts" id="chartsBox" data-rise>
+      <h3 class="h3">Top songs this week <span class="ja" lang="ja">今週の曲</span></h3>
+      <ol class="top-songs" id="weekTracks"></ol>
+      <ul class="stat-stickers" id="lfmStats" aria-label="All-time Last.fm stats"></ul>
+    </div>
   </div>
   <a class="feature" href="https://open.spotify.com/artist/5INjqkS1o8h1imAzPqGZBb" target="_blank" rel="noopener" data-rise>
     <img src="assets/img/tame-impala.jpg" alt="Kevin Parker of Tame Impala" loading="lazy" decoding="async">
     <span class="feature-text glass">
-      <span class="feature-kicker">On repeat forever</span>
+      <span class="feature-kicker">On repeat forever · <span lang="ja">ずっとリピート中</span></span>
       <span class="feature-title">Tame Impala</span>
+      <span class="feature-desc">Tame Impala is really one person: Kevin Parker, an Australian musician who writes, plays, records and produces almost every sound on the albums himself, then tours with a five-piece band. It started as fuzzy psychedelic rock on <i>Innerspeaker</i> and <i>Lonerism</i>, turned into the glossy synth-pop of <i>Currents</i>, and kept going through <i>The Slow Rush</i> and <i>Deadbeat</i>.</span>
       <span class="feature-sub">One of the best artists of all time. Start with “Let It Happen”.</span>
       <span class="arrow-link">Open in Spotify <span aria-hidden="true">→</span></span>
     </span>
@@ -264,7 +276,7 @@
       <label><span>Your name</span><input name="name" maxlength="24" required placeholder="clawd"></label>
       <label><span>Message <em id="gbCount">0/160</em></span><textarea name="msg" maxlength="160" rows="4" required placeholder="hi ruytha! cool site"></textarea></label>
       <label class="gb-hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
-      <button class="btn btn-pop" type="submit">Stick it on the wall</button>
+      <button class="btn btn-pop" type="submit">Stick it on the wall <span lang="ja">ぺたっ</span></button>
       <p class="gb-status" id="gbStatus" aria-live="polite"></p>
     </form>
     <ul class="gb-wall" id="gbWall" aria-live="polite" data-rise><li class="gb-empty">Loading notes…</li></ul>
@@ -300,7 +312,7 @@
 
 <footer class="end">
   <p class="bye"><span lang="ja">またね！</span></p>
-  <p class="bye-en">see you next time</p>
+  <p class="bye-en">see you next time · <span lang="ja">見てくれてありがとう</span> thanks for stopping by</p>
   <div class="end-row">
     <nav class="end-links" aria-label="More pages">
       <a href="/links">Links page</a>
