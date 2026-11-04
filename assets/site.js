@@ -16,6 +16,17 @@
   }
   $('year').textContent = new Date().getFullYear();
 
+  /* ---------- the first screen starts bare; bring the extras in on the first scroll ---------- */
+  (function () {
+    if (!root.classList.contains('calm')) return;
+    function wake() {
+      if (window.scrollY < 8) return;
+      root.classList.remove('calm');
+      window.removeEventListener('scroll', wake);
+    }
+    window.addEventListener('scroll', wake, { passive: true });
+  })();
+
   /* ---------- my time (Perth time, but the page only ever says "my time") ---------- */
   (function () {
     var el = $('clock');

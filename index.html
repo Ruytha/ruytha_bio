@@ -28,7 +28,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap">
 <link rel="stylesheet" href="assets/site.css">
 <!-- femboy mode is applied before first paint, so the page never flashes the wrong colours -->
-<script>try { if (localStorage.getItem('ruytha-femboy') === '1') document.documentElement.classList.add('femboy'); } catch (e) {}</script>
+<script>try { if (localStorage.getItem('ruytha-femboy') === '1') document.documentElement.classList.add('femboy'); } catch (e) {}
+  if (!scrollY) document.documentElement.classList.add('calm');</script>
 </head>
 
 <body>
@@ -57,19 +58,19 @@
     <p class="hi"><span class="ja" lang="ja">こんにちは</span> hi, i'm</p>
     <h1 class="name">Ruytha</h1>
     <p class="sing" id="sing">i direct short films and music videos</p>
-    <p class="meta"><span class="live-dot" aria-hidden="true"></span>Open to collabs · Australia · <span id="clock">my time</span></p>
+    <p class="meta later"><span class="live-dot" aria-hidden="true"></span>Open to collabs · Australia · <span id="clock">my time</span></p>
     <div class="cta">
       <a class="btn btn-pop" href="#projects">See my projects</a>
       <a class="btn btn-glass" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">Say hi on Discord</a>
     </div>
   </div>
   <div class="hero-side">
-    <p class="tate" lang="ja" aria-hidden="true">ようこそ、いらっしゃい</p>
+    <p class="tate later" lang="ja" aria-hidden="true">ようこそ、いらっしゃい</p>
     <div class="me">
       <img src="assets/img/avatar.png" alt="Ruytha's avatar: an anime-style character with dark blue hair" width="320" height="320" decoding="async">
-      <span class="spark s1" aria-hidden="true"></span><span class="spark s2" aria-hidden="true"></span><span class="spark s3" aria-hidden="true"></span>
+      <span class="spark s1 later" aria-hidden="true"></span><span class="spark s2 later" aria-hidden="true"></span><span class="spark s3 later" aria-hidden="true"></span>
     </div>
-    <a class="np glass" id="np" href="#listening" data-state="loading">
+    <a class="np glass later" id="np" href="#listening" data-state="loading">
       <span class="np-art" id="npArt" aria-hidden="true"></span>
       <span class="np-text">
         <span class="np-label" id="npLabel">Checking what's playing</span>
