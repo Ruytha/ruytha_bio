@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "slug": "welcome",
+    "title": "Welcome!",
+    "date": "2026-11-10",
+    "description": "This is the first blog on my very cool website!",
+    "cover": "",
+    "minutes": 1,
+    "draft": false,
+    "updated": 1794299743607
+  }
+]
