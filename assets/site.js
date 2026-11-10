@@ -16,17 +16,6 @@
   }
   $('year').textContent = new Date().getFullYear();
 
-  /* ---------- the first screen starts bare; bring the extras in on the first scroll ---------- */
-  (function () {
-    if (!root.classList.contains('calm')) return;
-    function wake() {
-      if (window.scrollY < 8) return;
-      root.classList.remove('calm');
-      window.removeEventListener('scroll', wake);
-    }
-    window.addEventListener('scroll', wake, { passive: true });
-  })();
-
   /* ---------- my time (Perth time, but the page only ever says "my time") ---------- */
   (function () {
     var el = $('clock');
@@ -107,8 +96,16 @@
   function lastfm(q) {
     var user = String(CFG.lastfmUser || '').trim(), key = CFG.lastfmApiKey;
     if (!user || !key) return Promise.reject(new Error('not configured'));
-    return fetch('https://ws.audioscrobbler.com/2.0/?format=json&user=' + encodeURIComponent(user) + '&api_key=' + encodeURIComponent(key) + q)
-      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); });
+    var url = 'https://ws.audioscrobbler.com/2.0/?format=json&user=' + encodeURIComponent(user) + '&api_key=' + encodeURIComponent(key) + q;
+    function ask() {
+      return fetch(url)
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (d) { if (d && d.error) throw new Error(d.message || d.error); return d; });   // Last.fm can send an error with a 200
+    }
+    // The page asks for several things at once and Last.fm sometimes drops one; try again once before giving up.
+    return ask().catch(function () {
+      return new Promise(function (go) { setTimeout(go, 900); }).then(ask);
+    });
   }
   function api(path) { return fetch(path).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); }
   // The /api/lastfm route keeps the key private when it's configured on Vercel; otherwise ask Last.fm from the browser.
@@ -304,7 +301,7 @@
     $('posters').addEventListener('click', function (e) {
       var b = e.target.closest('[data-fav]'); if (!b) return;
       if (data) return open(b.dataset.fav);
-      fetch('assets/favs.json').then(function (r) { return r.json(); }).then(function (d) { data = d; open(b.dataset.fav); });
+      fetch('assets/favs.json').then(function (r) { return r.json(); }).then(function (d) { data = d; open(b.dataset.fav); }).catch(function () {});
     });
     dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });   // click outside the card
   })();
@@ -409,6 +406,70 @@
       btn.classList.remove('wave'); void btn.offsetWidth; btn.classList.add('wave');
       petals();
     });
+  })();
+
+  /* ---------- smooth scrolling: a mouse wheel glides to where it's going instead of jumping ----------
+     Only for real mouse wheels. Trackpads and touch screens already scroll smoothly, so they're left alone,
+     and so is anything with its own scrollbar (the favourites popup, the message box). */
+  (function () {
+    if (reduce) return;
+    var target = window.scrollY, mid = target, at = target, raf = 0, last = 0;
+    function stop() { cancelAnimationFrame(raf); raf = 0; last = 0; }
+    function step(now) {
+      var dt = last ? Math.min(now - last, 100) : 16; last = now;
+      // time based, so the same glide on a 60Hz or a 144Hz screen; two followers in a row so it eases in
+      // as well as out, the first one quick so a wheel click still answers straight away
+      mid += (target - mid) * (1 - Math.exp(-dt / 80));
+      at += (mid - at) * (1 - Math.exp(-dt / 150));
+      if (Math.abs(target - at) < 0.4 && Math.abs(target - mid) < 0.4) at = mid = target;
+      window.scrollTo({ top: at, behavior: 'instant' });
+      if (at === target) { raf = 0; last = 0; } else raf = requestAnimationFrame(step);
+    }
+    function ownScroller(el) {
+      for (; el && el !== document.body && el.nodeType === 1; el = el.parentNode) {
+        if (el.tagName === 'DIALOG') return true;
+        var o = getComputedStyle(el).overflowY;
+        if ((o === 'auto' || o === 'scroll') && el.scrollHeight > el.clientHeight + 1) return true;
+      }
+      return false;
+    }
+    window.addEventListener('wheel', function (e) {
+      if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.shiftKey || e.deltaX) return;
+      var lines = e.deltaMode === 1, dy = lines ? e.deltaY * 40 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY;
+      // A mouse wheel moves the page in big jumps (about 100px a click, scaled by the page zoom, so
+      // 40px at 250% up to 200px at 50%); a trackpad sends lots of small ones. Firefox mice scroll by lines.
+      var mouse = lines || Math.abs(dy) >= 40;
+      if (!mouse || !dy) { stop(); return; }
+      if (ownScroller(e.target)) return;
+      e.preventDefault();
+      if (!raf) at = mid = target = window.scrollY;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      target = Math.max(0, Math.min(max, target + dy));
+      if (!raf) raf = requestAnimationFrame(step);
+    }, { passive: false });
+    // anything else that moves the page (a link, the keyboard, dragging the scrollbar) takes over at once
+    ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) { window.addEventListener(ev, stop, { passive: true }); });
+  })();
+
+  /* ---------- header: slides back in when you scroll up, tucks away when you scroll down ---------- */
+  (function () {
+    var bar = document.querySelector('.bar');
+    if (!bar) return;
+    var lastY = window.scrollY;
+    function update() {
+      var y = window.scrollY, dy = y - lastY;
+      if (y < 160) {                                    // back at the top: it sits in its normal place
+        if (!bar.classList.contains('shown') || y < 4) bar.classList.remove('float', 'shown');
+        lastY = y; return;
+      }
+      bar.classList.add('float');
+      if (Math.abs(dy) < 6) return;                      // ignore tiny jitters
+      bar.classList.toggle('shown', dy < 0);
+      lastY = y;
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    // clicking a section link scrolls down; let the header get out of the way
+    bar.addEventListener('click', function (e) { if (e.target.closest('a[href^="#"]')) setTimeout(function () { bar.classList.remove('shown'); }, 0); });
   })();
 
   /* ---------- entrances: each part rises in once, staggered with its siblings ----------

@@ -20,28 +20,27 @@
 <meta name="twitter:description" content="Director, editor and lighting artist from Australia.">
 <meta name="twitter:image" content="https://ruytha.dev/assets/img/og-2026.jpg">
 
-<link rel="icon" href="assets/img/favicon.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/img/avatar.png">
+<link rel="icon" href="assets/img/favicon-64.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/avatar-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,900&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap">
 <link rel="stylesheet" href="assets/site.css">
 <!-- femboy mode is applied before first paint, so the page never flashes the wrong colours -->
-<script>try { if (localStorage.getItem('ruytha-femboy') === '1') document.documentElement.classList.add('femboy'); } catch (e) {}
-  if (!scrollY) document.documentElement.classList.add('calm');</script>
+<script>try { if (localStorage.getItem('ruytha-femboy') === '1') document.documentElement.classList.add('femboy'); } catch (e) {}</script>
 </head>
 
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="bar">
-  <a class="mark" href="#top"><img src="assets/img/avatar.png" alt="" width="30" height="30">Ruytha</a>
+  <a class="mark" href="#top"><img src="assets/img/avatar-96.jpg" alt="" width="30" height="30">Ruytha</a>
   <nav class="bar-links" aria-label="Sections">
+    <a href="#reel" data-ja="映像">Showreel</a>
     <a href="#about" data-ja="自己紹介">About</a>
     <a href="#projects" data-ja="作品">Projects</a>
     <a href="#studios" data-ja="スタジオ">Studios</a>
-    <a href="#reel" data-ja="映像">Showreel</a>
     <a href="#listening" data-ja="音楽">Music</a>
     <a href="#favourites" data-ja="お気に入り">Favourites</a>
     <a href="#guestbook" data-ja="ゲストブック">Guestbook</a>
@@ -58,16 +57,16 @@
     <p class="hi"><span class="ja" lang="ja">こんにちは</span> hi, i'm</p>
     <h1 class="name">Ruytha</h1>
     <p class="sing" id="sing">i direct short films and music videos</p>
-    <p class="meta later"><span class="live-dot" aria-hidden="true"></span>Open to collabs · Australia · <span id="clock">my time</span></p>
+    <p class="meta later"><span class="live-dot" aria-hidden="true"></span><a href="mailto:ruytha@ruytha.dev">Open to collabs</a> · Australia · <span id="clock">my time</span></p>
     <div class="cta">
-      <a class="btn btn-pop" href="#projects">See my projects</a>
+      <a class="btn btn-pop" href="#reel">Watch the showreel</a>
       <a class="btn btn-glass" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">Say hi on Discord</a>
     </div>
   </div>
   <div class="hero-side">
     <p class="tate later" lang="ja" aria-hidden="true">ようこそ、いらっしゃい</p>
     <div class="me">
-      <img src="assets/img/avatar.png" alt="Ruytha's avatar: an anime-style character with dark blue hair" width="320" height="320" decoding="async">
+      <img src="assets/img/avatar-720.jpg" alt="Ruytha's avatar: an anime-style character with dark blue hair" width="320" height="320" decoding="async" fetchpriority="high">
       <span class="spark s1 later" aria-hidden="true"></span><span class="spark s2 later" aria-hidden="true"></span><span class="spark s3 later" aria-hidden="true"></span>
     </div>
     <a class="np glass later" id="np" href="#listening" data-state="loading">
@@ -122,46 +121,44 @@
 
 <section class="sec about" id="about">
   <figure class="polaroid" data-rise>
-    <img src="assets/img/avatar.png" alt="" width="420" height="420" loading="lazy" decoding="async">
+    <img src="assets/img/avatar-720.jpg" alt="" width="420" height="420" loading="lazy" decoding="async">
     <figcaption>me, probably editing something</figcaption>
   </figure>
   <div data-rise>
     <h2 class="h2">About <span class="ja" lang="ja">自己紹介</span></h2>
     <p class="statement">An Australian director, editor and lighting artist who makes short films and music videos, and builds the tools to make them.</p>
-    <p>Most projects run end to end through my hands: animating and rigging in Blender, cutting in DaVinci Resolve, Premiere Pro and After Effects, lighting virtual sets and real ones, and shooting stills on a Canon EOS 7D. I write HTML, CSS, JavaScript and Python, and I'm building VCap Motion, a VR motion capture system for the upcoming YouTube series <em>Borderline Obsession</em>.</p>
-    <p>I sync and review TTML lyric files for Spicy Lyrics, learn Japanese (<span lang="ja">がんばります</span>!), and play RDR2 and Forza with Tame Impala on in the background. Say hi on Discord, <strong>@ruytha</strong>.</p>
+    <p>Most projects run end to end through my hands, from the first rig to the final cut. Right now I'm building VCap Motion, a VR motion capture system for the upcoming YouTube series <em>Borderline Obsession</em>.</p>
+    <p>Outside of that I'm learning Japanese (<span lang="ja">がんばります</span>!) and playing RDR2 and Forza with Tame Impala on in the background. Say hi on Discord, <strong>@ruytha</strong>.</p>
     <ul class="stickers" aria-label="Quick facts">
       <li><b>Australia</b><span>based in</span></li>
-      <li><b>Canon EOS 7D</b><span>shoots on</span></li>
       <li><b>Japanese</b><span>learning</span></li>
       <li><b>Claude</b><span>favourite AI</span></li>
       <li><b>2021 to 2026</b><span>played Rec Room</span></li>
       <li><b>a femboy</b><span>yes, i am</span></li>
     </ul>
   </div>
-</section>
-
-<section class="sec skills" id="skills">
-  <h2 class="h2" data-rise>What I do <span class="ja" lang="ja">できること</span></h2>
-  <ul class="skill-grid" data-rise>
-    <li><b>Directing</b><span>Short films and music videos.</span></li>
-    <li><b>Editing</b><span>Resolve, Premiere Pro and After Effects. DM me if you want to collab.</span></li>
-    <li><b>Lighting</b><span>Virtual sets and real ones.</span></li>
-    <li><b>Blender</b><span>Mostly animation and rigging.</span></li>
-    <li><b>Photography</b><span>A Canon EOS 7D and an iPhone 12.</span></li>
-    <li><b>Lyric sync</b><span>Word-by-word TTMLs for Spicy Lyrics.</span></li>
-    <li><b>Music, sometimes</b><span>I open FL Studio and close it five minutes later.</span></li>
-    <li><b>Code</b><span>HTML, CSS, JavaScript and Python. Claude helps. A lot.</span></li>
-  </ul>
+  <div class="about-skills" id="skills">
+    <h3 class="h3" data-rise>What I do <span class="ja" lang="ja">できること</span></h3>
+    <ul class="skill-grid" data-rise>
+      <li><b>Directing</b><span>Short films and music videos.</span></li>
+      <li><b>Editing</b><span>Resolve, Premiere Pro and After Effects. DM me if you want to collab.</span></li>
+      <li><b>Lighting</b><span>Virtual sets and real ones.</span></li>
+      <li><b>Blender</b><span>Mostly animation and rigging.</span></li>
+      <li><b>Photography</b><span>A Canon EOS 7D and an iPhone 12.</span></li>
+      <li><b>Lyric sync</b><span>Word-by-word TTMLs for Spicy Lyrics.</span></li>
+      <li><b>Music, sometimes</b><span>I open FL Studio and close it five minutes later.</span></li>
+      <li><b>Code</b><span>HTML, CSS, JavaScript and Python. Claude helps. A lot.</span></li>
+    </ul>
+  </div>
 </section>
 
 <section class="sec projects" id="projects">
   <div class="sec-head" data-rise>
     <h2 class="h2">Projects <span class="ja" lang="ja">作品</span></h2>
-    <p class="lede">What I'm making right now. Borderline Obsession is waiting on VCap Motion, no pressure.</p>
+    <p class="lede">What's in the works. Borderline Obsession is waiting on VCap Motion, no pressure.</p>
   </div>
   <div class="proj-grid">
-    <article class="proj proj-lead glass" data-rise>
+    <article class="proj glass" data-rise>
       <img src="assets/img/project-vcap.png" alt="" loading="lazy" decoding="async">
       <div class="proj-body">
         <p class="status status-soon">Coming soon</p>
@@ -185,14 +182,6 @@
         <p>Word-by-word timed lyrics for Spicy Lyrics. <a href="https://spicylyrics.org/ruytha" target="_blank" rel="noopener">See my profile</a>.</p>
       </div>
     </article>
-    <article class="proj glass" data-rise>
-      <img src="assets/img/project-website.png" alt="" loading="lazy" decoding="async">
-      <div class="proj-body">
-        <p class="status status-on">In progress</p>
-        <h3>This website</h3>
-        <p>You're looking at it. It gets rebuilt more often than it should.</p>
-      </div>
-    </article>
   </div>
 </section>
 
@@ -206,11 +195,11 @@
         <a class="arrow-link" href="/studios/contact">Start a project <span aria-hidden="true">→</span></a>
       </div>
     </div>
-    <ul class="studios-apps" data-rise>
-      <li><a href="/studios/shutter"><b>Shutter</b><span>Frame-accurate review notes, exported as markers for Resolve.</span></a></li>
-      <li><a href="/studios/slate"><b>Slate</b><span>Shot lists, shareable call sheets and a take log on set.</span></a></li>
-      <li><a href="/studios/cuelight"><b>Cuelight</b><span>Concert light shows in Blender, cued to the music.</span></a></li>
-      <li><a href="/studios/tools"><b>Tools</b><span>Free timecode, storage and crop calculators.</span></a></li>
+    <ul class="studios-apps">
+      <li data-rise><a href="/studios/shutter"><b>Shutter</b><span>Frame-accurate review notes, exported as markers for Resolve.</span></a></li>
+      <li data-rise><a href="/studios/slate"><b>Slate</b><span>Shot lists, shareable call sheets and a take log on set.</span></a></li>
+      <li data-rise><a href="/studios/cuelight"><b>Cuelight</b><span>Concert light shows in Blender, cued to the music.</span></a></li>
+      <li data-rise><a href="/studios/tools"><b>Tools</b><span>Free timecode, storage and crop calculators.</span></a></li>
     </ul>
   </div>
 </section>
@@ -295,9 +284,10 @@
 <section class="sec links" id="links">
   <div class="sec-head" data-rise>
     <h2 class="h2">Find me <span class="ja" lang="ja">連絡先</span></h2>
-    <p class="lede">Anywhere on this list works. Discord is where I reply fastest.</p>
+    <p class="lede">Anywhere on this list works. Email me about work, Discord is where I reply fastest.</p>
   </div>
   <ul class="link-list" data-rise>
+    <li class="link-wide"><a class="glass" href="mailto:ruytha@ruytha.dev"><b>Email</b><span>ruytha@ruytha.dev</span></a></li>
     <li><a class="glass" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener"><b>Discord</b><span>@ruytha</span></a></li>
     <li><a class="glass" href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener"><b>Discord server</b><span>come say something</span></a></li>
     <li><a class="glass" href="https://www.youtube.com/@ruytha.m4a" target="_blank" rel="noopener"><b>YouTube</b><span>@ruytha.m4a</span></a></li>
@@ -319,7 +309,6 @@
   <div class="end-row">
     <nav class="end-links" aria-label="More pages">
       <a href="/links">Links page</a>
-      <a href="/boykisser">Boykisser clicker</a>
       <a href="/tools/textflag">TextFlag</a>
       <a href="/tools/textflag/privacy">TextFlag privacy</a>
       <a href="/tools/textflag/terms">TextFlag terms</a>
