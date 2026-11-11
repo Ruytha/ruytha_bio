@@ -429,6 +429,36 @@
     bar.addEventListener('click', function (e) { if (e.target.closest('a[href^="#"]')) setTimeout(function () { bar.classList.remove('shown'); }, 0); });
   })();
 
+  /* ---------- first screen: the lights and my photo lean towards the mouse ---------- */
+  (function () {
+    var hero = document.querySelector('.hero');
+    if (!hero || reduce || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    hero.addEventListener('pointermove', function (e) {
+      var r = hero.getBoundingClientRect();
+      hero.style.setProperty('--px', ((e.clientX - r.left) / r.width * 2 - 1).toFixed(3));
+      hero.style.setProperty('--py', ((e.clientY - r.top) / r.height * 2 - 1).toFixed(3));
+    });
+    hero.addEventListener('pointerleave', function () { hero.style.setProperty('--px', 0); hero.style.setProperty('--py', 0); });
+  })();
+
+  /* ---------- what I do: the cards ride past on a belt; a second copy follows so the loop never shows a gap ---------- */
+  (function () {
+    var grid = document.querySelector('.skill-grid');
+    if (!grid || reduce) return;
+    var belt = document.createElement('div');
+    belt.className = 'skill-belt';
+    grid.parentNode.insertBefore(belt, grid);
+    belt.appendChild(grid);
+    Array.prototype.slice.call(grid.children).forEach(function (li) {
+      // colour and tilt come from each card's place in the list, so pin them before copying
+      var cs = getComputedStyle(li), copy;
+      li.style.background = cs.backgroundColor; li.style.setProperty('--t', cs.getPropertyValue('--t'));
+      copy = li.cloneNode(true); copy.setAttribute('aria-hidden', 'true');
+      grid.appendChild(copy);
+    });
+    grid.classList.add('marquee');
+  })();
+
   /* ---------- entrances: each part rises in once, staggered with its siblings ----------
      A plain scroll check, so nothing can stay hidden if an observer is throttled. */
   (function () {
