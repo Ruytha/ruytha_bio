@@ -614,7 +614,9 @@ function closePop(){morePop.classList.remove('on');moreBtn.setAttribute('aria-ex
 moreBtn.onclick=e=>{e.stopPropagation();morePop.classList.contains('on')?closePop():openPop()};
 document.addEventListener('click',e=>{if(morePop.classList.contains('on')&&!morePop.contains(e.target)&&e.target!==moreBtn)closePop()});
 addEventListener('resize',()=>{if(morePop.classList.contains('on'))placePop()});
-const q0=new URLSearchParams(location.search).get('src');if(q0){$('#src').value=q0;url(q0)}
+/* A link to load comes as ?src=, or as #src= when it's too long for the server or shouldn't reach it
+   (Spicy Lyrics hands over the playing song's TTML as a data URL). A data URL isn't shown in the field. */
+const q0=new URLSearchParams(location.search).get('src')||new URLSearchParams(location.hash.slice(1)).get('src');if(q0){if(!q0.startsWith('data:'))$('#src').value=q0;url(q0)}
 
 /* selection -> pill */
 function selRange(){const s=getSelection();if(!s.rangeCount||s.isCollapsed)return null;const r=s.getRangeAt(0);
