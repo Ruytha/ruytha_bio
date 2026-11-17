@@ -5,12 +5,26 @@
   "rewrites": [
     {
       "source": "/",
-      "has": [{ "type": "header", "key": "user-agent", "value": "(curl|Wget|HTTPie|xh)/.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(curl|Wget|HTTPie|xh)/.*"
+        }
+      ],
       "destination": "/api/lastfm?view=card"
+    },
+    {
+      "source": "/",
+      "destination": "/home"
     }
   ],
   "redirects": [
-    { "source": "/blog/posts/:path*", "destination": "/blog", "permanent": false }
+    {
+      "source": "/blog/posts/:path*",
+      "destination": "/blog",
+      "permanent": false
+    }
   ],
   "functions": {
     "api/motion-cover.js": {
@@ -23,14 +37,23 @@
     {
       "source": "/assets/img/(.*)",
       "headers": [
-        { "key": "cache-control", "value": "public, max-age=604800, must-revalidate" }
+        {
+          "key": "cache-control",
+          "value": "public, max-age=604800, must-revalidate"
+        }
       ]
     },
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "x-content-type-options", "value": "nosniff" },
-        { "key": "referrer-policy", "value": "strict-origin-when-cross-origin" }
+        {
+          "key": "x-content-type-options",
+          "value": "nosniff"
+        },
+        {
+          "key": "referrer-policy",
+          "value": "strict-origin-when-cross-origin"
+        }
       ]
     }
   ]
