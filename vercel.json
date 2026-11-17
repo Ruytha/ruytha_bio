@@ -6,7 +6,7 @@
     {
       "source": "/",
       "has": [{ "type": "header", "key": "user-agent", "value": "(curl|Wget|HTTPie|xh)/.*" }],
-      "destination": "/api/curl"
+      "destination": "/api/lastfm?view=card"
     }
   ],
   "redirects": [

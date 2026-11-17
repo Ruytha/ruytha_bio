@@ -16,6 +16,9 @@
  */
 
 module.exports = async function handler(req, res) {
+  // what `curl https://ruytha.dev` shows; vercel.json sends curl visits to "/" here
+  if (req.query.view === 'card') return require('../lib/curl-card')(req, res);
+
   const key  = process.env.LASTFM_API_KEY;
   const user = process.env.LASTFM_USER;
 
