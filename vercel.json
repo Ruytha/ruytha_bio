@@ -2,6 +2,13 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "header", "key": "user-agent", "value": "(curl|Wget|HTTPie|xh)/.*" }],
+      "destination": "/api/curl"
+    }
+  ],
   "redirects": [
     { "source": "/blog/posts/:path*", "destination": "/blog", "permanent": false }
   ],
