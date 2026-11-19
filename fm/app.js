@@ -270,6 +270,10 @@ async function pageSettings() {
       ${codeBox(meInfo.token)}
       <button class="btn" id="regen">Regenerate token</button>
     </section>
+    <section class="panel" id="spotpanel">
+      <h2>Spotify (automatic)</h2>
+      <div id="spot" class="hint">checking…</div>
+    </section>
     <section class="panel">
       <h2>Connect scrobblers</h2>
       <p class="hint"><b>ListenBrainz-compatible</b> (Web Scrobbler, Pano Scrobbler, Navidrome, Jellyfin, multi-scrobbler, the NyaFM Spicetify extension):</p>
@@ -312,10 +316,43 @@ async function pageSettings() {
     try { await api('/password', { method: 'POST', body: Object.fromEntries(new FormData(e.target)) }); $('#pwe').innerHTML = '<span class="okmsg">Password changed ✓</span>'; e.target.reset(); }
     catch (err) { $('#pwe').textContent = err.message; }
   };
+  spotifyPanel();
   $('#imp').onchange = (e) => importFiles([...e.target.files]);
   $('#exj').onclick = () => exportAll('json');
   $('#exc').onclick = () => exportAll('csv');
 }
+
+async function spotifyPanel() {
+  const box = $('#spot');
+  if (!box) return;
+  try {
+    const s = await api('/spotify/status');
+    if (!s.configured) {
+      box.innerHTML = `Not set up yet. Create an app at <a href="https://developer.spotify.com/dashboard" style="color:var(--accent)">developer.spotify.com/dashboard</a>,
+        add this redirect URI, then set <code>SPOTIFY_CLIENT_ID</code> and <code>SPOTIFY_CLIENT_SECRET</code> in Vercel and redeploy.${codeBox(s.redirect_uri)}`;
+    } else if (!s.connected) {
+      box.innerHTML = `Pull your plays straight from Spotify, no Spicetify needed. <p><a class="btn" href="/fm/api/spotify/connect">Connect Spotify</a></p>`;
+    } else {
+      box.innerHTML = `Connected ✓ ${s.last_sync ? `· last sync ${ago(s.last_sync)} (${s.last_count} new)` : ''}
+        <p><button class="btn" id="spsync">Sync now</button> <button class="btn" id="spoff">Disconnect</button></p>
+        <p class="hint">Syncs automatically while this site is open${s.cron_secret_set ? ', and in the background when a pinger calls <code>/fm/api/spotify/sync</code>' : ''}.</p><div id="spmsg"></div>`;
+      $('#spsync').onclick = async () => {
+        $('#spmsg').textContent = 'syncing…';
+        try { const r = await api('/spotify/sync', { method: 'POST' }); $('#spmsg').textContent = `${r.new_scrobbles} new scrobbles${r.now_playing ? ' · now playing: ' + r.now_playing : ''} ✓`; }
+        catch (e) { $('#spmsg').textContent = e.message; }
+      };
+      $('#spoff').onclick = async () => { if (confirm('Disconnect Spotify?')) { await api('/spotify/disconnect', { method: 'POST' }); spotifyPanel(); } };
+    }
+  } catch (e) { box.textContent = e.message; }
+}
+
+// While you are logged in and the page is open, sync Spotify once a minute.
+async function spotifyAuto() {
+  if (!status?.me || document.hidden) return;
+  try { const s = await api('/spotify/status'); if (s.connected) await api('/spotify/sync', { method: 'POST' }); } catch {}
+}
+setInterval(spotifyAuto, 60000);
+setTimeout(spotifyAuto, 3000);
 
 document.addEventListener('click', (e) => {
   const v = e.target.dataset?.copy;
