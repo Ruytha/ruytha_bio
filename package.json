@@ -6,6 +6,9 @@
   },
   "dependencies": {
     "@clerk/backend": "^2.33.7",
-    "ffmpeg-static": "^5.2.0"
+    "@hono/node-server": "^2.1.9",
+    "@libsql/client": "^0.18.0",
+    "ffmpeg-static": "^5.2.0",
+    "hono": "^4.13.19"
   }
 }

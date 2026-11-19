@@ -26,7 +26,17 @@
       "permanent": false
     }
   ],
+  "rewrites": [
+    { "source": "/2.0", "destination": "/api/nyafm" },
+    { "source": "/2.0/", "destination": "/api/nyafm" },
+    { "source": "/1/:path*", "destination": "/api/nyafm" },
+    { "source": "/v1", "destination": "/api/nyafm" },
+    { "source": "/v1/:path*", "destination": "/api/nyafm" },
+    { "source": "/apis/:path*", "destination": "/api/nyafm" },
+    { "source": "/fm/api/:path*", "destination": "/api/nyafm" }
+  ],
   "functions": {
+    "api/nyafm.mjs": { "maxDuration": 30 },
     "api/motion-cover.js": {
       "maxDuration": 60,
       "memory": 1024,

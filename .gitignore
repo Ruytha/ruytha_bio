@@ -6,3 +6,4 @@ node_modules/
 # source artwork, not for the site
 studios/*.png
 promo/
+nyafm.db*
