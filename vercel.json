@@ -25,7 +25,7 @@
     { "source": "/fm/api/:path*", "destination": "/api/nyafm" }
   ],
   "crons": [
-    { "path": "/fm/api/spotify/sync", "schedule": "0 */6 * * *" }
+    { "path": "/fm/api/spotify/sync", "schedule": "0 0 * * *" }
   ],
   "redirects": [
     {
