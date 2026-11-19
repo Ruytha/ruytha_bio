@@ -108,23 +108,18 @@
   /* Try the Vercel serverless route first (keeps the API key private).
      Fall back to a direct browser call if a key is set in config.js. */
   function getRecent() {
-    return fetch('/api/lastfm?limit=' + LIMIT, { headers: { accept: 'application/json' } })
-      .then(function (r) {
-        if (!r.ok) throw new Error('api route responded ' + r.status);
-        return r.json();
-      })
-      .catch(function () {
-        if (!CFG.lastfmUser || !CFG.lastfmApiKey) throw new Error('not configured');
-        var url = 'https://ws.audioscrobbler.com/2.0/' +
-          '?method=user.getrecenttracks' +
-          '&user='    + encodeURIComponent(CFG.lastfmUser) +
-          '&api_key=' + encodeURIComponent(CFG.lastfmApiKey) +
-          '&format=json&limit=' + LIMIT;
-        return fetch(url).then(function (r) {
-          if (!r.ok) throw new Error('last.fm responded ' + r.status);
-          return r.json();
-        });
-      });
+    var u = encodeURIComponent(String(CFG.nyafmUser || CFG.lastfmUser || 'Ruytha').trim());
+    var get = function (p) { return fetch('/v1/users/' + u + p, { headers: { accept: 'application/json' } }).then(function (r) { if (!r.ok) throw new Error('v1 responded ' + r.status); return r.json(); }); };
+    return Promise.all([get('/now-playing').catch(function () { return {}; }), get('/recent?limit=' + LIMIT)]).then(function (r) {
+      var shape = function (t, now) {
+        var o = { name: t.track, url: '/fm#/artist/' + encodeURIComponent(t.artist), artist: { '#text': t.artist }, image: [{}, {}, {}, { '#text': t.image || '' }] };
+        if (now) o['@attr'] = { nowplaying: 'true' }; else o.date = { uts: String(t.timestamp) };
+        return o;
+      };
+      var list = (r[1].scrobbles || []).map(function (t) { return shape(t, false); });
+      if (r[0] && r[0].playing && r[0].track) list.unshift(shape(r[0].track, true));
+      return { recenttracks: { track: list, '@attr': { user: '' } } };
+    });
   }
 
   var listEl = $('tracks');
@@ -159,7 +154,7 @@
 
     if (noteEl && profileUrl) {
       noteEl.innerHTML = 'Full history on <a href="' + esc(profileUrl) +
-        '" target="_blank" rel="noopener">Last.fm</a>.';
+        '">NyaFM</a>.';
     }
   }
 
@@ -184,9 +179,7 @@
       }
 
       renderTracks(tracks.slice(0, LIMIT),
-        (rt['@attr'] && rt['@attr'].user)
-          ? 'https://www.last.fm/user/' + rt['@attr'].user
-          : (CFG.lastfmUser ? 'https://www.last.fm/user/' + CFG.lastfmUser : ''));
+        '/fm');
 
       var top = tracks[0];
       var live = top['@attr'] && top['@attr'].nowplaying === 'true';

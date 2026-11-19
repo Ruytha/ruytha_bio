@@ -122,3 +122,18 @@ progress { width: 100%; accent-color: var(--accent); }
 .m-DELETE { background: rgba(255,118,118,.15); color: var(--bad); }
 pre.out { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 8px 0 0;
   font: 12px/1.5 ui-monospace, Consolas, monospace; overflow: auto; max-height: 360px; white-space: pre; }
+
+/* stats page */
+.tile .n small { font-size: 14px; font-weight: 500; color: var(--dim); }
+.more { color: var(--dim); font-size: 13px; font-weight: 400; margin-left: 8px; }
+.heat { overflow-x: auto; padding-bottom: 4px; }
+.heat svg { width: 100%; height: auto; display: block; }
+.heat text { fill: var(--dim); font-size: 10px; }
+.heat rect, .heatkey rect { fill: var(--accent); }
+.heat .l0, .heatkey .l0 { fill: var(--line); opacity: .55; }
+.heat .l1, .heatkey .l1 { opacity: .30; }
+.heat .l2, .heatkey .l2 { opacity: .55; }
+.heat .l3, .heatkey .l3 { opacity: .78; }
+.heat .l4, .heatkey .l4 { opacity: 1; }
+.heat rect:hover { stroke: var(--text, #fff); stroke-width: 1; }
+.heatkey { display: flex; align-items: center; gap: 4px; justify-content: flex-end; color: var(--dim); font-size: 12px; margin-top: 8px; }

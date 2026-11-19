@@ -234,36 +234,28 @@ var RUYTHA_PROJECTS_UPDATED = '1 October 2026';
   })();
 
   /* ============================================================
-     2. This week on Last.fm
+     2. This week (from my NyaFM)
      ============================================================ */
   (function () {
     var box = $('weekStats');
     if (!box) return;
     var CFG = window.RUYTHA_CONFIG || {};
 
-    function direct() {
-      var user = String(CFG.lastfmUser || '').trim(), key = CFG.lastfmApiKey;
-      if (!user || !key) return Promise.reject(new Error('not configured'));
-      var base = 'https://ws.audioscrobbler.com/2.0/?format=json&user=' + encodeURIComponent(user) + '&api_key=' + encodeURIComponent(key);
-      var since = Math.floor(Date.now() / 1000) - 7 * 86400;
-      var get = function (q) { return fetch(base + q).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); };
-      var list = function (x) { return x ? (Array.isArray(x) ? x : [x]) : []; };
-      return Promise.all([
-        get('&method=user.gettopartists&period=7day&limit=5'),
-        get('&method=user.gettoptracks&period=7day&limit=5'),
-        get('&method=user.getrecenttracks&limit=1&from=' + since)
-      ]).then(function (r) {
-        return {
-          plays: parseInt(r[2].recenttracks && r[2].recenttracks['@attr'] && r[2].recenttracks['@attr'].total, 10) || 0,
-          artists: list(r[0].topartists && r[0].topartists.artist).map(function (a) { return { name: a.name, plays: +a.playcount, url: a.url }; }),
-          tracks: list(r[1].toptracks && r[1].toptracks.track).map(function (t) { return { name: t.name, artist: t.artist && t.artist.name, plays: +t.playcount, url: t.url }; })
-        };
-      });
+    // From my own NyaFM (same site, /v1), shaped like the old Last.fm week summary.
+    var USER = encodeURIComponent(String(CFG.nyafmUser || CFG.lastfmUser || 'Ruytha').trim());
+    function get(path) {
+      return fetch('/v1/users/' + USER + path).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); });
     }
+    function link(name) { return '/fm#/artist/' + encodeURIComponent(name); }
 
-    fetch('/api/lastfm?view=week')
-      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-      .catch(direct)
+    Promise.all([get('/top/artists?period=7day&limit=5'), get('/top/tracks?period=7day&limit=5'), get('/stats?period=7day')])
+      .then(function (r) {
+        return {
+          plays: r[2].scrobbles || 0,
+          artists: (r[0].artists || []).map(function (a) { return { name: a.artist, plays: a.plays, url: link(a.artist) }; }),
+          tracks: (r[1].tracks || []).map(function (t) { return { name: t.track, artist: t.artist, plays: t.plays, url: link(t.artist) }; })
+        };
+      })
       .then(function (d) {
         if (!d || !d.artists) throw new Error('empty');
         var max = d.artists.reduce(function (m, a) { return Math.max(m, a.plays); }, 1);
@@ -283,7 +275,7 @@ var RUYTHA_PROJECTS_UPDATED = '1 October 2026';
         box.setAttribute('aria-busy', 'false');
       })
       .catch(function () {
-        box.innerHTML = '<p class="wk-empty">Weekly stats show up here once Last.fm is connected.</p>';
+        box.innerHTML = '<p class="wk-empty">Weekly stats show up here once my scrobbler has some plays.</p>';
         box.setAttribute('aria-busy', 'false');
       });
   })();

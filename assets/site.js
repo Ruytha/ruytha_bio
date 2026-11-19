@@ -91,113 +91,82 @@
     img.src = url;
   }
 
-  /* ---------- music: now playing, the lyric sheet, this week ---------- */
+  /* ---------- music: now playing, the lyric sheet, this week (from my own NyaFM, /v1) ---------- */
   var CFG = window.RUYTHA_CONFIG || {};
-  function lastfm(q) {
-    var user = String(CFG.lastfmUser || '').trim(), key = CFG.lastfmApiKey;
-    if (!user || !key) return Promise.reject(new Error('not configured'));
-    var url = 'https://ws.audioscrobbler.com/2.0/?format=json&user=' + encodeURIComponent(user) + '&api_key=' + encodeURIComponent(key) + q;
-    function ask() {
-      return fetch(url)
-        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-        .then(function (d) { if (d && d.error) throw new Error(d.message || d.error); return d; });   // Last.fm can send an error with a 200
-    }
-    // The page asks for several things at once and Last.fm sometimes drops one; try again once before giving up.
-    return ask().catch(function () {
-      return new Promise(function (go) { setTimeout(go, 900); }).then(ask);
-    });
+  var FMUSER = String(CFG.nyafmUser || CFG.lastfmUser || 'Ruytha').trim();
+  function v1(path) {
+    return fetch('/v1/users/' + encodeURIComponent(FMUSER) + path, { headers: { accept: 'application/json' } })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (d) { if (d && d.ok === false) throw new Error(d.error || 'error'); return d; });
   }
-  function api(path) { return fetch(path).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); }
-  // The /api/lastfm route keeps the key private when it's configured on Vercel; otherwise ask Last.fm from the browser.
-  function weekDirect() {
-    var since = Math.floor(Date.now() / 1000) - 7 * 86400;
-    var many = function (x) { return x ? (Array.isArray(x) ? x : [x]) : []; };
-    return Promise.all([
-      lastfm('&method=user.gettopartists&period=7day&limit=5'),
-      lastfm('&method=user.gettoptracks&period=7day&limit=5'),
-      lastfm('&method=user.getrecenttracks&limit=1&from=' + since)
-    ]).then(function (r) {
-      return {
-        plays: parseInt(r[2].recenttracks && r[2].recenttracks['@attr'] && r[2].recenttracks['@attr'].total, 10) || 0,
-        artists: many(r[0].topartists && r[0].topartists.artist).map(function (a) { return { name: a.name, plays: +a.playcount, url: a.url }; }),
-        tracks: many(r[1].toptracks && r[1].toptracks.track).map(function (t) { return { name: t.name, artist: t.artist && t.artist.name, plays: +t.playcount, url: t.url }; })
-      };
-    });
-  }
-  function art(t) {
-    var img = t.image && (t.image[3] || t.image[2]) && (t.image[3] || t.image[2])['#text'];
-    return img && img.indexOf('2a96cbd8b46e442fc41c2b86b821562f') < 0 ? img : '';   // Last.fm's blank star means no art
-  }
-  function artist(t) { return t.artist && (t.artist['#text'] || t.artist.name); }
+  function artistHref(name) { return '/fm#/artist/' + encodeURIComponent(name); }
 
   var sheet = $('tracks');
   sheet.innerHTML = new Array(7).join('<li class="sk"></li>');
-  api('/api/lastfm?limit=8')
-    .catch(function () { return lastfm('&method=user.getrecenttracks&limit=8'); })
-    .then(function (d) {
-      var tracks = (d.recenttracks && d.recenttracks.track) || [];
-      if (!Array.isArray(tracks)) tracks = [tracks];
-      if (!tracks.length) throw new Error('none');
-      var first = tracks[0], playing = first['@attr'] && first['@attr'].nowplaying === 'true';
+  Promise.all([v1('/now-playing').catch(function () { return { playing: false }; }), v1('/recent?limit=8')])
+    .then(function (r) {
+      var np = r[0], recent = r[1].scrobbles || [];
+      var playing = !!(np && np.playing && np.track);
+      var first = playing ? np.track : recent[0];
+      if (!first) throw new Error('none');
       $('np').dataset.state = playing ? 'playing' : 'recent';
-      $('npLabel').textContent = playing ? 'Now playing ♪' : 'Last played ' + (first.date ? ago(first.date.uts * 1000) : '');
-      $('npTrack').textContent = first.name + ' · ' + artist(first);
-      if (art(first)) { $('npArt').style.backgroundImage = 'url("' + art(first) + '")'; albumColours(art(first)); }
-      // While a song is playing Last.fm also returns its earlier scrobble right after it; show it once.
-      tracks = tracks.filter(function (t, i) {
-        var prev = tracks[i - 1];
-        return !(prev && prev['@attr'] && prev['@attr'].nowplaying === 'true' && prev.name === t.name && artist(prev) === artist(t));
-      });
-      sheet.innerHTML = tracks.slice(0, 8).map(function (t) {
-        var now = t['@attr'] && t['@attr'].nowplaying === 'true';
-        return '<li><a href="' + esc(t.url) + '" target="_blank" rel="noopener"><span class="line">' + esc(t.name) + '</span>' +
-          '<span class="by">' + esc(artist(t)) + ' · ' + (now ? 'playing now' : t.date ? ago(t.date.uts * 1000) : '') + '</span></a></li>';
+      $('npLabel').textContent = playing ? 'Now playing ♪' : 'Last played ' + ago(first.timestamp * 1000);
+      $('npTrack').textContent = first.track + ' · ' + first.artist;
+      if (first.image) { $('npArt').style.backgroundImage = 'url("' + first.image + '")'; albumColours(first.image); }
+      var rows = recent.map(function (t) { return { name: t.track, artist: t.artist, when: ago(t.timestamp * 1000) }; });
+      // The track that's playing may also have been logged already; show it once.
+      if (playing) {
+        rows = rows.filter(function (t) { return !(t.name === np.track.track && t.artist === np.track.artist && /just now/.test(t.when)); });
+        rows.unshift({ name: np.track.track, artist: np.track.artist, when: 'playing now' });
+      }
+      sheet.innerHTML = rows.slice(0, 8).map(function (t) {
+        return '<li><a href="' + esc(artistHref(t.artist)) + '"><span class="line">' + esc(t.name) + '</span>' +
+          '<span class="by">' + esc(t.artist) + ' · ' + esc(t.when) + '</span></a></li>';
       }).join('');
     })
     .catch(function () {
       $('np').dataset.state = 'idle';
       $('npLabel').textContent = 'Probably listening to';
       $('npTrack').textContent = 'Tame Impala';
-      sheet.innerHTML = '<li class="by" style="opacity:1;max-height:none">Couldn’t reach Last.fm just now.</li>';
+      sheet.innerHTML = '<li class="by" style="opacity:1;max-height:none">Couldn’t reach my scrobbler just now.</li>';
     });
 
-  api('/api/lastfm?view=week')
-    .catch(weekDirect)
-    .then(function (w) {
-      $('weekPlays').textContent = w.plays.toLocaleString();
-      var max = Math.max.apply(null, w.artists.map(function (a) { return a.plays; }).concat([1]));
-      $('weekArtists').innerHTML = w.artists.map(function (a) {
-        return '<li><a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.name) + '</a><i style="width:' + Math.max(6, a.plays / max * 100) + '%"></i><b>' + a.plays + '</b></li>';
+  Promise.all([v1('/top/artists?period=7day&limit=5'), v1('/top/tracks?period=7day&limit=5'), v1('/stats?period=7day')])
+    .then(function (r) {
+      var artists = r[0].artists || [], tracks = r[1].tracks || [];
+      $('weekPlays').textContent = (r[2].scrobbles || 0).toLocaleString();
+      var max = Math.max.apply(null, artists.map(function (a) { return a.plays; }).concat([1]));
+      $('weekArtists').innerHTML = artists.map(function (a) {
+        return '<li><a href="' + esc(artistHref(a.artist)) + '">' + esc(a.artist) + '</a><i style="width:' + Math.max(6, a.plays / max * 100) + '%"></i><b>' + a.plays + '</b></li>';
       }).join('');
-      $('weekTracks').innerHTML = w.tracks.map(function (t) {
-        return '<li><a href="' + esc(t.url) + '" target="_blank" rel="noopener"><span class="t"><b>' + esc(t.name) + '</b><span>' + esc(t.artist) + '</span></span><span class="n">' + t.plays + ' plays</span></a></li>';
+      $('weekTracks').innerHTML = tracks.map(function (t) {
+        return '<li><a href="' + esc(artistHref(t.artist)) + '"><span class="t"><b>' + esc(t.track) + '</b><span>' + esc(t.artist) + '</span></span><span class="n">' + t.plays + ' plays</span></a></li>';
       }).join('');
     })
     .catch(function () { $('week').hidden = true; $('weekTracks').closest('.charts').querySelector('.h3').hidden = true; });
 
-  // Albums on repeat this week; covers Last.fm doesn't have become a pastel tile with the album's name.
-  lastfm('&method=user.gettopalbums&period=7day&limit=6').then(function (d) {
-    var list = (d.topalbums && d.topalbums.album) || [];
-    if (!Array.isArray(list)) list = [list];
+  // Albums on repeat this week; covers that are missing become a pastel tile with the album's name.
+  v1('/top/albums?period=7day&limit=6').then(function (d) {
+    var list = d.albums || [];
     if (!list.length) throw new Error('none');
     var TILES = ['var(--pink)', 'var(--blue)', 'var(--lemon)', 'var(--mint)', 'var(--lilac)', 'var(--peach)'];
     $('weekAlbums').innerHTML = list.slice(0, 6).map(function (a, i) {
-      var img = art(a);
-      return '<li class="album"><a href="' + esc(a.url) + '" target="_blank" rel="noopener">' +
-        '<span class="cover" style="--tc:' + TILES[i % TILES.length] + (img ? ';background-image:url(&quot;' + esc(img) + '&quot;)' : '') + '">' + (img ? '' : esc(a.name)) + '</span>' +
-        '<b>' + esc(a.name) + '</b><span>' + esc(a.artist && a.artist.name) + ' · ' + a.playcount + ' plays</span></a></li>';
+      var img = a.image || '';
+      return '<li class="album"><a href="' + esc(artistHref(a.artist)) + '">' +
+        '<span class="cover" style="--tc:' + TILES[i % TILES.length] + (img ? ';background-image:url(&quot;' + esc(img) + '&quot;)' : '') + '">' + (img ? '' : esc(a.album)) + '</span>' +
+        '<b>' + esc(a.album) + '</b><span>' + esc(a.artist) + ' · ' + a.plays + ' plays</span></a></li>';
     }).join('');
   }).catch(function () { $('albumsBox').hidden = true; });
 
-  // All-time numbers from the Last.fm profile.
-  lastfm('&method=user.getinfo').then(function (d) {
-    var u = d.user, since = new Date(u.registered.unixtime * 1000);
+  // All-time numbers.
+  v1('').then(function (d) {
+    var t = d.totals, since = new Date(d.user.first_scrobble || d.user.joined);
     var n = function (x) { return Number(x).toLocaleString(); };
     $('lfmStats').innerHTML = [
-      [n(u.playcount), 'scrobbles, all time'],
-      [n(u.artist_count), 'artists'],
-      [n(u.track_count), 'different songs'],
-      [since.toLocaleDateString(undefined, { month: 'short', year: 'numeric' }), 'on Last.fm since']
+      [n(t.scrobbles), 'scrobbles, all time'],
+      [n(t.artists), 'artists'],
+      [n(t.tracks), 'different songs'],
+      [since.toLocaleDateString(undefined, { month: 'short', year: 'numeric' }), 'scrobbling since']
     ].map(function (s) { return '<li><b>' + s[0] + '</b><span>' + s[1] + '</span></li>'; }).join('');
   }).catch(function () { $('lfmStats').hidden = true; });
 

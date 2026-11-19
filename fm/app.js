@@ -173,6 +173,116 @@ async function pageHome() {
   bindDelete($('#rec'));
 }
 
+// ---------------------------------------------------------------- stats (detailed)
+function heatmap(series) {
+  // series: [{k:'YYYY-MM-DD', v}] oldest -> newest (e.g. 365 days)
+  const cell = 13, gap = 3, step = cell + gap, top = 16;
+  const first = new Date(series[0].k + 'T00:00:00');
+  const offset = first.getDay(); // 0 = Sunday
+  const max = Math.max(...series.map((d) => d.v), 1);
+  const level = (v) => (v === 0 ? 0 : Math.min(4, Math.ceil((v / max) * 4)));
+  const weeks = Math.ceil((series.length + offset) / 7);
+  const W = weeks * step + 4, H = top + 7 * step;
+  let rects = '', months = '', lastMonth = -1;
+  series.forEach((d, i) => {
+    const idx = i + offset, col = Math.floor(idx / 7), row = idx % 7;
+    const dt = new Date(d.k + 'T00:00:00');
+    if (row === 0 && dt.getMonth() !== lastMonth && col < weeks - 1) {
+      lastMonth = dt.getMonth();
+      months += `<text x="${col * step}" y="10">${dt.toLocaleDateString(undefined, { month: 'short' })}</text>`;
+    }
+    rects += `<rect class="l${level(d.v)}" x="${col * step}" y="${top + row * step}" width="${cell}" height="${cell}" rx="3"><title>${esc(dt.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }))}: ${fmtN(d.v)} plays</title></rect>`;
+  });
+  return `<div class="heat"><svg viewBox="0 0 ${W} ${H}" style="min-width:${Math.min(W, 640)}px">${months}${rects}</svg></div>
+    <div class="heatkey">less ${[0, 1, 2, 3, 4].map((l) => `<svg width="13" height="13"><rect class="l${l}" width="13" height="13" rx="3"/></svg>`).join('')} more</div>`;
+}
+
+function streaks(series) {
+  let best = 0, bestEnd = null, run = 0;
+  series.forEach((d) => {
+    run = d.v > 0 ? run + 1 : 0;
+    if (run > best) { best = run; bestEnd = d.k; }
+  });
+  let current = 0;
+  for (let i = series.length - 1; i >= 0; i--) {
+    if (series[i].v > 0) current++;
+    else if (i === series.length - 1) continue; // today may still be empty
+    else break;
+  }
+  const busiest = series.reduce((m, d) => (d.v > m.v ? d : m), { k: '', v: 0 });
+  const active = series.filter((d) => d.v > 0).length;
+  return { best, bestEnd, current, busiest, active };
+}
+
+const fmtDay = (k) => (k ? new Date(k + 'T00:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) : '—');
+
+async function pageStats() {
+  const u = user();
+  const P = `period=${period}`;
+  const [sum, ta, tt, tal, daily, monthly, all] = await Promise.all([
+    api(`/u/${enc(u)}/summary?${P}&tz=${TZ}`),
+    api(`/u/${enc(u)}/top/artists?${P}&limit=15`),
+    api(`/u/${enc(u)}/top/tracks?${P}&limit=15`),
+    api(`/u/${enc(u)}/top/albums?${P}&limit=12`),
+    api(`/u/${enc(u)}/timeline?days=365&tz=${TZ}`),
+    api(`/u/${enc(u)}/timeline?days=0&tz=${TZ}`),
+    api(`/u/${enc(u)}/summary?period=overall&tz=${TZ}`),
+  ]);
+  const year = fillDays(daily, 365);
+  const st = streaks(year);
+  const yearTotal = year.reduce((a, d) => a + d.v, 0);
+  const spanDays = { '7day': 7, '1month': 30, '3month': 90, '6month': 182, '12month': 365 }[period]
+    || Math.max(1, Math.ceil((Date.now() / 1000 - (all.first_scrobble || Date.now() / 1000)) / 86400));
+  const perDay = sum.scrobbles / spanDays;
+  const avgTrack = sum.scrobbles ? sum.listening_seconds / sum.scrobbles : 0;
+  const topArtist = ta.rows[0];
+  const share = topArtist && sum.scrobbles ? Math.round((100 * topArtist.plays) / sum.scrobbles) : 0;
+  const busyHour = sum.hours.indexOf(Math.max(...sum.hours));
+  const wdNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const busyWd = sum.weekdays.indexOf(Math.max(...sum.weekdays));
+  const monthSeries = monthly.map((r) => ({ k: r.bucket, v: r.plays }));
+  const hh = (h) => `${h % 12 || 12}${h < 12 ? 'am' : 'pm'}`;
+
+  view.innerHTML = `
+    <h1>Stats</h1>
+    <p class="sub">${esc(u)} · every number, sliced a few ways</p>
+    <div id="periods"></div>
+    <div class="tiles">
+      <div class="tile"><div class="n">${fmtN(sum.scrobbles)}</div><div class="l">scrobbles</div></div>
+      <div class="tile"><div class="n">${fmtN(sum.artists)}</div><div class="l">artists</div></div>
+      <div class="tile"><div class="n">${fmtN(sum.tracks)}</div><div class="l">tracks</div></div>
+      <div class="tile"><div class="n">${fmtN(sum.albums)}</div><div class="l">albums</div></div>
+      <div class="tile"><div class="n">${hours(sum.listening_seconds)}</div><div class="l">hours listened</div></div>
+      <div class="tile"><div class="n">${perDay >= 10 ? Math.round(perDay) : perDay.toFixed(1)}</div><div class="l">plays per day</div></div>
+      <div class="tile"><div class="n">${avgTrack ? (avgTrack / 60).toFixed(1) : '—'}<small> min</small></div><div class="l">average track length</div></div>
+      <div class="tile"><div class="n">${share}<small>%</small></div><div class="l">${topArtist ? `of plays are ${esc(topArtist.artist)}` : 'top artist share'}</div></div>
+    </div>
+
+    <section class="panel"><h2>The last year <span class="more">${fmtN(yearTotal)} plays on ${st.active} days</span></h2>${heatmap(year)}</section>
+
+    <div class="tiles">
+      <div class="tile"><div class="n">${st.current}<small> day${st.current === 1 ? '' : 's'}</small></div><div class="l">current streak</div></div>
+      <div class="tile"><div class="n">${st.best}<small> day${st.best === 1 ? '' : 's'}</small></div><div class="l">longest streak${st.bestEnd ? ` · ended ${fmtDay(st.bestEnd)}` : ''}</div></div>
+      <div class="tile"><div class="n">${fmtN(st.busiest.v)}</div><div class="l">busiest day · ${fmtDay(st.busiest.k)}</div></div>
+      <div class="tile"><div class="n">${sum.scrobbles ? hh(busyHour) : '—'}</div><div class="l">favourite hour</div></div>
+      <div class="tile"><div class="n">${sum.scrobbles ? wdNames[busyWd].slice(0, 3) : '—'}</div><div class="l">favourite day of the week</div></div>
+    </div>
+
+    <section class="panel"><h2>Month by month <span class="more">all time</span></h2>${barChart(monthSeries, { labelEvery: Math.ceil(monthSeries.length / 12), fmtLabel: (k) => k.slice(2) })}</section>
+
+    <div class="grid2">
+      <section class="panel"><h2>Listening clock</h2>${barChart(sum.hours.map((v, i) => ({ k: `${String(i).padStart(2, '0')}:00`, v })), { labelEvery: 3, fmtLabel: (k) => k.slice(0, 2) })}</section>
+      <section class="panel"><h2>By weekday</h2>${barChart(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((k, i) => ({ k, v: sum.weekdays[i] })))}</section>
+    </div>
+
+    <div class="grid2">
+      <section class="panel"><h2>Top artists <a class="more" href="#/library/artists">see all →</a></h2>${rowsList(ta.rows.map((r) => ({ ...r, kind: 'artist' })))}</section>
+      <section class="panel"><h2>Top tracks <a class="more" href="#/library/tracks">see all →</a></h2>${rowsList(tt.rows)}</section>
+    </div>
+    <section><h2>Top albums <a class="more" href="#/library/albums">see all →</a></h2>${cards(tal.rows, 'albums')}</section>`;
+  $('#periods').replaceWith(periodChips(route));
+}
+
 async function pageRecent(params) {
   const u = user();
   let page = Number(params.get('page') || 1);
@@ -567,6 +677,7 @@ async function route() {
     if (parts[0] === 'api') { if (status.private && !status.me) return loginForm('login'); return pageApi(); }
     if (parts[0] === 'authorize') return await pageAuthorize(params);
     if (status.private && !status.me) return loginForm('login');
+    if (parts[0] === 'stats') return await pageStats();
     if (parts[0] === 'recent') return await pageRecent(params);
     if (parts[0] === 'library') return await pageLibrary(parts[1] || 'artists', params);
     if (parts[0] === 'artist') return await pageArtist(decodeURIComponent(parts.slice(1).join('/')));
