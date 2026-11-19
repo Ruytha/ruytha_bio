@@ -66,7 +66,7 @@ function barChart(data, { labelEvery = 1, fmtLabel = (x) => x } = {}) {
   const bars = data.map((d, i) => {
     const h = (d.v / max) * (H - pad - 6);
     const lbl = i % labelEvery === 0 ? `<text x="${i * bw + bw / 2}" y="${H - 4}" text-anchor="middle">${esc(fmtLabel(d.k))}</text>` : '';
-    return `<rect x="${i * bw + 1}" y="${H - pad - h}" width="${Math.max(bw - 2, 1)}" height="${h}" rx="2"><title>${esc(d.k)}: ${fmtN(d.v)}</title></rect>${lbl}`;
+    return `<rect data-k="${esc(d.k)}" data-tip="${esc(d.k)}: ${fmtN(d.v)}" style="--i:${Math.min(i, 60)}" x="${i * bw + 1}" y="${H - pad - h}" width="${Math.max(bw - 2, 1)}" height="${h}" rx="2"></rect>${lbl}`;
   }).join('');
   return `<svg class="chart" viewBox="0 0 ${W} ${H}">${bars}</svg>`;
 }
@@ -158,7 +158,7 @@ async function pageHome() {
       <div class="tile"><div class="n">${fmtN(sum.albums)}</div><div class="l">albums</div></div>
       <div class="tile"><div class="n">${hours(sum.listening_seconds)}</div><div class="l">hours listened</div></div>
     </div>
-    <section class="panel"><h2>Listening over time</h2>${barChart(series, { labelEvery: Math.ceil(series.length / 10), fmtLabel: (k) => k.slice(5) || k })}</section>
+    <section class="panel" id="tlpanel"><h2>Listening over time <span class="more">click a bar to see ${days && days <= 400 ? "that day" : "that month"}</span></h2>${barChart(series, { labelEvery: Math.ceil(series.length / 10), fmtLabel: (k) => k.slice(5) || k })}<div id="drill"></div></section>
     <section><h2>Top artists <a class="more" href="#/library/artists">see all →</a></h2>${cards(ta.rows, 'artists')}</section>
     <section><h2>Top albums <a class="more" href="#/library/albums">see all →</a></h2>${cards(tal.rows, 'albums')}</section>
     <div class="grid2">
@@ -171,6 +171,32 @@ async function pageHome() {
     </div>`;
   $('#periods').replaceWith(periodChips(route));
   bindDelete($('#rec'));
+  bindDrill($('#tlpanel'), u);
+}
+
+// Click a bar (a day, or a month for all time) to list what you played then.
+function bindDrill(panel, u) {
+  panel.addEventListener('click', async (e) => {
+    const bar = e.target.closest('rect[data-k]');
+    if (!bar) return;
+    const k = bar.dataset.k;
+    const month = k.length === 7;
+    const start = new Date(month ? `${k}-01T00:00:00` : `${k}T00:00:00`);
+    const end = new Date(start);
+    if (month) end.setMonth(end.getMonth() + 1); else end.setDate(end.getDate() + 1);
+    panel.querySelectorAll('rect.sel').forEach((r) => r.classList.remove('sel'));
+    bar.classList.add('sel');
+    const box = $('#drill');
+    box.innerHTML = '<div class="drill"><div class="empty">loading…</div></div>';
+    try {
+      const r = await api(`/u/${enc(u)}/recent?from=${start.getTime() / 1000}&to=${end.getTime() / 1000 - 1}&limit=100`);
+      const label = start.toLocaleDateString(undefined, month ? { month: 'long', year: 'numeric' } : { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      box.innerHTML = `<div class="drill"><h3>${esc(label)} · ${fmtN(r.total ?? r.rows.length)} plays<button type="button" id="drillx">close ✕</button></h3>${scrobbleList(r.rows, { canDelete: isOwner() })}</div>`;
+      bindDelete(box);
+      $('#drillx').onclick = () => { box.innerHTML = ''; bar.classList.remove('sel'); };
+      window.FX?.burst?.(e.clientX, e.clientY, 6, '🎶');
+    } catch (err) { box.innerHTML = `<div class="drill"><div class="empty">${esc(err.message)}</div></div>`; }
+  });
 }
 
 // ---------------------------------------------------------------- stats (detailed)
@@ -191,7 +217,7 @@ function heatmap(series) {
       lastMonth = dt.getMonth();
       months += `<text x="${col * step}" y="10">${dt.toLocaleDateString(undefined, { month: 'short' })}</text>`;
     }
-    rects += `<rect class="l${level(d.v)}" x="${col * step}" y="${top + row * step}" width="${cell}" height="${cell}" rx="3"><title>${esc(dt.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }))}: ${fmtN(d.v)} plays</title></rect>`;
+    rects += `<rect class="l${level(d.v)}" data-tip="${esc(dt.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }))}: ${fmtN(d.v)} plays" x="${col * step}" y="${top + row * step}" width="${cell}" height="${cell}" rx="3"></rect>`;
   });
   return `<div class="heat"><svg viewBox="0 0 ${W} ${H}" style="min-width:${Math.min(W, 640)}px">${months}${rects}</svg></div>
     <div class="heatkey">less ${[0, 1, 2, 3, 4].map((l) => `<svg width="13" height="13"><rect class="l${l}" width="13" height="13" rx="3"/></svg>`).join('')} more</div>`;
@@ -692,5 +718,5 @@ route();
 // refresh now-playing every 30s on the overview
 setInterval(async () => {
   const np = $('#np');
-  if (np && user()) np.innerHTML = await nowPlaying(user());
+  if (np && user()) { np.innerHTML = await nowPlaying(user()); window.FX?.npChanged(np.textContent); }
 }, 30000);

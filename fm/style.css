@@ -137,3 +137,71 @@ pre.out { background: var(--bg); border: 1px solid var(--line); border-radius: 1
 .heat .l4, .heatkey .l4 { opacity: 1; }
 .heat rect:hover { stroke: var(--text, #fff); stroke-width: 1; }
 .heatkey { display: flex; align-items: center; gap: 4px; justify-content: flex-end; color: var(--dim); font-size: 12px; margin-top: 8px; }
+
+/* ---------------------------------------------------------------- motion (fx.js) */
+.fx-tip { position: fixed; left: 0; top: 0; z-index: 60; pointer-events: none; padding: 5px 10px; border-radius: 8px; background: #000c; color: #fff; font-size: 12px; white-space: nowrap; opacity: 0; transition: opacity .12s; backdrop-filter: blur(6px); border: 1px solid var(--line); }
+.fx-tip.on { opacity: 1; }
+.fx-toast { position: fixed; left: 50%; top: 14px; z-index: 60; translate: -50% -140%; padding: 10px 18px; border-radius: 999px; background: var(--panel); border: 1px solid var(--accent); color: var(--text); box-shadow: 0 8px 30px #0008; transition: translate .5s cubic-bezier(.2,1.4,.4,1); max-width: 90vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fx-toast.on { translate: -50% 0; }
+.fx-paw { position: fixed; z-index: 70; pointer-events: none; font-size: 20px; translate: -50% -50%; animation: fx-fly 1s cubic-bezier(.15,.7,.3,1) forwards; }
+@keyframes fx-fly { 0% { opacity: 1; transform: translate(0,0) rotate(0) scale(calc(var(--s) * .4)); } 25% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + 70px)) rotate(var(--r)) scale(var(--s)); } }
+
+.fx-wait { opacity: 0; }
+.fx-in { animation: fx-up .6s cubic-bezier(.2,.8,.2,1) calc(var(--i, 0) * 45ms) backwards; }
+@keyframes fx-up { from { opacity: 0; transform: translateY(18px) scale(.97); } }
+
+.chart.fx-wait, .heat.fx-wait { opacity: 1; }
+.chart.fx-wait rect, .heat.fx-wait rect { transform: scaleY(0); }
+.chart rect { transform-box: fill-box; transform-origin: bottom; cursor: pointer; transition: opacity .15s, fill .15s; }
+.chart.fx-in { animation: none; }
+.chart.fx-in rect { animation: fx-grow .7s cubic-bezier(.2,.9,.25,1.15) calc(var(--i, 0) * 14ms) backwards; }
+@keyframes fx-grow { from { transform: scaleY(0); } }
+.chart rect.sel { fill: var(--accent2); opacity: 1; }
+.heat.fx-in { animation: none; }
+.heat.fx-in rect { transform-box: fill-box; transform-origin: center; animation: fx-pop .5s cubic-bezier(.2,.9,.3,1.4) calc(var(--c, 0) * 12ms) backwards; }
+@keyframes fx-pop { from { transform: scale(0); opacity: 0; } }
+
+.row.fx-in .bar i { transform-origin: left; animation: fx-bar .9s cubic-bezier(.2,.8,.2,1) calc(var(--i, 0) * 45ms + .15s) backwards; }
+@keyframes fx-bar { from { transform: scaleX(0); } }
+
+.tile { transition: transform .25s cubic-bezier(.2,1.5,.4,1), border-color .2s; cursor: pointer; }
+.tile:hover { transform: translateY(-3px); border-color: var(--accent); }
+.tile.pop { animation: fx-tilepop .5s cubic-bezier(.2,1.6,.4,1); }
+@keyframes fx-tilepop { 40% { transform: scale(1.09) rotate(-1.5deg); } }
+
+.card { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .3s; will-change: transform; }
+.card:hover { box-shadow: 0 14px 34px #000a, 0 0 0 1px var(--accent); }
+.card::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .25s; background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), #fff3, transparent 55%); }
+.card:hover::after { opacity: 1; }
+
+.row { transition: background .2s, transform .2s; border-radius: 8px; }
+.row:hover { background: #ffffff0a; transform: translateX(3px); }
+.cover.wiggle { animation: fx-wiggle .6s; }
+@keyframes fx-wiggle { 20% { transform: rotate(-12deg) scale(1.1); } 50% { transform: rotate(10deg) scale(1.1); } 80% { transform: rotate(-4deg); } }
+
+/* now playing: a little spinning record */
+.np { position: relative; overflow: hidden; }
+.np .cover { border-radius: 50%; animation: fx-spin 9s linear infinite; box-shadow: 0 0 0 3px #0006, 0 6px 20px #0008; position: relative; }
+.np .cover::after { content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 12px; translate: -50% -50%; border-radius: 50%; background: var(--bg); box-shadow: 0 0 0 2px #0005; z-index: 2; }
+.np:hover .cover { animation-play-state: paused; }
+@keyframes fx-spin { to { transform: rotate(360deg); } }
+.np::before { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, #ffffff12 50%, transparent 70%); translate: -100% 0; animation: fx-shine 4.5s ease-in-out infinite; pointer-events: none; }
+@keyframes fx-shine { 60%, 100% { translate: 100% 0; } }
+
+.brand .paw { transition: transform .3s cubic-bezier(.2,1.6,.4,1); }
+.brand:hover .paw { transform: rotate(14deg) scale(1.3); }
+.brand { cursor: pointer; }
+.chip { transition: transform .15s, background .2s, border-color .2s; }
+.chip:hover { transform: translateY(-2px); border-color: var(--accent); }
+.chip:active { transform: scale(.94); }
+
+/* day drill-down */
+#drill:empty { display: none; }
+.drill { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); animation: fx-up .45s cubic-bezier(.2,.8,.2,1) backwards; }
+.drill h3 { margin: 0 0 8px; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+.drill h3 button { margin-left: auto; border: 0; background: var(--panel2); color: var(--dim); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .fx-wait { opacity: 1 !important; }
+}
