@@ -3,147 +3,36 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    [
-      [
-        "source",
-        "/api/auth-config"
+    { "source": "/api/auth-config", "destination": "/api/auth?config=1" },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(curl|Wget|HTTPie|xh)/.*"
+        }
       ],
-      [
-        "destination",
-        "/api/auth?config=1"
-      ]
-    ],
-    [
-      [
-        "source",
-        "/"
-      ],
-      [
-        "has",
-        [
-          [
-            [
-              "type",
-              "header"
-            ],
-            [
-              "key",
-              "user-agent"
-            ],
-            [
-              "value",
-              "(curl|Wget|HTTPie|xh)/.*"
-            ]
-          ]
-        ]
-      ],
-      [
-        "destination",
-        "/api/lastfm?view=card"
-      ]
-    ],
-    [
-      [
-        "source",
-        "/"
-      ],
-      [
-        "destination",
-        "/home"
-      ]
-    ],
-    [
-      [
-        "source",
-        "/2.0"
-      ],
-      [
-        "destination",
-        "/api/nyafm"
-      ]
-    ],
-    [
-      [
-        "source",
-        "/2.0/"
-      ],
-      [
-        "destination",
-        "/api/nyafm"
-      ]
-    ],
-    [
-      [
-        "source",
-        "/1/:path*"
-      ],
-      [
-        "destination",
-        "/api/nyafm"
-      ]
-    ],
-    [
-      [
-        "source",
-        "/v1"
-      ],
-      [
-        "destination",
-        "/api/nyafm"
-      ]
-    ],
-    [
-      [
-        "source",
-        "/v1/:path*"
-      ],
-      [
-        "destination",
-        "/api/nyafm"
-      ]
-    ],
-    [
-      [
-        "source",
-        "/apis/:path*"
-      ],
-      [
-        "destination",
-        "/api/nyafm"
-      ]
-    ],
-    [
-      [
-        "source",
-        "/fm/api/:path*"
-      ],
-      [
-        "destination",
-        "/api/nyafm"
-      ]
-    ]
+      "destination": "/api/lastfm?view=card"
+    },
+    { "source": "/", "destination": "/home" },
+    { "source": "/2.0", "destination": "/api/nyafm" },
+    { "source": "/2.0/", "destination": "/api/nyafm" },
+    { "source": "/1/:path*", "destination": "/api/nyafm" },
+    { "source": "/v1", "destination": "/api/nyafm" },
+    { "source": "/v1/:path*", "destination": "/api/nyafm" },
+    { "source": "/apis/:path*", "destination": "/api/nyafm" },
+    { "source": "/fm/api/:path*", "destination": "/api/nyafm" }
   ],
   "redirects": [
-    [
-      [
-        "source",
-        "/blog/posts/:path*"
-      ],
-      [
-        "destination",
-        "/blog"
-      ],
-      [
-        "permanent",
-        false
-      ]
-    ]
+    {
+      "source": "/blog/posts/:path*",
+      "destination": "/blog",
+      "permanent": false
+    }
   ],
   "functions": {
-    "api/nyafm.mjs": {
-      "maxDuration": 30,
-      "includeFiles": "{node_modules/hono/**,node_modules/@hono/**,lib/nyafm/**}"
-    },
+    "api/nyafm.mjs": { "maxDuration": 30 },
     "api/motion-cover.js": {
       "maxDuration": 60,
       "memory": 1024,
@@ -151,57 +40,27 @@
     }
   },
   "headers": [
-    [
-      [
-        "source",
-        "/assets/img/(.*)"
-      ],
-      [
-        "headers",
-        [
-          [
-            [
-              "key",
-              "cache-control"
-            ],
-            [
-              "value",
-              "public, max-age=604800, must-revalidate"
-            ]
-          ]
-        ]
+    {
+      "source": "/assets/img/(.*)",
+      "headers": [
+        {
+          "key": "cache-control",
+          "value": "public, max-age=604800, must-revalidate"
+        }
       ]
-    ],
-    [
-      [
-        "source",
-        "/(.*)"
-      ],
-      [
-        "headers",
-        [
-          [
-            [
-              "key",
-              "x-content-type-options"
-            ],
-            [
-              "value",
-              "nosniff"
-            ]
-          ],
-          [
-            [
-              "key",
-              "referrer-policy"
-            ],
-            [
-              "value",
-              "strict-origin-when-cross-origin"
-            ]
-          ]
-        ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "x-content-type-options",
+          "value": "nosniff"
+        },
+        {
+          "key": "referrer-policy",
+          "value": "strict-origin-when-cross-origin"
+        }
       ]
-    ]
+    }
   ]
 }
