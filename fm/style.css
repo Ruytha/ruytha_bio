@@ -141,7 +141,7 @@ pre.out { background: var(--bg); border: 1px solid var(--line); border-radius: 1
 /* ---------------------------------------------------------------- motion (fx.js) */
 .fx-tip { position: fixed; left: 0; top: 0; z-index: 60; pointer-events: none; padding: 5px 10px; border-radius: 8px; background: #000c; color: #fff; font-size: 12px; white-space: nowrap; opacity: 0; transition: opacity .12s; backdrop-filter: blur(6px); border: 1px solid var(--line); }
 .fx-tip.on { opacity: 1; }
-.fx-toast { position: fixed; left: 50%; top: 14px; z-index: 60; translate: -50% -140%; padding: 10px 18px; border-radius: 999px; background: var(--panel); border: 1px solid var(--accent); color: var(--text); box-shadow: 0 8px 30px #0008; transition: translate .5s cubic-bezier(.2,1.4,.4,1); max-width: 90vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fx-toast { position: fixed; left: 50%; top: 14px; z-index: 60; translate: -50% -220%; padding: 10px 18px; border-radius: 999px; background: var(--panel); border: 1px solid var(--accent); color: var(--text); box-shadow: 0 8px 30px #0008; transition: translate .5s cubic-bezier(.2,1.4,.4,1); max-width: 90vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .fx-toast.on { translate: -50% 0; }
 .fx-paw { position: fixed; z-index: 70; pointer-events: none; font-size: 20px; translate: -50% -50%; animation: fx-fly 1s cubic-bezier(.15,.7,.3,1) forwards; }
 @keyframes fx-fly { 0% { opacity: 1; transform: translate(0,0) rotate(0) scale(calc(var(--s) * .4)); } 25% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + 70px)) rotate(var(--r)) scale(var(--s)); } }

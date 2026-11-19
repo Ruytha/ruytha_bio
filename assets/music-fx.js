@@ -58,6 +58,7 @@
       if (!en.isIntersecting) return;
       var el = en.target;
       io.unobserve(el);
+      el.classList.remove('mfx-wait');
       el.classList.add('mfx-in');
       if (el.matches('#lfmStats li')) { var b = el.querySelector('b'); if (b) countUp(b); }
       if (el.id === 'weekPlays') countUp(el);

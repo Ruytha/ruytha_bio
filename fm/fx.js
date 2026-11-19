@@ -110,6 +110,7 @@
       if (!en.isIntersecting) continue;
       const el = en.target;
       io.unobserve(el);
+      el.classList.remove('fx-wait');
       el.classList.add('fx-in');
       if (el.matches('.tile')) $$('.n', el).forEach(countUp);
     }
