@@ -60,8 +60,8 @@
     npChanged(text) {
       const t = (text || '').trim().replace(/\s+/g, ' ');
       if (lastNp !== null && t && t !== lastNp) {
-        say('♪ now playing: ' + t.replace(/^Now playing\s*/i, ''));
-        burst(innerWidth / 2, 60, 8, '🎵');
+        if (/^Not listening/i.test(t)) say('⏸ not listening anymore');
+        else { say('♪ now playing: ' + t.replace(/^Now playing\s*/i, '')); burst(innerWidth / 2, 60, 8, '🎵'); }
       }
       lastNp = t;
     },

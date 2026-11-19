@@ -58,6 +58,12 @@
 
   function clean(meta) { const { uri, ...rest } = meta; return rest; }
 
+  // Playback stopped (paused, or Spotify closed): clear "now playing" so the site says you're not listening.
+  function clearNowPlaying(keepalive = false) {
+    if (!cfg.url || !cfg.token) return;
+    fetch(`${cfg.url}/v1/now-playing`, { method: 'DELETE', headers: { Authorization: `Bearer ${cfg.token}` }, keepalive }).catch(() => {});
+  }
+
   async function flushQueue() {
     const q = JSON.parse(LS.get(QUEUE_KEY) || '[]');
     if (!q.length) return;
@@ -78,6 +84,7 @@
     cur = meta && meta.artist_name && meta.track_name ? { meta, started: Date.now(), played: 0, scrobbled: false } : null;
     lastTick = Date.now();
     if (cur && Spicetify.Player.isPlaying()) submit('playing_now', [{ track_metadata: clean(cur.meta) }]);
+    else clearNowPlaying();
   }
 
   // Last.fm rules: track > 30s, scrobble after half its length or 4 minutes of actual listening.
@@ -97,7 +104,11 @@
   Spicetify.Player.addEventListener('onplaypause', () => {
     lastTick = Date.now();
     if (cur && Spicetify.Player.isPlaying()) submit('playing_now', [{ track_metadata: clean(cur.meta) }]);
+    else clearNowPlaying();
   });
+  // Heartbeat while playing, so a long track keeps showing as playing.
+  setInterval(() => { if (cur && Spicetify.Player.isPlaying()) submit('playing_now', [{ track_metadata: clean(cur.meta) }]); }, 60000);
+  window.addEventListener('beforeunload', () => clearNowPlaying(true));
   onSongChange();
   flushQueue();
 

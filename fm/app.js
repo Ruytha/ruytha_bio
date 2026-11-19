@@ -127,7 +127,13 @@ function cards(items, kind) {
 // ---------------------------------------------------------------- pages
 async function nowPlaying(u) {
   const { nowplaying: np } = await api(`/u/${enc(u)}/nowplaying`).catch(() => ({}));
-  if (!np) return '';
+  if (!np) {
+    // Nothing playing: say so, and show what was played last.
+    const last = (await api(`/u/${enc(u)}/recent?limit=1`).catch(() => ({ rows: [] }))).rows?.[0];
+    if (!last) return '';
+    return `<div class="np idle">${cover(last)}<div><div class="lbl">Not listening right now</div>
+      <div style="font-size:18px;font-weight:600">${esc(last.track)}</div><div class="s">${artistLink(last.artist)} · last played ${ago(last.ts)}</div></div></div>`;
+  }
   return `<div class="np">${cover(np)}<div><div class="lbl"><span class="eq"><i></i><i></i><i></i></span> Now playing</div>
     <div style="font-size:18px;font-weight:600">${esc(np.track)}</div><div class="s">${artistLink(np.artist)}${np.album ? ` · ${esc(np.album)}` : ''}</div></div></div>`;
 }
@@ -195,6 +201,7 @@ function bindDrill(panel, u) {
       bindDelete(box);
       $('#drillx').onclick = () => { box.innerHTML = ''; bar.classList.remove('sel'); };
       window.FX?.burst?.(e.clientX, e.clientY, 6, '🎶');
+      box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } catch (err) { box.innerHTML = `<div class="drill"><div class="empty">${esc(err.message)}</div></div>`; }
   });
 }
@@ -713,7 +720,7 @@ async function route() {
   }
 }
 
-window.addEventListener('hashchange', route);
+window.addEventListener('hashchange', () => { route(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 route();
 // refresh now-playing every 30s on the overview
 setInterval(async () => {

@@ -205,3 +205,11 @@ pre.out { background: var(--bg); border: 1px solid var(--line); border-radius: 1
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .fx-wait { opacity: 1 !important; }
 }
+
+/* smooth scrolling + idle now-playing */
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+.np.idle { background: var(--panel); border-color: var(--line); }
+.np.idle .lbl { color: var(--dim); }
+.np.idle .cover { border-radius: 8px; animation: none; box-shadow: none; opacity: .75; filter: grayscale(.35); }
+.np.idle .cover::after, .np.idle::before { display: none; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

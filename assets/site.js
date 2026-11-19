@@ -103,15 +103,16 @@
 
   var sheet = $('tracks');
   sheet.innerHTML = new Array(7).join('<li class="sk"></li>');
-  Promise.all([v1('/now-playing').catch(function () { return { playing: false }; }), v1('/recent?limit=8')])
+  function loadNow() {
+  return Promise.all([v1('/now-playing').catch(function () { return { playing: false }; }), v1('/recent?limit=8')])
     .then(function (r) {
       var np = r[0], recent = r[1].scrobbles || [];
       var playing = !!(np && np.playing && np.track);
       var first = playing ? np.track : recent[0];
       if (!first) throw new Error('none');
       $('np').dataset.state = playing ? 'playing' : 'recent';
-      $('npLabel').textContent = playing ? 'Now playing ♪' : 'Last played ' + ago(first.timestamp * 1000);
-      $('npTrack').textContent = first.track + ' · ' + first.artist;
+      $('npLabel').textContent = playing ? 'Now playing ♪' : 'Not listening right now · ' + ago(first.timestamp * 1000);
+      $('npTrack').textContent = (playing ? '' : 'last: ') + first.track + ' · ' + first.artist;
       if (first.image) { $('npArt').style.backgroundImage = 'url("' + first.image + '")'; albumColours(first.image); }
       var rows = recent.map(function (t) { return { name: t.track, artist: t.artist, when: ago(t.timestamp * 1000) }; });
       // The track that's playing may also have been logged already; show it once.
@@ -119,10 +120,11 @@
         rows = rows.filter(function (t) { return !(t.name === np.track.track && t.artist === np.track.artist && /just now/.test(t.when)); });
         rows.unshift({ name: np.track.track, artist: np.track.artist, when: 'playing now' });
       }
-      sheet.innerHTML = rows.slice(0, 8).map(function (t) {
+      var html = rows.slice(0, 8).map(function (t) {
         return '<li><a href="' + esc(artistHref(t.artist)) + '"><span class="line">' + esc(t.name) + '</span>' +
           '<span class="by">' + esc(t.artist) + ' · ' + esc(t.when) + '</span></a></li>';
       }).join('');
+      if (sheet.dataset.h !== html) { sheet.dataset.h = html; sheet.innerHTML = html; }   // only redraw when something changed
     })
     .catch(function () {
       $('np').dataset.state = 'idle';
@@ -130,6 +132,10 @@
       $('npTrack').textContent = 'Tame Impala';
       sheet.innerHTML = '<li class="by" style="opacity:1;max-height:none">Couldn’t reach my scrobbler just now.</li>';
     });
+  }
+  loadNow();
+  // Keep it honest: when the music stops, the page notices within a minute.
+  setInterval(function () { if (!document.hidden) loadNow(); }, 30000);
 
   Promise.all([v1('/top/artists?period=7day&limit=5'), v1('/top/tracks?period=7day&limit=5'), v1('/stats?period=7day')])
     .then(function (r) {
