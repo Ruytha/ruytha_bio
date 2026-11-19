@@ -37,7 +37,7 @@
     { "source": "/fm/api/:path*", "destination": "/api/nyafm" }
   ],
   "functions": {
-    "api/nyafm.mjs": { "maxDuration": 30 },
+    "api/nyafm.mjs": { "maxDuration": 30, "includeFiles": "{node_modules/hono/**,node_modules/@hono/**,lib/nyafm/**}" },
     "api/motion-cover.js": {
       "maxDuration": 60,
       "memory": 1024,
