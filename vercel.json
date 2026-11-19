@@ -3,6 +3,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
+    { "source": "/api/auth-config", "destination": "/api/auth?config=1" },
     {
       "source": "/",
       "has": [
