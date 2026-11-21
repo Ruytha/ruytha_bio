@@ -14,8 +14,15 @@
   transition: background 0.8s;
 }
 .lp[hidden] { display: none; }
-#lyricPreview { width: min(100%, 560px); }
-#lyricPreview .lp-stage { height: clamp(220px, 32vh, 300px); }
+/* On the home page it's a compact strip under the name, so the tagline and buttons stay on the first screen. */
+#lyricPreview { width: min(100%, 520px); margin: 18px 0 18px; border-radius: 16px; }
+#lyricPreview .lp-stage { height: clamp(120px, 17vh, 150px); font-size: clamp(17px, 1.6vw, 21px); padding: 0 16px; }
+#lyricPreview .lp-credit { padding: 0 14px 9px; font-size: 11px; }
+#lyricPreview .lp-src { white-space: nowrap; }
+@media (max-width: 700px) {
+  #lyricPreview { width: 100%; }
+  #lyricPreview .lp-stage { height: 130px; font-size: 17px; }
+}
 .lp-stage {
   position: relative;
   height: clamp(260px, 42vh, 380px);
