@@ -94,7 +94,7 @@ export function mount(host) {
     player.setLyricLines(data.lines, Math.max(0, Math.round(songTime())));
     player.setCurrentTime(Math.max(0, Math.round(songTime())), true);
     title.textContent = t.track + ' · ' + t.artist;
-    src.textContent = data.provider + (data.sync === 'word' ? ' · word synced' : ' · line synced');
+    src.textContent = data.provider + (data.sync === 'word' ? ' · word synced' : ' · line synced') + (data.credit ? ' · ' + data.credit : '');
     host.dataset.sync = data.sync;
     player.resume();
     run();
