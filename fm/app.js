@@ -156,6 +156,7 @@ async function pageHome() {
     <h1>${esc(u)}</h1>
     <p class="sub">${sum.first_scrobble ? `scrobbling since ${new Date(sum.first_scrobble * 1000).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}` : 'no scrobbles yet — set up a scrobbler in Settings'}</p>
     <div id="np">${np}</div>
+    <div id="lyrics"></div>
     <div id="periods"></div>
     <div class="tiles">
       <div class="tile"><div class="n">${fmtN(sum.scrobbles)}</div><div class="l">scrobbles</div></div>
@@ -720,10 +721,28 @@ async function route() {
   }
 }
 
-window.addEventListener('hashchange', () => { route(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
-route();
+// Synced lyrics under the now-playing card (BiniLyrics / NetEase / LRCLIB, drawn by AMLL). Uses /v1 for the song's position.
+let lyricsPlayer = null;
+async function syncLyrics() {
+  const host = $('#lyrics');
+  if (!host || !user()) { lyricsPlayer?.destroy(); lyricsPlayer = null; return; }
+  const np = await fetch(`/v1/users/${enc(user())}/now-playing`).then((r) => r.json()).catch(() => null);
+  const track = np?.playing ? np.track : null;
+  if (lyricsPlayer && lyricsPlayer.host !== host) { lyricsPlayer.destroy(); lyricsPlayer = null; }   // the page was redrawn
+  if (!lyricsPlayer) {
+    if (!track) return;
+    const m = await import('/assets/lyrics.js').catch(() => null);
+    if (!m || $('#lyrics') !== host) return;
+    lyricsPlayer = m.mount(host);
+  }
+  lyricsPlayer.update(track);
+}
+
+window.addEventListener('hashchange', () => { route().then(syncLyrics); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+route().then(syncLyrics);
 // refresh now-playing every 30s on the overview
 setInterval(async () => {
   const np = $('#np');
   if (np && user()) { np.innerHTML = await nowPlaying(user()); window.FX?.npChanged(np.textContent); }
+  syncLyrics();
 }, 30000);

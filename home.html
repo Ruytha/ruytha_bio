@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,900&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap">
 <link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/lyrics.css">
 <!-- femboy mode is applied before first paint, so the page never flashes the wrong colours -->
 <script>try { if (localStorage.getItem('ruytha-femboy') === '1') document.documentElement.classList.add('femboy'); } catch (e) {}</script>
 </head>
@@ -211,6 +212,7 @@
     <h2 class="h2">Music <span class="ja" lang="ja">音楽</span></h2>
     <p class="lede">Pulled live from my own scrobbler, <a href="/fm">NyaFM</a>, and set like a lyric sheet. Some straight bangers. No judging.</p>
   </div>
+  <div id="lyricPreview" data-rise hidden></div>
   <div class="listen-grid">
     <ol class="sheet" id="tracks" aria-label="Recently played" data-rise></ol>
     <aside class="week glass" id="week" data-rise>

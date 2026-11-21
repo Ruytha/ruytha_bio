@@ -1,0 +1,29 @@
+/* Lyric preview (assets/lyrics.js). Shared by the home page and NyaFM, so it only relies on its own variables. */
+.lp {
+  --amll-lyric-view-color: #fff;
+  position: relative;
+  margin: 18px 0 0;
+  border-radius: 18px;
+  overflow: hidden;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--np1, #7a5cff) 38%, #0b0a14), color-mix(in srgb, var(--np2, #ff6fae) 30%, #0b0a14));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+  transition: background 0.8s;
+}
+.lp[hidden] { display: none; }
+.lp-stage {
+  position: relative;
+  height: clamp(260px, 42vh, 380px);
+  padding: 0 clamp(12px, 3vw, 28px);
+  font-size: clamp(22px, 3.2vw, 30px);
+  -webkit-mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+}
+.lp-amll { position: absolute; inset: 0; width: 100%; height: 100%; }
+.lp-credit {
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  margin: 0; padding: 8px 16px 12px;
+  font-size: 12px; line-height: 1.3; opacity: 0.7;
+}
+.lp-title { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+@media (prefers-reduced-motion: reduce) { .lp { transition: none; } }

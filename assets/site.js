@@ -101,6 +101,17 @@
   }
   function artistHref(name) { return '/fm#/artist/' + encodeURIComponent(name); }
 
+  // Synced lyrics of whatever's playing right now (BiniLyrics / NetEase / LRCLIB, drawn by AMLL). Loaded on demand, and only while music is on.
+  var lyricsHost = $('lyricPreview'), lyricsMount = null, lyricsLoading = false;
+  function lyricsFor(track) {
+    if (!lyricsHost) return;
+    if (lyricsMount) { lyricsMount.update(track); return; }
+    if (!track || lyricsLoading) return;
+    lyricsLoading = true;
+    import('/assets/lyrics.js').then(function (m) { lyricsMount = m.mount(lyricsHost); lyricsMount.update(track); })
+      .catch(function () { lyricsLoading = false; });
+  }
+
   var sheet = $('tracks');
   sheet.innerHTML = new Array(7).join('<li class="sk"></li>');
   function loadNow() {
@@ -111,6 +122,7 @@
       var first = playing ? np.track : recent[0];
       if (!first) throw new Error('none');
       $('np').dataset.state = playing ? 'playing' : 'recent';
+      lyricsFor(playing ? np.track : null);
       $('npLabel').textContent = playing ? 'Now playing ♪' : 'Not listening right now · ' + ago(first.timestamp * 1000);
       $('npTrack').textContent = (playing ? '' : 'last: ') + first.track + ' · ' + first.artist;
       if (first.image) { $('npArt').style.backgroundImage = 'url("' + first.image + '")'; albumColours(first.image); }
