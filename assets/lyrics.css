@@ -8,9 +8,13 @@
   background: linear-gradient(160deg, color-mix(in srgb, var(--np1, #7a5cff) 38%, #0b0a14), color-mix(in srgb, var(--np2, #ff6fae) 30%, #0b0a14));
   border: 1px solid rgba(255, 255, 255, 0.14);
   color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", system-ui, "Segoe UI", sans-serif;
+  font-weight: 700;
+  -webkit-font-smoothing: antialiased;
   transition: background 0.8s;
 }
 .lp[hidden] { display: none; }
+#lyricPreview { width: min(100%, 460px); }
 .lp-stage {
   position: relative;
   height: clamp(260px, 42vh, 380px);
