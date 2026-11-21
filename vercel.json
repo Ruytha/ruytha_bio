@@ -22,6 +22,7 @@
     { "source": "/term", "destination": "/api/nyafm" },
     { "source": "/term/:path*", "destination": "/api/nyafm" },
     { "source": "/fm/term", "destination": "/api/nyafm" },
+    { "source": "/api/lyrics", "destination": "/api/nyafm" },
     { "source": "/v1", "destination": "/api/nyafm" },
     { "source": "/v1/:path*", "destination": "/api/nyafm" },
     { "source": "/apis/:path*", "destination": "/api/nyafm" },
