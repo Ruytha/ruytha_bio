@@ -1,5 +1,5 @@
 /* Lyric preview for whatever's playing, shared by the home page and NyaFM.
-   Lyrics come from /api/lyrics (BiniLyrics, NetEase, LRCLIB) and are drawn by AMLL, the Apple Music-like Lyrics renderer.
+   Lyrics come from /api/lyrics (Spicy Lyrics, BiniLyrics, NetEase, LRCLIB), which looks up the song playing right now on the server, and are drawn by AMLL, the Apple Music-like Lyrics renderer.
 
      import('/assets/lyrics.js').then(m => { const lp = m.mount(hostElement); lp.update(nowPlayingTrack); });
 
@@ -63,17 +63,22 @@ export function mount(host) {
     if (player) { player.pause(); }
   }
 
-  async function load(t, myToken) {
+  async function load(t, myToken, attempt = 0) {
     let data;
     try {
-      const q = new URLSearchParams({ artist: t.artist, track: t.track });
-      if (t.album) q.set('album', t.album);
-      if (t.duration) q.set('duration', String(t.duration));
-      const r = await fetch('/api/lyrics?' + q, { headers: { accept: 'application/json' } });
+      // No song details go up: the server looks up what is playing right now.
+      const r = await fetch('/api/lyrics', { headers: { accept: 'application/json' }, cache: 'no-store' });
       if (!r.ok) return;
       data = await r.json();
     } catch (e) { return; }
-    if (myToken !== token || !data || !data.found || !data.lines || !data.lines.length) return;
+    if (myToken !== token || !data) return;
+    // The song changed between our poll and the server's: wait a moment and ask again.
+    const same = (a, b) => String(a || '').toLowerCase() === String(b || '').toLowerCase();
+    if (data.track && !(same(data.track.artist, t.artist) && same(data.track.track, t.track))) {
+      if (attempt < 2) setTimeout(() => { if (myToken === token) load(t, myToken, attempt + 1); }, 2500);
+      return;
+    }
+    if (!data.found || !data.lines || !data.lines.length) return;
 
     let amll;
     try { amll = await loadAmll(); } catch (e) { return; }
@@ -94,7 +99,16 @@ export function mount(host) {
     player.setLyricLines(data.lines, Math.max(0, Math.round(songTime())));
     player.setCurrentTime(Math.max(0, Math.round(songTime())), true);
     title.textContent = t.track + ' · ' + t.artist;
-    src.textContent = data.provider + (data.sync === 'word' ? ' · word synced' : ' · line synced') + (data.credit ? ' · ' + data.credit : '');
+    // Credit: always the provider; for a community sync also the uploader and the maker, linked where we have a link.
+    src.textContent = data.provider + (data.sync === 'word' ? ' · word synced' : ' · line synced');
+    for (const c of data.credits || []) {
+      src.append(' · ' + c.role + ' ');
+      if (c.url) {
+        const a = document.createElement('a');
+        a.href = c.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = c.name;
+        src.append(a);
+      } else src.append(c.name);
+    }
     host.dataset.sync = data.sync;
     player.resume();
     run();
