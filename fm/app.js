@@ -42,6 +42,39 @@ function cover({ artist, album, track, kind = 'album' }, cls = 'cover') {
 document.head.insertAdjacentHTML('beforeend', '<style>.cover{position:relative}.cover img{position:relative;z-index:1}</style>');
 
 const artistLink = (a) => `<a href="#/artist/${enc(a)}">${esc(a)}</a>`;
+const trackHref = (a, t) => `#/track/${enc(a)}/${enc(t)}`;
+const trackLink = (a, t) => `<a href="${trackHref(a, t)}">${esc(t)}</a>`;
+const compact = (n) => new Intl.NumberFormat(undefined, { notation: 'compact', maximumFractionDigits: 1 }).format(n);
+const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
+const flag = (cc) => (/^[A-Z]{2}$/.test(cc || '') ? String.fromCodePoint(...[...cc].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65)) : '');
+
+// Rows are tappable: a song opens its page, an artist or album opens the artist's page.
+document.addEventListener('click', (e) => {
+  const row = e.target.closest('.row[data-go]');
+  if (!row || e.target.closest('a, button')) return;
+  location.hash = row.dataset.go;
+});
+
+// 30-second previews, one at a time
+let pv = null, pvBtn = null, pvUrl = '';
+function stopPreview() {
+  if (pv) pv.pause();
+  if (pvBtn) pvBtn.classList.remove('on');
+  pv = pvBtn = null; pvUrl = '';
+}
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-preview]');
+  if (!btn) return;
+  const url = btn.dataset.preview;
+  const same = pvUrl === url;
+  stopPreview();
+  if (same) return;
+  pv = new Audio(url); pvBtn = btn; pvUrl = url;
+  btn.classList.add('on');
+  pv.onended = stopPreview;
+  pv.onerror = stopPreview;
+  pv.play().catch(stopPreview);
+});
 const user = () => new URLSearchParams(location.hash.split('?')[1] || '').get('user') || status?.me || status?.default_user;
 const isOwner = () => status?.me && status.me.toLowerCase() === String(user()).toLowerCase();
 
@@ -85,10 +118,10 @@ function rowsList(items, { rank = true, max } = {}) {
   if (!items.length) return '<div class="empty">nothing here yet… go listen to something 🎧</div>';
   const top = max ?? Math.max(...items.map((i) => i.plays || 0), 1);
   return `<div class="rows">${items.map((it) => `
-    <div class="row">
+    <div class="row" data-go="${esc(it.track ? trackHref(it.artist, it.track) : `#/artist/${enc(it.artist)}`)}">
       ${rank ? `<div class="rk">${it.rank}</div>` : ''}
       ${cover(it.track ? it : { ...it, kind: it.album ? 'album' : 'artist' })}
-      <div class="main"><div class="t">${esc(it.track || it.album || it.artist)}</div>
+      <div class="main"><div class="t">${it.track ? trackLink(it.artist, it.track) : it.album ? esc(it.album) : artistLink(it.artist)}</div>
         ${it.track || it.album ? `<div class="s">${artistLink(it.artist)}</div>` : ''}</div>
       <div class="bar"><i style="width:${(100 * (it.plays || 0)) / top}%"></i><span>${fmtN(it.plays)} plays</span></div>
     </div>`).join('')}</div>`;
@@ -97,9 +130,9 @@ function rowsList(items, { rank = true, max } = {}) {
 function scrobbleList(items, { canDelete = false } = {}) {
   if (!items.length) return '<div class="empty">no scrobbles yet… 🐾</div>';
   return `<div class="rows">${items.map((s) => `
-    <div class="row" data-id="${s.id}">
+    <div class="row" data-id="${s.id}" data-go="${esc(trackHref(s.artist, s.track))}">
       ${cover(s)}
-      <div class="main"><div class="t">${esc(s.track)}</div><div class="s">${artistLink(s.artist)}${s.album ? ` · ${esc(s.album)}` : ''}</div></div>
+      <div class="main"><div class="t">${trackLink(s.artist, s.track)}</div><div class="s">${artistLink(s.artist)}${s.album ? ` · ${esc(s.album)}` : ''}</div></div>
       <div class="when" title="${new Date(s.ts * 1000).toLocaleString()}">${ago(s.ts)}</div>
       ${canDelete ? '<button class="x" title="Delete scrobble">✕</button>' : ''}
     </div>`).join('')}</div>`;
@@ -132,10 +165,10 @@ async function nowPlaying(u) {
     const last = (await api(`/u/${enc(u)}/recent?limit=1`).catch(() => ({ rows: [] }))).rows?.[0];
     if (!last) return '';
     return `<div class="np idle">${cover(last)}<div><div class="lbl">Not listening right now</div>
-      <div style="font-size:18px;font-weight:600">${esc(last.track)}</div><div class="s">${artistLink(last.artist)} · last played ${ago(last.ts)}</div></div></div>`;
+      <div style="font-size:18px;font-weight:600">${trackLink(last.artist, last.track)}</div><div class="s">${artistLink(last.artist)} · last played ${ago(last.ts)}</div></div></div>`;
   }
   return `<div class="np">${cover(np)}<div><div class="lbl"><span class="eq"><i></i><i></i><i></i></span> Now playing</div>
-    <div style="font-size:18px;font-weight:600">${esc(np.track)}</div><div class="s">${artistLink(np.artist)}${np.album ? ` · ${esc(np.album)}` : ''}</div></div></div>`;
+    <div style="font-size:18px;font-weight:600">${trackLink(np.artist, np.track)}</div><div class="s">${artistLink(np.artist)}${np.album ? ` · ${esc(np.album)}` : ''}</div></div></div>`;
 }
 
 async function pageHome() {
@@ -372,14 +405,126 @@ async function pageArtist(name) {
   ]);
   view.innerHTML = `
     <div class="hero">${cover({ artist: info.artist, kind: 'artist' })}
-      <div><h1>${esc(info.artist)}</h1>
-      <p class="sub">${fmtN(info.plays)} plays${info.rank ? ` · #${info.rank} all-time` : ''}${info.first_ts ? ` · first heard ${new Date(info.first_ts * 1000).toLocaleDateString()}` : ''}</p></div></div>
-    <section class="panel"><h2>Plays per month</h2>${barChart(tl.map((r) => ({ k: r.bucket, v: r.plays })), { labelEvery: Math.ceil(tl.length / 10) })}</section>
+      <div class="grow"><h1>${esc(info.artist)}</h1>
+      <p class="sub">${info.plays ? `${fmtN(info.plays)} plays${info.rank ? ` · #${info.rank} all-time` : ''}` : 'not in your library yet'}</p>
+      <div class="facts" id="xf"></div></div></div>
+    ${info.plays ? `<div class="tiles">
+      <div class="tile"><div class="n">${fmtN(info.plays)}</div><div class="l">plays</div></div>
+      <div class="tile"><div class="n">${info.rank ? `#${info.rank}` : '—'}</div><div class="l">all-time rank</div></div>
+      <div class="tile"><div class="n">${fmtN(tracks.total)}</div><div class="l">tracks played</div></div>
+      <div class="tile"><div class="n">${fmtN(albums.total)}</div><div class="l">albums</div></div>
+      <div class="tile"><div class="n sm">${dateOf(info.first_ts)}</div><div class="l">first heard</div></div>
+      <div class="tile"><div class="n sm">${info.last_ts ? ago(info.last_ts) : '—'}</div><div class="l">last heard</div></div>
+    </div>` : ''}
+    <div id="xa"></div>
+    ${info.plays ? `<section class="panel"><h2>Plays per month</h2>${barChart(tl.map((r) => ({ k: r.bucket, v: r.plays })), { labelEvery: Math.ceil(tl.length / 10) })}</section>
     <section><h2>Albums</h2>${cards(albums.rows, 'albums')}</section>
     <div class="grid2">
       <section class="panel"><h2>Top tracks</h2>${rowsList(tracks.rows)}</section>
       <section class="panel"><h2>Recent</h2>${scrobbleList(rec.rows)}</section>
+    </div>` : ''}`;
+  loadArtistExtra(info.artist);
+}
+
+const dateOf = (ts) => (ts ? new Date(ts * 1000).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) : '—');
+const extJSON = (path) => fetch(`/fm/api${path}`).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+const imgCover = (url, initial, cls = 'cover') => `<div class="${cls}"><img loading="lazy" alt="" src="${esc(url)}" onerror="this.remove()"/><span style="position:absolute">${esc(String(initial || '?').charAt(0).toUpperCase())}</span></div>`;
+const playBtn = (url) => (url ? `<button type="button" class="pbtn" data-preview="${esc(url)}" aria-label="Play a 30 second preview" title="30 second preview"></button>` : '');
+
+// What the web knows about an artist (Deezer, MusicBrainz, Wikipedia), filled in after the page is up.
+async function loadArtistExtra(name) {
+  const x = await extJSON(`/artist-info?name=${enc(name)}`);
+  const facts = $('#xf'), box = $('#xa');
+  if (!x || !facts || !box) return;                       // failed, or we've already navigated away
+  const typeLabel = { Group: 'Band', Person: 'Solo artist', Orchestra: 'Orchestra', Choir: 'Choir' }[x.type] || x.type;
+  const chips = [];
+  const where = [flag(x.country), typeLabel, x.area].filter(Boolean).join(' ');
+  if (where) chips.push(`<span class="fact">${esc(where)}</span>`);
+  if (x.begin) chips.push(`<span class="fact">${x.ended && x.end && x.end !== x.begin ? `${esc(x.begin)}–${esc(x.end)}` : `Since ${esc(x.begin)}`}</span>`);
+  if (x.fans) chips.push(`<span class="fact">${compact(x.fans)} fans on Deezer</span>`);
+  if (x.albums_count) chips.push(`<span class="fact">${fmtN(x.albums_count)} releases</span>`);
+  for (const t of x.tags || []) chips.push(`<span class="fact tag">${esc(t)}</span>`);
+  facts.innerHTML = chips.join('');
+  const links = [x.bio?.url && `<a href="${esc(x.bio.url)}" target="_blank" rel="noopener noreferrer">Wikipedia ↗</a>`, x.deezer_url && `<a href="${esc(x.deezer_url)}" target="_blank" rel="noopener noreferrer">Deezer ↗</a>`].filter(Boolean).join(' · ');
+  const about = x.bio?.text ? `<section class="panel"><h2>About</h2>
+      <p class="bio${x.bio.text.length > 320 ? ' clamp' : ''}" id="bio">${esc(x.bio.text)}</p>
+      <div class="biof">${x.bio.text.length > 320 ? '<button type="button" class="lnk" id="bm">Read more</button>' : ''}<span class="more">${links}</span></div></section>` : '';
+  const pop = x.top?.length ? `<section class="panel"><h2>Popular right now <span class="more">▶ plays a 30s preview</span></h2><div class="rows">${x.top.map((t) => `
+      <div class="row" data-go="${esc(trackHref(name, t.title))}">
+        ${t.cover ? imgCover(t.cover, t.title) : `<div class="cover"><span>♪</span></div>`}
+        <div class="main"><div class="t">${trackLink(name, t.title)}</div><div class="s">${esc(t.album || '')}</div></div>
+        <div class="when">${t.duration ? mmss(t.duration) : ''}</div>${playBtn(t.preview)}
+      </div>`).join('')}</div></section>` : '';
+  const similar = x.related?.length ? `<section><h2>Similar artists</h2><div class="cards">${x.related.map((r) => `
+      <a class="card" href="#/artist/${enc(r.name)}">${r.picture ? imgCover(r.picture, r.name) : cover({ artist: r.name, kind: 'artist' })}
+        <div class="meta"><div class="t">${esc(r.name)}</div></div></a>`).join('')}</div></section>` : '';
+  box.innerHTML = `${about || pop ? `<div class="${about && pop ? 'grid2' : ''}">${about}${pop}</div>` : ''}${similar}`;
+  $('#bm')?.addEventListener('click', (e) => { const c = $('#bio').classList.toggle('clamp'); e.target.textContent = c ? 'Read more' : 'Show less'; });
+}
+
+async function pageTrack(artist, track) {
+  const u = user();
+  const T = `artist=${enc(artist)}&track=${enc(track)}`;
+  const [info, tl, rec, more] = await Promise.all([
+    api(`/u/${enc(u)}/track?${T}`),
+    api(`/u/${enc(u)}/timeline?days=0&tz=${TZ}&${T}`),
+    api(`/u/${enc(u)}/recent?${T}&limit=25`),
+    api(`/u/${enc(u)}/top/tracks?artist=${enc(artist)}&limit=8`),
+  ]);
+  artist = info.artist; track = info.track;
+  const secs = info.duration && info.plays ? info.duration * info.plays : 0;
+  const listened = secs >= 3600 ? `${hours(secs)}<small> h</small>` : `${Math.round(secs / 60)}<small> min</small>`;
+  view.innerHTML = `
+    <div class="hero">${cover({ artist, album: info.album, track }, 'cover sq')}
+      <div class="grow"><h1>${esc(track)}</h1>
+      <p class="sub">${artistLink(artist)}${info.album ? ` · ${esc(info.album)}` : ''}</p>
+      <div class="facts" id="xf"></div>
+      <div class="acts">${isOwner() && info.plays ? `<button type="button" class="btn" id="love">${info.loved ? '♥ Loved' : '♡ Love'}</button>` : ''}<span id="xp"></span></div></div></div>
+    ${info.plays ? `<div class="tiles">
+      <div class="tile"><div class="n">${fmtN(info.plays)}</div><div class="l">plays</div></div>
+      <div class="tile"><div class="n sm">${dateOf(info.first_ts)}</div><div class="l">first heard</div></div>
+      <div class="tile"><div class="n sm">${info.last_ts ? ago(info.last_ts) : '—'}</div><div class="l">last heard</div></div>
+      <div class="tile"><div class="n">${info.duration ? mmss(info.duration) : '—'}</div><div class="l">length</div></div>
+      <div class="tile"><div class="n">${secs ? listened : '—'}</div><div class="l">time spent on it</div></div>
+    </div>
+    <section class="panel"><h2>Plays per month</h2>${barChart(tl.map((r) => ({ k: r.bucket, v: r.plays })), { labelEvery: Math.ceil(tl.length / 10) })}</section>`
+    : `<div class="empty">You haven't played this one yet 🎧</div>`}
+    <div id="xa"></div>
+    <div class="grid2">
+      ${info.plays ? `<section class="panel"><h2>Every play <span class="more">${fmtN(rec.total)}</span></h2><div id="plays">${scrobbleList(rec.rows, { canDelete: isOwner() })}</div></section>` : ''}
+      <section class="panel"><h2>More from ${esc(artist)} <a class="more" href="#/artist/${enc(artist)}">artist page →</a></h2>${rowsList(more.rows)}</section>
     </div>`;
+  bindDelete($('#plays'));
+  const love = $('#love');
+  if (love) {
+    let loved = !!info.loved;
+    love.onclick = async () => {
+      love.disabled = true;
+      try { await api('/love', { method: 'POST', body: { artist, track, loved: !loved } }); loved = !loved; love.textContent = loved ? '♥ Loved' : '♡ Love'; if (loved) window.FX?.burst?.(love.getBoundingClientRect().left + 30, love.getBoundingClientRect().top, 8, '💖'); } catch (err) { console.error(err); }
+      love.disabled = false;
+    };
+  }
+  loadTrackExtra(artist, track);
+}
+
+async function loadTrackExtra(artist, track) {
+  const [t, a] = await Promise.all([extJSON(`/track-info?artist=${enc(artist)}&track=${enc(track)}`), extJSON(`/artist-info?name=${enc(artist)}`)]);
+  const facts = $('#xf'), box = $('#xa'), pbox = $('#xp');
+  if (!facts || !box) return;
+  const chips = [];
+  if (t?.release_date) chips.push(`<span class="fact">Released ${esc(new Date(t.release_date + 'T00:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }))}</span>`);
+  if (t?.bpm) chips.push(`<span class="fact">${Math.round(t.bpm)} BPM</span>`);
+  if (t?.explicit) chips.push('<span class="fact">Explicit</span>');
+  if (t && !t.release_date && t.album) chips.push(`<span class="fact">${esc(t.album)}</span>`);
+  const others = (t?.contributors || []).filter((n) => n.toLowerCase() !== artist.toLowerCase());
+  if (others.length) chips.push(`<span class="fact">with ${others.map(artistLink).join(', ')}</span>`);
+  for (const tag of (a?.tags || []).slice(0, 3)) chips.push(`<span class="fact tag">${esc(tag)}</span>`);
+  facts.innerHTML = chips.join('');
+  if (pbox && t?.preview) pbox.innerHTML = `<button type="button" class="btn play" data-preview="${esc(t.preview)}">30s preview</button>${t.deezer_url ? ` <a class="btn" href="${esc(t.deezer_url)}" target="_blank" rel="noopener noreferrer">Deezer ↗</a>` : ''}`;
+  if (a?.bio?.text) {
+    const short = a.bio.text.length > 260 ? `${a.bio.text.slice(0, 260).replace(/\s+\S*$/, '')}…` : a.bio.text;
+    box.innerHTML = `<section class="panel"><h2>About ${esc(artist)} <a class="more" href="#/artist/${enc(artist)}">artist page →</a></h2><p class="bio">${esc(short)}</p></section>`;
+  }
 }
 
 // ---------------------------------------------------------------- auth / settings
@@ -705,6 +850,7 @@ async function exportAll(kind) {
 
 // ---------------------------------------------------------------- router
 async function route() {
+  stopPreview();
   const [path, qs] = location.hash.replace(/^#/, '').split('?');
   const params = new URLSearchParams(qs || '');
   const parts = (path || '/').split('/').filter(Boolean);
@@ -720,6 +866,7 @@ async function route() {
     if (parts[0] === 'recent') return await pageRecent(params);
     if (parts[0] === 'library') return await pageLibrary(parts[1] || 'artists', params);
     if (parts[0] === 'artist') return await pageArtist(decodeURIComponent(parts.slice(1).join('/')));
+    if (parts[0] === 'track') return await pageTrack(decodeURIComponent(parts[1] || ''), decodeURIComponent(parts.slice(2).join('/')));
     return await pageHome();
   } catch (e) {
     view.innerHTML = `<div class="empty">Something went wrong 😿<br><small>${esc(e.message)}</small></div>`;

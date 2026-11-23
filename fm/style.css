@@ -281,3 +281,44 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
   .row .x { opacity: .7; }
   .fx-tip { display: none; }
 }
+
+/* ---------------------------------------------------------------- song + artist detail pages */
+.row[data-go] { cursor: pointer; }
+.row .t a { color: inherit; }
+.row .t a:hover, .np a:hover { color: var(--accent); }
+.np a { color: inherit; }
+.hero .grow { flex: 1; min-width: 0; }
+.hero .sub { margin-bottom: 10px; }
+.hero h1 { overflow-wrap: anywhere; }
+.hero .cover.sq { border-radius: 16px; font-size: 48px; }
+.tile .n.sm { font-size: 18px; line-height: 1.7; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px; }
+.facts:empty { display: none; }
+.fact { padding: 3px 10px; border-radius: 999px; background: var(--panel2); border: 1px solid var(--line); font-size: 13px; }
+.fact a { color: var(--accent); }
+.fact.tag { color: var(--dim); text-transform: lowercase; }
+.acts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+.acts:empty { display: none; }
+.acts > span { display: contents; }
+.bio { margin: 0; line-height: 1.6; color: #d8d2e4; overflow-wrap: anywhere; }
+.bio.clamp { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+.biof { display: flex; align-items: center; gap: 12px; margin-top: 10px; font-size: 13px; }
+.biof .more { margin-left: auto; }
+.biof a, .more a { color: var(--accent); }
+.lnk { border: 0; background: none; color: var(--accent); cursor: pointer; padding: 4px 0; }
+.pbtn { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel2); color: var(--text); cursor: pointer; display: grid; place-items: center; font-size: 12px; padding: 0 0 0 2px; }
+.pbtn::before, .btn.play::before { content: "▶"; }
+.btn.play::before { margin-right: 6px; font-size: 11px; }
+.pbtn.on, .btn.play.on { background: var(--accent); border-color: var(--accent); color: #1a0d14; }
+.pbtn.on { padding: 0; }
+.pbtn.on::before, .btn.play.on::before { content: "❚❚"; letter-spacing: -1px; }
+.pbtn:hover { border-color: var(--accent); }
+.cards .card .cover span { font-size: 42px; }
+a.btn { text-decoration: none; display: inline-flex; align-items: center; }
+@media (max-width: 640px) {
+  .hero .grow { text-align: center; }
+  .hero .facts, .hero .acts { justify-content: center; }
+  .hero .cover.sq { width: 140px; height: 140px; }
+  .biof { flex-wrap: wrap; }
+  .pbtn { width: 40px; height: 40px; }
+}
