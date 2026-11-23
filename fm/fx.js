@@ -118,7 +118,9 @@
 
   function enhance() {
     if (reduce) return;
-    const targets = $$('.tile, .panel, .card, .row, .np, .chart, .heat, .heatkey, #view > section, #view > h1, #view > .sub, .periods', view);
+    // touch screens skip the heatmap's pop-in so it can never be left waiting to appear
+    const touch = matchMedia('(hover: none)').matches;
+    const targets = $$('.tile, .panel, .card, .row, .np, .chart, ' + (touch ? '' : '.heat, .heatkey, ') + '#view > section, #view > h1, #view > .sub, .periods', view);
     const seen = new Map();
     for (const el of targets) {
       if (el.dataset.fx) continue;

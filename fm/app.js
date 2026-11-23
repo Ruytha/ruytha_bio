@@ -208,7 +208,7 @@ function bindDrill(panel, u) {
 }
 
 // ---------------------------------------------------------------- stats (detailed)
-function heatmap(series) {
+function heatmap(series, compact = false) {
   // series: [{k:'YYYY-MM-DD', v}] oldest -> newest (e.g. 365 days)
   const cell = 13, gap = 3, step = cell + gap, top = 16;
   const first = new Date(series[0].k + 'T00:00:00');
@@ -227,7 +227,7 @@ function heatmap(series) {
     }
     rects += `<rect class="l${level(d.v)}" data-tip="${esc(dt.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }))}: ${fmtN(d.v)} plays" x="${col * step}" y="${top + row * step}" width="${cell}" height="${cell}" rx="3"></rect>`;
   });
-  return `<div class="heat"><svg viewBox="0 0 ${W} ${H}" style="min-width:${Math.min(W, 640)}px">${months}${rects}</svg></div>
+  return `<div class="heat"><svg viewBox="0 0 ${W} ${H}"${compact ? '' : ` style="min-width:${Math.min(W, 640)}px"`}>${months}${rects}</svg></div>
     <div class="heatkey">less ${[0, 1, 2, 3, 4].map((l) => `<svg width="13" height="13"><rect class="l${l}" width="13" height="13" rx="3"/></svg>`).join('')} more</div>`;
 }
 
@@ -274,6 +274,11 @@ async function pageStats() {
   const busyHour = sum.hours.indexOf(Math.max(...sum.hours));
   const wdNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const busyWd = sum.weekdays.indexOf(Math.max(...sum.weekdays));
+  // on a phone the whole year is too wide to read, so show the last six months fitted to the screen
+  const narrow = window.matchMedia('(max-width: 640px)').matches;
+  const heatSeries = narrow ? year.slice(-182) : year;
+  const heatTotal = narrow ? heatSeries.reduce((n, d) => n + d.v, 0) : yearTotal;
+  const heatActive = narrow ? heatSeries.filter((d) => d.v > 0).length : st.active;
   const monthSeries = monthly.map((r) => ({ k: r.bucket, v: r.plays }));
   const hh = (h) => `${h % 12 || 12}${h < 12 ? 'am' : 'pm'}`;
 
@@ -292,7 +297,7 @@ async function pageStats() {
       <div class="tile"><div class="n">${share}<small>%</small></div><div class="l">${topArtist ? `of plays are ${esc(topArtist.artist)}` : 'top artist share'}</div></div>
     </div>
 
-    <section class="panel"><h2>The last year <span class="more">${fmtN(yearTotal)} plays on ${st.active} days</span></h2>${heatmap(year)}</section>
+    <section class="panel"><h2>${narrow ? 'The last 6 months' : 'The last year'} <span class="more">${fmtN(heatTotal)} plays on ${heatActive} days</span></h2>${heatmap(heatSeries, narrow)}</section>
 
     <div class="tiles">
       <div class="tile"><div class="n">${st.current}<small> day${st.current === 1 ? '' : 's'}</small></div><div class="l">current streak</div></div>
