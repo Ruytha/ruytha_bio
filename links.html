@@ -1,437 +1,510 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ruytha · Links</title>
-<meta name="description" content="All of Ruytha's links in one place.">
-<meta name="theme-color" content="#030718">
+<meta name="description" content="All of Ruytha's links in one place: Instagram, X, YouTube, Discord, Spotify and more.">
+<meta name="theme-color" content="#070b1f">
 <meta name="color-scheme" content="dark">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Ruytha · Links">
 <meta property="og:description" content="All of Ruytha's links in one place.">
-<meta property="og:url" content="https://ruytha.vercel.app/links">
-<meta property="og:image" content="/assets/img/og.png">
+<meta property="og:url" content="https://ruytha.dev/links">
+<meta property="og:image" content="https://ruytha.dev/assets/img/og-2026.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@teaboirr">
+<meta name="twitter:image" content="https://ruytha.dev/assets/img/og-2026.jpg">
 
-<link rel="icon" href="assets/img/favicon.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/img/avatar.png">
-
+<link rel="icon" href="assets/img/favicon-64.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/avatar-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Gochi+Hand&display=swap">
-<link rel="stylesheet" href="assets/styles.css">
-<link rel="stylesheet" href="assets/home.css">
-<link rel="stylesheet" href="assets/player.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<script>try { if (localStorage.getItem('ruytha-femboy') === '1') document.documentElement.classList.add('femboy'); } catch (e) {}</script>
 <style>
-  /* same rounded font as the home page */
-  :root { --font: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", system-ui, sans-serif; }
-  .lk-name, .tile-title { font-family: var(--font); letter-spacing: -0.02em; }
+  /* the links page: the home page's look, in one narrow column */
+  .lk { max-width: 680px; margin: 0 auto; padding: 104px var(--pad) 0; }
 
-  /* ---------- layout: one column for phones, culture cards either side on desktop ---------- */
-  main.lk {
-    display: block;
-    max-width: none;
-    padding: 0 var(--gut);
-  }
-  .lk-stage {
-    display: grid;
-    grid-template-columns: minmax(0, 560px);
-    justify-content: center;
-    gap: 48px;
-    padding: 40px 0 96px;
-  }
-  .lk-col { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-  .lk-side { display: none; }
-  @media (min-width: 1100px) {
-    .lk-stage { grid-template-columns: 220px minmax(0, 560px) 220px; }
-    .lk-side { display: flex; flex-direction: column; gap: 44px; padding-top: 70px; }
-    .lk-side .cult { position: relative; left: auto; right: auto; }
-    .lk-side .cult:nth-child(2) { margin-left: 24px; }
-    .lk-side-r .cult:nth-child(2) { margin-left: -24px; }
-  }
-  .lk-side .cult .cult-fact { display: none; }
+  /* hero: photo, now playing, then the name */
+  .lk-hero { display: grid; justify-items: center; text-align: center; }
+  .lk-hero .me { width: clamp(170px, 44vw, 220px); }
+  .lk-hero .np { margin-top: -22px; width: min(100%, 360px); text-align: left; }
+  .lk-hero .np-art { width: 52px; height: 52px; }
+  .lk-hero .hi { margin: 26px 0 4px; }
+  .lk-hero .name { font-size: clamp(72px, 19vw, 120px); }
+  .lk-hero .meta { justify-content: center; margin-top: 14px; }
+  .lk-bio { margin: 14px 0 0; max-width: 34ch; font-size: 17px; color: var(--muted); text-wrap: balance; }
+  .lk-bio strong { color: var(--ink); font-weight: 700; }
+  .lk-hero .tate { position: absolute; top: 12px; right: -8px; }
 
-  .lk-glass {
-    position: relative;
-    border-radius: var(--r-xl);
-    background: var(--glass);
-    border: 1px solid var(--glass-edge);
-    box-shadow: var(--glass-shine), var(--glass-drop);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
+  /* round icon row */
+  .lk-icons { list-style: none; display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 30px 0 0; padding: 0; }
+  .ic {
+    position: relative; display: grid; place-items: center;
+    width: 54px; height: 54px; border-radius: 50%;
+    color: var(--ink); text-decoration: none;
+    transition: transform 0.4s var(--boing), background 0.25s, color 0.25s;
   }
+  .ic svg { width: 22px; height: 22px; }
+  .ic:hover, .ic:focus-visible { transform: translateY(-4px) rotate(-6deg); background: var(--c); color: var(--on-pastel); border-color: transparent; }
+  .ic .tip {
+    position: absolute; bottom: calc(100% + 8px); left: 50%; translate: -50% 4px;
+    padding: 3px 10px 4px; border-radius: 999px;
+    font-size: 12.5px; font-weight: 700; white-space: nowrap;
+    background: var(--c); color: var(--on-pastel);
+    opacity: 0; pointer-events: none; transition: opacity 0.2s, translate 0.25s var(--boing);
+  }
+  .ic:hover .tip, .ic:focus-visible .tip { opacity: 1; translate: -50% 0; }
 
-  /* ---------- profile ---------- */
-  .lk-profile {
-    display: flex; flex-direction: column; align-items: center;
-    padding: 40px 24px 26px;
-    text-align: center;
-    overflow: hidden;
-    isolation: isolate;
-  }
-  .lk-profile::before {
-    content: ""; position: absolute; inset: -30% -20% auto; height: 80%; z-index: -1;
-    background:
-      radial-gradient(45% 50% at 30% 50%, color-mix(in srgb, var(--np1) 55%, transparent), transparent 70%),
-      radial-gradient(40% 45% at 72% 40%, color-mix(in srgb, var(--np2) 50%, transparent), transparent 72%);
-    filter: blur(28px);
-    opacity: 0.7;
-    transition: background 1s;
-  }
-  .lk-profile .avatar-wrap { margin-bottom: 18px; }
-  .lk-profile .avatar {
-    width: calc(100% - 8px); height: calc(100% - 8px); margin: 0;
-    cursor: pointer;
-    transition: transform 0.5s var(--ease);
-  }
-  .lk-profile .avatar:hover { transform: scale(1.06) rotate(-4deg); }
-  .lk-profile .avatar.is-boop { animation: boop 0.5s var(--ease); }
-  [data-np="playing"] .lk-profile .avatar { animation: beat 0.5s ease-in-out infinite alternate; }
-
-  .lk-name {
-    margin: 0;
-    font-size: clamp(44px, 12vw, 64px); font-weight: 700; line-height: 1; letter-spacing: -0.045em;
-    background: linear-gradient(100deg, #fff 0%, #cfe8ff 25%, var(--a1) 45%, var(--a2) 70%, var(--a3) 100%);
-    background-size: 220% 100%;
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-    animation: shine 9s ease-in-out infinite alternate;
-  }
-  .femboy .lk-name { background-image: linear-gradient(100deg, #ff4fa3 0%, #ff9ccc 25%, #fff 48%, #a8dcff 72%, #5aa9ff 100%); }
-  .lk-bio { margin-top: 12px; max-width: 34em; font-size: 15.5px; line-height: 1.5; color: var(--muted); }
-  .lk-bio strong { color: var(--text); font-weight: 600; }
-  .lk-profile .pill { margin-top: 20px; }
-
-  /* red hanko seal */
-  .hanko {
-    position: absolute; top: 18px; right: 18px;
-    display: grid; place-items: center;
-    width: 40px; padding: 8px 0;
-    writing-mode: vertical-rl;
-    font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
-    font-size: 15px; font-weight: 700; letter-spacing: 0.12em;
-    color: #fff1ea;
-    background: #c8202f;
-    border-radius: 5px;
-    box-shadow: inset 0 0 0 2px #c8202f, inset 0 0 0 3.5px rgba(255, 241, 234, 0.75);
-    rotate: 8deg;
-    filter: url(#ink);
-    opacity: 0.92;
-    user-select: none;
-  }
-
-  /* ---------- featured: the Discord server ---------- */
+  /* the Discord server, in the same gradient as the home page's main button */
   .lk-feature {
-    position: relative;
-    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 16px;
-    padding: 22px 22px 22px 18px;
-    border-radius: var(--r-xl);
-    background:
-      radial-gradient(120% 140% at 0% 0%, rgba(88, 101, 242, 0.55), transparent 60%),
-      linear-gradient(120deg, rgba(88, 101, 242, 0.28), rgba(175, 82, 222, 0.22));
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: var(--glass-shine), 0 18px 40px -12px rgba(88, 101, 242, 0.6);
-    overflow: hidden;
-    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+    position: relative; display: flex; align-items: center; gap: 16px;
+    margin-top: 40px; padding: 20px 24px 20px 18px; border-radius: 24px;
+    background: linear-gradient(100deg, var(--hot), var(--cool));
+    color: var(--on-pastel); text-decoration: none;
+    box-shadow: 0 22px 50px -24px color-mix(in srgb, var(--hot) 80%, transparent);
+    transition: transform 0.4s var(--boing);
   }
-  .lk-feature:hover { transform: translateY(-3px); box-shadow: var(--glass-shine), 0 24px 50px -12px rgba(88, 101, 242, 0.8); }
-  .lk-feature::before {
-    content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 30%;
-    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.18), transparent);
-    transform: skewX(-18deg);
-    transition: left 0.9s var(--ease);
-  }
-  .lk-feature:hover::before { left: 120%; }
-  .lk-feature .blob { width: 60px; height: 60px; }
-  .lk-feature .blob svg { width: 28px; height: 28px; }
-  .lk-feature .blob::before { background: #5865f2; }
-  .lk-feature-title { display: block; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
-  .lk-feature-sub { display: block; margin-top: 2px; font-size: 14px; color: rgba(255, 255, 255, 0.75); }
-  .lk-feature .chev { font-size: 24px; transition: transform 0.3s var(--ease); }
-  .lk-feature:hover .chev { transform: translateX(4px); }
-  .lk-sticker {
-    position: absolute; top: 10px; right: 46px;
-    font-family: "Gochi Hand", cursive;
-    font-size: 17px;
-    color: #ffb3d9;
-    rotate: 6deg;
+  .lk-feature:hover { transform: translateY(-3px) rotate(-0.8deg); }
+  .lk-feature .tile { background: rgba(26, 20, 48, 0.9); color: #fff; rotate: -4deg; }
+  .lk-feature b { display: block; font: 800 clamp(22px, 5vw, 28px)/1.05 var(--display); letter-spacing: -0.02em; }
+  .lk-feature span.sub { display: block; margin-top: 3px; font-size: 15px; opacity: 0.75; }
+  .lk-feature::after { content: "→"; margin-left: auto; font-size: 24px; transition: translate 0.25s var(--ease); }
+  .lk-feature:hover::after { translate: 5px 0; }
+  .lk-feature .ja-tag {
+    position: absolute; top: -12px; right: 18px;
+    padding: 3px 12px 4px; border-radius: 999px;
+    font: 800 13px/1.3 var(--ja); background: var(--lemon); color: var(--on-pastel); rotate: 5deg;
   }
 
-  /* ---------- quick actions ---------- */
-  .lk-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .lk-btn {
-    appearance: none; cursor: pointer;
-    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
-    padding: 13px 14px;
-    border-radius: var(--r-lg);
-    font: inherit; font-size: 14px; font-weight: 600;
-    color: var(--text);
-    background: var(--glass);
-    border: 1px solid var(--glass-edge);
-    box-shadow: var(--glass-shine);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    transition: transform 0.3s var(--ease), background 0.3s;
+  /* groups */
+  .lk-group { margin-top: 56px; }
+  .lk-group .h2 { font-size: clamp(38px, 9vw, 56px); margin-bottom: 18px; }
+  .lk-group .h2 .ja { font-size: 14px; }
+
+  .rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .rows a {
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px 22px 12px 12px; border-radius: 22px; text-decoration: none;
+    transition: transform 0.4s var(--boing), background 0.25s;
   }
-  .lk-btn:hover { background: var(--glass-2); transform: translateY(-2px); }
-  .lk-btn:active { transform: scale(0.97); }
-  .lk-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  .lk-btn.is-done { background: linear-gradient(120deg, rgba(48, 209, 88, 0.35), rgba(48, 209, 88, 0.15)); }
+  .rows a::after { content: "→"; margin-left: auto; font-size: 22px; color: var(--muted); transition: translate 0.25s var(--ease), color 0.25s; }
+  .rows a:hover { transform: translateY(-3px) rotate(-0.8deg); background: var(--glass-2); }
+  .rows a:hover::after { translate: 5px 0; color: var(--hot); }
+  .rows .txt { display: grid; min-width: 0; }
+  .rows b { font: 800 clamp(21px, 4.6vw, 26px)/1.1 var(--display); letter-spacing: -0.02em; }
+  .rows .txt span { font-size: 14.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* ---------- the rest of the links ---------- */
-  .lk-list { display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
-  @media (min-width: 560px) { .lk-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-
+  /* pastel sticker tiles for the icons, tilted like the home page's stickers */
   .tile {
-    position: relative;
-    display: flex; align-items: center; gap: 14px;
-    height: 100%; padding: 13px 14px;
-    border-radius: var(--r-lg);
-    background: var(--glass);
-    border: 1px solid var(--glass-edge);
-    box-shadow: var(--glass-shine);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    transition: background 0.25s, transform 0.35s var(--ease);
+    flex: none; display: grid; place-items: center;
+    width: 52px; height: 52px; border-radius: 16px;
+    background: var(--c); color: var(--on-pastel);
+    rotate: var(--t, -3deg);
+    transition: rotate 0.4s var(--boing), scale 0.4s var(--boing);
   }
-  .tile:hover { transform: translateY(-2px); background: var(--glass-2); }
-  .tile-text { display: flex; flex-direction: column; min-width: 0; margin-right: auto; }
-  .tile-title { font-size: 15px; font-weight: 600; }
-  .tile-sub { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .tile .chev { font-size: 20px; color: var(--muted); transition: transform 0.3s var(--ease), color 0.3s; }
-  .tile:hover .chev { transform: translateX(3px); color: var(--text); }
+  .tile svg { width: 24px; height: 24px; }
+  .rows a:hover .tile { rotate: 0deg; scale: 1.08; }
+  .rows li:nth-child(even) .tile { --t: 3deg; }
 
-  /* wavy icon blobs, filled with the site gradient on hover */
-  .blob { position: relative; flex: none; display: grid; place-items: center; width: 46px; height: 46px; }
-  .blob::before,
-  .blob::after {
-    content: ""; position: absolute; inset: 0;
-    clip-path: var(--shape, circle(50%));
-    transition: opacity 0.5s, transform 1.2s cubic-bezier(.2, .8, .2, 1);
-  }
-  .blob::before { background: rgba(255, 255, 255, 0.09); }
-  .blob::after { background: linear-gradient(135deg, var(--a1), var(--a2)); opacity: 0; }
-  .blob svg {
-    position: relative; z-index: 1; width: 22px; height: 22px;
-    fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
-  }
-  .blob svg .fill { fill: currentColor; stroke: none; }
-  .tile:hover .blob::before, .tile:hover .blob::after,
-  .lk-feature:hover .blob::before { transform: rotate(60deg); }
-  .tile:hover .blob::after { opacity: 1; }
+  .c-pink  { --c: var(--pink); }
+  .c-blue  { --c: var(--blue); }
+  .c-lemon { --c: var(--lemon); }
+  .c-mint  { --c: var(--mint); }
+  .c-lilac { --c: var(--lilac); }
+  .c-peach { --c: var(--peach); }
 
-  .lk-foot {
-    display: flex; justify-content: space-between; align-items: center; gap: 12px;
-    margin-top: 10px; padding: 0 6px;
-    font-size: 13px; color: var(--muted);
-  }
-  .lk-foot a { color: var(--text); opacity: 0.85; transition: opacity 0.2s; }
-  .lk-foot a:hover { opacity: 1; }
+  .s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .f { fill: currentColor; }
 
-  @media (prefers-reduced-motion: reduce) {
-    .lk-name { animation: none; }
-    .blob::before, .blob::after, .lk-feature::before { transition: none; }
+  .lk-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 48px; }
+  .lk-actions .btn.is-done { background: var(--mint); color: var(--on-pastel); }
+
+  .lk-end { margin-top: 72px; }
+  .lk-end .bye { font-size: clamp(56px, 16vw, 120px); }
+  .lk-end .end-row { margin-top: 40px; }
+
+  .lk-toast {
+    position: fixed; left: 50%; bottom: 24px; z-index: 70; translate: -50% 20px;
+    padding: 10px 18px; border-radius: 999px;
+    background: var(--hot); color: var(--on-pastel); font-weight: 700; font-size: 15px;
+    opacity: 0; pointer-events: none; transition: opacity 0.25s, translate 0.35s var(--boing);
+  }
+  .lk-toast.on { opacity: 1; translate: -50% 0; }
+
+  /* the home page reorders its hero on smaller screens; this page keeps photo → now playing → name */
+  .lk-hero .me, .lk-hero .np { order: 0; }
+  @media (max-width: 900px) {
+    .lk-hero .np { margin-top: -22px; width: min(100%, 360px); }
+    .bar { flex-wrap: nowrap; }
+    .bar .bar-links { order: 0; width: auto; margin: 0; padding: 0; overflow: visible; }
+  }
+  @media (max-width: 640px) {
+    .lk { padding-top: 84px; }
+    .bar-links { display: none; }
+    .bar { justify-content: space-between; }
+    .mark { font-size: 20px; gap: 10px; }
+    .mark img { width: 32px; height: 32px; }
+    .ic { width: 50px; height: 50px; }
+    .lk-icons { gap: 9px; }
+    .rows a { padding: 10px 16px 10px 10px; gap: 14px; }
+    .tile { width: 46px; height: 46px; border-radius: 14px; }
+    .lk-feature { padding: 18px 18px 18px 14px; gap: 14px; }
   }
 </style>
 </head>
 
 <body>
-<canvas class="stars" id="stars" aria-hidden="true"></canvas>
 <a class="skip" href="#main">Skip to content</a>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <filter id="ink"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
-</svg>
+<header class="bar">
+  <a class="mark" href="/"><img src="assets/img/avatar-96.jpg" alt="" width="30" height="30">Ruytha</a>
+  <nav class="bar-links" aria-label="Pages">
+    <a href="/" data-ja="ホーム">Home</a>
+    <a href="/fm" data-ja="音楽">NyaFM</a>
+    <a href="/blog" data-ja="ブログ">Blog</a>
+  </nav>
+  <button class="fem" id="femBtn" type="button" role="switch" aria-checked="false">
+    <span class="fem-track" aria-hidden="true"><span class="fem-knob">♡</span></span>femboy mode
+  </button>
+</header>
 
 <main id="main" class="lk">
-<div class="lk-stage">
 
-  <aside class="lk-side lk-side-l" aria-label="Japan">
-    <figure class="cult cult-jp rail-bob" style="--d: -1s; --r: -4deg; --depth: 14">
-      <img src="assets/img/culture/lanterns.svg" alt="" width="160" height="120" decoding="async">
-      <figcaption><span class="cult-title">提灯</span> <span class="cult-sub">chōchin</span><span class="cult-fact">Paper lanterns.</span></figcaption>
-    </figure>
-    <figure class="cult cult-jp rail-bob" style="--d: -3s; --r: 3deg; --depth: 22">
-      <img src="assets/img/culture/sakura.svg" alt="" width="160" height="120" decoding="async">
-      <figcaption><span class="cult-title">桜</span> <span class="cult-sub">sakura</span><span class="cult-fact">Cherry blossoms.</span></figcaption>
-    </figure>
-    <figure class="cult cult-jp rail-bob" style="--d: -5s; --r: -2deg; --depth: 16">
-      <img src="assets/img/culture/maneki.svg" alt="" width="160" height="120" decoding="async">
-      <figcaption><span class="cult-title">招き猫</span> <span class="cult-sub">maneki-neko</span><span class="cult-fact">The beckoning cat.</span></figcaption>
-    </figure>
-  </aside>
-
-  <div class="lk-col">
-    <header class="lk-glass lk-profile">
-      <span class="hanko" aria-hidden="true">ルイサ</span>
-      <div class="avatar-wrap">
-        <span class="viz" id="viz" aria-hidden="true"></span>
-        <span class="fb-bow" aria-hidden="true">🎀</span>
-        <img class="avatar" id="avatar" src="assets/img/avatar.png" alt="Ruytha" width="104" height="104" decoding="async">
-      </div>
-      <h1 class="lk-name">Ruytha</h1>
-      <p class="lk-bio">Director, editor and lighting nerd from Australia. I make <strong>short films</strong>, mess around in <strong>Blender</strong>, and sync songs for <strong>Spicy Lyrics</strong>.</p>
-
-      <a class="pill np" id="pill" href="https://open.spotify.com/user/31wqsddt5oxby3p4ta7rx52mt6nu" target="_blank" rel="noopener" data-state="loading">
-        <span class="np-media" aria-hidden="true">
-          <span class="np-vinyl"><span class="np-label" id="npLabel"></span></span>
-          <span class="pill-art np-sleeve" id="pillArt"></span>
-        </span>
-        <span class="pill-text">
-          <span class="pill-label" id="pillLabel">Checking what's playing</span>
-          <span class="pill-track" id="pillTrack">one sec…</span>
-        </span>
-        <span class="pill-bars" id="pillBars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-      </a>
-    </header>
-
-    <a class="lk-feature" href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener">
-      <span class="lk-sticker" aria-hidden="true">most active here!</span>
-      <span class="blob" data-lobes="12"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M19.3 5.6A16 16 0 0 0 15.4 4.4l-.3.5a12 12 0 0 0-6.2 0l-.3-.5a16 16 0 0 0-3.9 1.2C2.3 9.2 1.6 12.7 2 16.1a16 16 0 0 0 4.8 2.4l.9-1.4a10 10 0 0 1-1.6-.8l.4-.3a11.4 11.4 0 0 0 9.8 0l.4.3a10 10 0 0 1-1.6.8l.9 1.4a16 16 0 0 0 4.8-2.4c.5-4-.7-7.4-2.5-10.5ZM8.9 14.1c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Zm6.2 0c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Z"/></svg></span>
-      <span>
-        <span class="lk-feature-title">Join the Discord server</span>
-        <span class="lk-feature-sub">come say something</span>
-      </span>
-      <span class="chev" aria-hidden="true">›</span>
-    </a>
-
-    <div class="lk-actions">
-      <button class="lk-btn" id="copyTag" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2.4"/><path d="M15.5 8.5V6.9a2.4 2.4 0 0 0-2.4-2.4H6.9a2.4 2.4 0 0 0-2.4 2.4v6.2a2.4 2.4 0 0 0 2.4 2.4h1.6"/></svg>
-        <span>Copy @ruytha</span>
-      </button>
-      <button class="lk-btn" id="shareBtn" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3.5M7.5 8 12 3.5 16.5 8"/><path d="M5 12.5v5.6A2.4 2.4 0 0 0 7.4 20.5h9.2a2.4 2.4 0 0 0 2.4-2.4v-5.6"/></svg>
-        <span>Share this page</span>
-      </button>
+  <section class="lk-hero" aria-label="Introduction">
+    <div class="me" data-rise>
+      <img src="assets/img/avatar-720.jpg" alt="Ruytha's avatar: an anime-style character with dark blue hair" width="220" height="220" decoding="async" fetchpriority="high">
+      <span class="spark s1" aria-hidden="true"></span><span class="spark s2" aria-hidden="true"></span><span class="spark s3" aria-hidden="true"></span>
     </div>
+    <a class="np glass" id="np" href="/fm" data-state="loading" data-rise>
+      <span class="np-art" id="npArt" aria-hidden="true"></span>
+      <span class="np-text">
+        <span class="np-label" id="npLabel">Checking what's playing</span>
+        <span class="np-track" id="npTrack">one sec…</span>
+      </span>
+      <span class="np-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    </a>
+    <p class="hi" data-rise><span class="ja" lang="ja">こんにちは</span> hi, i'm</p>
+    <h1 class="name" data-rise>Ruytha</h1>
+    <p class="meta" data-rise><span class="live-dot" aria-hidden="true"></span>Australia · <span id="clock">my time</span></p>
+    <p class="lk-bio" data-rise>Director, editor and lighting artist. I make <strong>short films</strong>, mess around in <strong>Blender</strong>, and sync songs for <strong>Spicy Lyrics</strong>.</p>
 
-    <ul class="lk-list">
-      <li><a class="tile" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">
-        <span class="blob" data-lobes="10"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.4" r="3.6"/><path d="M5.2 19.6a6.8 6.8 0 0 1 13.6 0"/></svg></span>
-        <span class="tile-text"><span class="tile-title">Discord</span><span class="tile-sub">@ruytha</span></span><span class="chev" aria-hidden="true">›</span></a></li>
-
-      <li><a class="tile" href="https://open.spotify.com/user/31wqsddt5oxby3p4ta7rx52mt6nu" target="_blank" rel="noopener">
-        <span class="blob" data-lobes="8"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.4"/><path d="M7.2 9.6a12 12 0 0 1 9.4 1.2M7.8 12.8a9.4 9.4 0 0 1 7.4.9M8.4 15.7a7 7 0 0 1 5.6.7"/></svg></span>
-        <span class="tile-text"><span class="tile-title">Spotify</span><span class="tile-sub">the actual evidence</span></span><span class="chev" aria-hidden="true">›</span></a></li>
-
-      <li><a class="tile" href="https://spicylyrics.org/ruytha" target="_blank" rel="noopener">
-        <span class="blob" data-lobes="6"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.4h9M4 11h13M4 15.6h7"/><path d="M17.6 14.2V7.4l3.4-.8"/><circle cx="16.2" cy="16.6" r="2"/></svg></span>
-        <span class="tile-text"><span class="tile-title">Spicy Lyrics</span><span class="tile-sub">my TTML profile</span></span><span class="chev" aria-hidden="true">›</span></a></li>
-
-      <li><a class="tile" href="/blog">
-        <span class="blob" data-lobes="5"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3.4h8.6L19 8.8v11.8H5Z"/><path d="M13.4 3.4v5.4H19M8 13h8M8 16.6h5.4"/></svg></span>
-        <span class="tile-text"><span class="tile-title">Blog</span><span class="tile-sub">reviews and opinions</span></span><span class="chev" aria-hidden="true">›</span></a></li>
-
-      <li><a class="tile" href="https://www.youtube.com/@ruytha.m4a" target="_blank" rel="noopener">
-        <span class="blob" data-lobes="5"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.8" y="5.4" width="18.4" height="13.2" rx="4"/><path d="M10.2 9.4v5.2l4.4-2.6Z"/></svg></span>
-        <span class="tile-text"><span class="tile-title">YouTube</span><span class="tile-sub">@ruytha.m4a</span></span><span class="chev" aria-hidden="true">›</span></a></li>
-
-      <li><a class="tile" href="https://yoursit.ee/ruytha" target="_blank" rel="noopener">
-        <span class="blob" data-lobes="4"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.4"/><path d="M2.8 12h18.4M12 2.6a14.4 14.4 0 0 1 0 18.8 14.4 14.4 0 0 1 0-18.8"/></svg></span>
-        <span class="tile-text"><span class="tile-title">Sitee profile</span><span class="tile-sub">yoursit.ee/ruytha</span></span><span class="chev" aria-hidden="true">›</span></a></li>
-
-      <li><a class="tile" href="https://ko-fi.com/ruytha" target="_blank" rel="noopener">
-        <span class="blob" data-lobes="7"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.4h12.4v5.4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5Z"/><path d="M16.4 9.6h1.4a2.6 2.6 0 0 1 0 5.2h-1.6"/><path d="M8.2 3.6v2M12.2 3.6v2"/></svg></span>
-        <span class="tile-text"><span class="tile-title">Ko-fi</span><span class="tile-sub">support my work</span></span><span class="chev" aria-hidden="true">›</span></a></li>
+    <ul class="lk-icons" aria-label="Socials" data-rise>
+      <li><a class="ic glass c-pink" href="https://www.instagram.com/ruytha.m4a" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect class="s" x="3.2" y="3.2" width="17.6" height="17.6" rx="5.2"/><circle class="s" cx="12" cy="12" r="4.1"/><circle class="f" cx="17.3" cy="6.7" r="1.15"/></svg><span class="tip">Instagram</span></a></li>
+      <li><a class="ic glass c-blue" href="https://x.com/teaboirr" target="_blank" rel="noopener" aria-label="X">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M17.8 3h3.1l-6.8 7.8L22 21h-6.3l-4.9-6.4L5.2 21H2.1l7.3-8.3L1.8 3h6.4l4.4 5.8L17.8 3Zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5Z"/></svg><span class="tip">X</span></a></li>
+      <li><a class="ic glass c-peach" href="https://www.youtube.com/@ruytha.m4a" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect class="s" x="2.6" y="5.4" width="18.8" height="13.2" rx="4"/><path class="f" d="M10.2 9.3v5.4l4.6-2.7Z"/></svg><span class="tip">YouTube</span></a></li>
+      <li><a class="ic glass c-lilac" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener" aria-label="Discord">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M19.3 5.6A16 16 0 0 0 15.4 4.4l-.3.5a12 12 0 0 0-6.2 0l-.3-.5a16 16 0 0 0-3.9 1.2C2.3 9.2 1.6 12.7 2 16.1a16 16 0 0 0 4.8 2.4l.9-1.4a10 10 0 0 1-1.6-.8l.4-.3a11.4 11.4 0 0 0 9.8 0l.4.3a10 10 0 0 1-1.6.8l.9 1.4a16 16 0 0 0 4.8-2.4c.5-4-.7-7.4-2.5-10.5ZM8.9 14.1c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Zm6.2 0c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Z"/></svg><span class="tip">Discord</span></a></li>
+      <li><a class="ic glass c-mint" href="https://open.spotify.com/user/31wqsddt5oxby3p4ta7rx52mt6nu" target="_blank" rel="noopener" aria-label="Spotify">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle class="s" cx="12" cy="12" r="9.4"/><path class="s" d="M7.2 9.6a12 12 0 0 1 9.4 1.2M7.8 12.8a9.4 9.4 0 0 1 7.4.9M8.4 15.7a7 7 0 0 1 5.6.7"/></svg><span class="tip">Spotify</span></a></li>
     </ul>
+  </section>
 
-    <footer class="lk-foot">
-      <a href="/">see the full site ›</a>
-      <span><span id="year">2026</span> Ruytha</span>
-    </footer>
+  <a class="lk-feature" href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener" data-rise>
+    <span class="ja-tag" lang="ja">いちばん活発！</span>
+    <span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M19.3 5.6A16 16 0 0 0 15.4 4.4l-.3.5a12 12 0 0 0-6.2 0l-.3-.5a16 16 0 0 0-3.9 1.2C2.3 9.2 1.6 12.7 2 16.1a16 16 0 0 0 4.8 2.4l.9-1.4a10 10 0 0 1-1.6-.8l.4-.3a11.4 11.4 0 0 0 9.8 0l.4.3a10 10 0 0 1-1.6.8l.9 1.4a16 16 0 0 0 4.8-2.4c.5-4-.7-7.4-2.5-10.5ZM8.9 14.1c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Zm6.2 0c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Z"/></svg></span>
+    <span><b>Join the Discord server</b><span class="sub">I'm most active here. Come say something</span></span>
+  </a>
+
+  <section class="lk-group" aria-labelledby="g-social">
+    <h2 class="h2" id="g-social" data-rise>Find me <span class="ja" lang="ja">連絡先</span></h2>
+    <ul class="rows" data-rise>
+      <li><a class="glass" href="https://www.instagram.com/ruytha.m4a" target="_blank" rel="noopener">
+        <span class="tile c-pink"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="s" x="3.2" y="3.2" width="17.6" height="17.6" rx="5.2"/><circle class="s" cx="12" cy="12" r="4.1"/><circle class="f" cx="17.3" cy="6.7" r="1.15"/></svg></span>
+        <span class="txt"><b>Instagram</b><span>@ruytha.m4a</span></span></a></li>
+      <li><a class="glass" href="https://x.com/teaboirr" target="_blank" rel="noopener">
+        <span class="tile c-blue"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M17.8 3h3.1l-6.8 7.8L22 21h-6.3l-4.9-6.4L5.2 21H2.1l7.3-8.3L1.8 3h6.4l4.4 5.8L17.8 3Zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5Z"/></svg></span>
+        <span class="txt"><b>X</b><span>@teaboirr</span></span></a></li>
+      <li><a class="glass" href="https://www.youtube.com/@ruytha.m4a" target="_blank" rel="noopener">
+        <span class="tile c-peach"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="s" x="2.6" y="5.4" width="18.8" height="13.2" rx="4"/><path class="f" d="M10.2 9.3v5.4l4.6-2.7Z"/></svg></span>
+        <span class="txt"><b>YouTube</b><span>@ruytha.m4a · films and edits</span></span></a></li>
+      <li><a class="glass" href="https://discord.com/users/690508522395402260" target="_blank" rel="noopener">
+        <span class="tile c-lilac"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="s" cx="12" cy="8.4" r="3.6"/><path class="s" d="M5.2 19.6a6.8 6.8 0 0 1 13.6 0"/></svg></span>
+        <span class="txt"><b>Discord</b><span>@ruytha</span></span></a></li>
+    </ul>
+  </section>
+
+  <section class="lk-group" aria-labelledby="g-music">
+    <h2 class="h2" id="g-music" data-rise>Music <span class="ja" lang="ja">音楽</span></h2>
+    <ul class="rows" data-rise>
+      <li><a class="glass" href="https://open.spotify.com/user/31wqsddt5oxby3p4ta7rx52mt6nu" target="_blank" rel="noopener">
+        <span class="tile c-mint"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="s" cx="12" cy="12" r="9.4"/><path class="s" d="M7.2 9.6a12 12 0 0 1 9.4 1.2M7.8 12.8a9.4 9.4 0 0 1 7.4.9M8.4 15.7a7 7 0 0 1 5.6.7"/></svg></span>
+        <span class="txt"><b>Spotify</b><span>the actual evidence</span></span></a></li>
+      <li><a class="glass" href="/fm">
+        <span class="tile c-pink"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="s" d="M4 20V13M9.3 20V8M14.6 20v-9M20 20V4"/></svg></span>
+        <span class="txt"><b>NyaFM</b><span>my listening stats, live</span></span></a></li>
+      <li><a class="glass" href="https://spicylyrics.org/ruytha" target="_blank" rel="noopener">
+        <span class="tile c-lemon"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="s" d="M4 6.4h9M4 11h13M4 15.6h7"/><path class="s" d="M17.6 14.2V7.4l3.4-.8"/><circle class="s" cx="16.2" cy="16.6" r="2"/></svg></span>
+        <span class="txt"><b>Spicy Lyrics</b><span>songs I've synced</span></span></a></li>
+    </ul>
+  </section>
+
+  <section class="lk-group" aria-labelledby="g-more">
+    <h2 class="h2" id="g-more" data-rise>Everything else <span class="ja" lang="ja">その他</span></h2>
+    <ul class="rows" data-rise>
+      <li><a class="glass" href="/blog">
+        <span class="tile c-blue"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="s" d="M5 3.4h8.6L19 8.8v11.8H5Z"/><path class="s" d="M13.4 3.4v5.4H19M8 13h8M8 16.6h5.4"/></svg></span>
+        <span class="txt"><b>Blog</b><span>reviews and opinions</span></span></a></li>
+      <li><a class="glass" href="https://ko-fi.com/ruytha" target="_blank" rel="noopener">
+        <span class="tile c-peach"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="s" d="M4 8.4h12.4v5.4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5Z"/><path class="s" d="M16.4 9.6h1.4a2.6 2.6 0 0 1 0 5.2h-1.6"/><path class="s" d="M8.2 3.6v2M12.2 3.6v2"/></svg></span>
+        <span class="txt"><b>Ko-fi</b><span>support my work</span></span></a></li>
+      <li><a class="glass" href="https://yoursit.ee/ruytha" target="_blank" rel="noopener">
+        <span class="tile c-lilac"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="s" cx="12" cy="12" r="9.4"/><path class="s" d="M2.8 12h18.4M12 2.6a14.4 14.4 0 0 1 0 18.8 14.4 14.4 0 0 1 0-18.8"/></svg></span>
+        <span class="txt"><b>Sitee</b><span>yoursit.ee/ruytha</span></span></a></li>
+    </ul>
+  </section>
+
+  <div class="lk-actions" data-rise>
+    <button class="btn btn-pop" id="shareBtn" type="button">Share this page</button>
+    <button class="btn btn-glass" id="copyTag" type="button">Copy my Discord @</button>
   </div>
 
-  <aside class="lk-side lk-side-r" aria-label="Australia">
-    <figure class="cult cult-au rail-bob" style="--d: -2s; --r: 3deg; --depth: 16">
-      <img src="assets/img/culture/southern-cross.svg" alt="" width="160" height="120" decoding="async">
-      <figcaption><span class="cult-title">Southern Cross</span><span class="cult-fact">On the flag.</span></figcaption>
-    </figure>
-    <figure class="cult cult-au rail-bob" style="--d: -4s; --r: -3deg; --depth: 24">
-      <img src="assets/img/culture/koala.svg" alt="" width="160" height="120" decoding="async">
-      <figcaption><span class="cult-title">Koala</span> <span class="cult-sub">napping</span><span class="cult-fact">Asleep.</span></figcaption>
-    </figure>
-    <figure class="cult cult-au rail-bob" style="--d: -1s; --r: 2deg; --depth: 14">
-      <img src="assets/img/culture/kangaroo.svg" alt="" width="160" height="120" decoding="async">
-      <figcaption><span class="cult-title">Kangaroo</span> <span class="cult-sub">boing</span><span class="cult-fact">Hopping.</span></figcaption>
-    </figure>
-  </aside>
-
-</div>
 </main>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-<div class="fb-hearts" id="fbHearts" aria-hidden="true"></div>
-<button class="fb-switch" id="fbSwitch" type="button" role="switch" aria-checked="false" aria-label="Femboy mode">
-  <span class="fb-track"><span class="fb-knob" aria-hidden="true">♡</span></span>
-  <span class="fb-label">femboy mode</span>
-</button>
+<footer class="end lk-end">
+  <button class="bye" id="bye" type="button" lang="ja" aria-label="またね！ Tap to say bye another way"><span id="byeWord"><i>ま</i><i>た</i><i>ね</i><i>！</i></span></button>
+  <p class="bye-en"><span id="byeEn">see you next time</span> · <span lang="ja">見てくれてありがとう</span> thanks for stopping by</p>
+  <div class="end-row">
+    <nav class="end-links" aria-label="More pages">
+      <a href="/">Main site</a>
+      <a href="/fm">NyaFM scrobbles</a>
+      <a href="/blog">Blog</a>
+      <a href="https://ko-fi.com/ruytha" target="_blank" rel="noopener">Support this website</a>
+    </nav>
+    <p class="end-copy">© <span id="year">2026</span> Ruytha</p>
+  </div>
+</footer>
 
-<script>
-  /* wavy circle clip-paths for the icon blobs */
-  (function () {
-    function blob(lobes) {
-      var pts = [], depth = lobes <= 5 ? 0.16 : 0.09;
-      for (var i = 0; i < 120; i++) {
-        var a = (i / 120) * Math.PI * 2;
-        var r = 1 - depth * (1 - Math.cos(lobes * a)) / 2;
-        pts.push((50 + 50 * r * Math.cos(a)).toFixed(2) + '% ' + (50 + 50 * r * Math.sin(a)).toFixed(2) + '%');
-      }
-      return 'polygon(' + pts.join(',') + ')';
-    }
-    document.querySelectorAll('.blob').forEach(function (el) {
-      el.style.setProperty('--shape', blob(Number(el.getAttribute('data-lobes')) || 8));
-    });
-  })();
+<div class="lk-toast" id="toast" role="status" aria-live="polite"></div>
+<div class="hearts" id="hearts" aria-hidden="true"></div>
 
-  /* copy the Discord username, share the page */
-  (function () {
-    var toast = document.getElementById('toast');
-    var t;
-    function say(msg) {
-      toast.textContent = msg;
-      toast.classList.add('is-on');
-      clearTimeout(t);
-      t = setTimeout(function () { toast.classList.remove('is-on'); }, 2400);
-    }
-    function copy(text) {
-      if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
-      return Promise.reject(new Error('no clipboard'));
-    }
-    function done(btn, label) {
-      var span = btn.querySelector('span');
-      var old = span.textContent;
-      btn.classList.add('is-done');
-      span.textContent = label;
-      setTimeout(function () { btn.classList.remove('is-done'); span.textContent = old; }, 1800);
-    }
-
-    var tag = document.getElementById('copyTag');
-    tag.addEventListener('click', function () {
-      copy('ruytha').then(function () {
-        done(tag, 'Copied!');
-        say('Copied @ruytha. Add me on Discord');
-      }, function () { say('My Discord is @ruytha'); });
-    });
-
-    var share = document.getElementById('shareBtn');
-    var url = location.origin + '/links';
-    share.addEventListener('click', function () {
-      if (navigator.share) {
-        navigator.share({ title: 'Ruytha', text: 'All of Ruytha’s links', url: url }).catch(function () {});
-        return;
-      }
-      copy(url).then(function () {
-        done(share, 'Link copied!');
-        say('Link copied');
-      }, function () { say(url); });
-    });
-  })();
-</script>
 <script src="assets/config.js"></script>
-<script src="assets/main.js" defer></script>
-<script src="assets/home.js" defer></script>
-<script src="assets/player.js" defer></script>
-<script src="assets/starfield.js" defer></script>
+<script>
+/* links page: the same bits as the home page (my time, now playing, album colours, femboy mode, またね, entrances) */
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var root = document.documentElement;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  $('year').textContent = new Date().getFullYear();
+
+  /* my time */
+  (function () {
+    var el = $('clock');
+    function tick() {
+      try { el.textContent = new Date().toLocaleTimeString('en-AU', { hour: 'numeric', minute: '2-digit', timeZone: 'Australia/Perth' }).toLowerCase() + ' my time'; } catch (e) {}
+    }
+    tick(); setInterval(tick, 30000);
+  })();
+
+  /* toast */
+  var toastT;
+  function say(msg) {
+    var t = $('toast');
+    t.textContent = msg; t.classList.add('on');
+    clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, 2400);
+  }
+
+  /* album colours: the glow behind me takes the colours of what I'm playing */
+  function hsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    var max = Math.max(r, g, b), min = Math.min(r, g, b), l = (max + min) / 2, h = 0, s = 0;
+    if (max !== min) {
+      var d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      h = max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+      h *= 60;
+    }
+    return [h, s, l];
+  }
+  function css(c) { return 'hsl(' + Math.round(c[0]) + ' ' + Math.round(Math.max(c[1], 0.6) * 100) + '% ' + Math.round(Math.min(Math.max(c[2], 0.62), 0.76) * 100) + '%)'; }
+  function albumColours(url) {
+    var img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = function () {
+      try {
+        var c = document.createElement('canvas'); c.width = c.height = 24;
+        var x = c.getContext('2d'); x.drawImage(img, 0, 0, 24, 24);
+        var d = x.getImageData(0, 0, 24, 24).data, px = [];
+        for (var i = 0; i < d.length; i += 4) { var p = hsl(d[i], d[i + 1], d[i + 2]); p.push(p[1] * (1 - Math.abs(p[2] - 0.55) * 1.6)); px.push(p); }
+        px.sort(function (a, b) { return b[3] - a[3]; });
+        var one = px[0], two = null;
+        if (one[1] < 0.15) return;
+        for (var j = 1; j < px.length; j++) { var gap = Math.abs(px[j][0] - one[0]) % 360; if (Math.min(gap, 360 - gap) > 40 && px[j][3] > 0.12) { two = px[j]; break; } }
+        if (!two) two = [(one[0] + 50) % 360, one[1], one[2]];
+        root.style.setProperty('--np1', css(one));
+        root.style.setProperty('--np2', css(two));
+      } catch (e) {}
+    };
+    img.src = url;
+  }
+
+  /* now playing, from my own NyaFM */
+  var CFG = window.RUYTHA_CONFIG || {};
+  var FMUSER = String(CFG.nyafmUser || CFG.lastfmUser || 'Ruytha').trim();
+  function v1(path) {
+    return fetch('/v1/users/' + encodeURIComponent(FMUSER) + path, { headers: { accept: 'application/json' } })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (d) { if (d && d.ok === false) throw new Error(d.error || 'error'); return d; });
+  }
+  function ago(ms) {
+    var m = Math.round((Date.now() - ms) / 60000);
+    if (m < 1) return 'just now';
+    if (m < 60) return m + ' min ago';
+    var h = Math.round(m / 60);
+    if (h < 24) return h + (h === 1 ? ' hour ago' : ' hours ago');
+    var d = Math.round(h / 24);
+    return d + (d === 1 ? ' day ago' : ' days ago');
+  }
+  var lastArt = '';
+  function loadNow() {
+    Promise.all([v1('/now-playing').catch(function () { return { playing: false }; }), v1('/recent?limit=1')])
+      .then(function (r) {
+        var np = r[0], recent = r[1].scrobbles || [];
+        var playing = !!(np && np.playing && np.track);
+        var t = playing ? np.track : recent[0];
+        if (!t) throw new Error('none');
+        $('np').dataset.state = playing ? 'playing' : 'recent';
+        $('npLabel').textContent = playing ? 'Now playing ♪' : 'Not listening right now · ' + ago(t.timestamp * 1000);
+        $('npTrack').textContent = (playing ? '' : 'last: ') + t.track + ' · ' + t.artist;
+        if (t.image && t.image !== lastArt) { lastArt = t.image; $('npArt').style.backgroundImage = 'url("' + t.image + '")'; albumColours(t.image); }
+      })
+      .catch(function () {
+        $('np').dataset.state = 'idle';
+        $('npLabel').textContent = 'Probably listening to';
+        $('npTrack').textContent = 'Tame Impala';
+      });
+  }
+  loadNow();
+  setInterval(function () { if (!document.hidden) loadNow(); }, 30000);
+
+  /* copy my Discord, share the page */
+  function copy(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
+    return Promise.reject(new Error('no clipboard'));
+  }
+  function done(btn, label) {
+    var old = btn.textContent;
+    btn.classList.add('is-done'); btn.textContent = label;
+    setTimeout(function () { btn.classList.remove('is-done'); btn.textContent = old; }, 1800);
+  }
+  var tag = $('copyTag');
+  tag.addEventListener('click', function () {
+    copy('ruytha').then(function () { done(tag, 'Copied!'); say('Copied @ruytha. Add me on Discord ♡'); },
+      function () { say('My Discord is @ruytha'); });
+  });
+  var share = $('shareBtn'), url = location.origin + '/links';
+  share.addEventListener('click', function () {
+    if (navigator.share) { navigator.share({ title: 'Ruytha', text: 'All of Ruytha’s links', url: url }).catch(function () {}); return; }
+    copy(url).then(function () { done(share, 'Link copied!'); say('Link copied'); }, function () { say(url); });
+  });
+
+  /* femboy mode (same switch and key as the home page) */
+  (function () {
+    var btn = $('femBtn'), layer = $('hearts'), meta = document.querySelector('meta[name="theme-color"]');
+    var KEY = 'ruytha-femboy', HEARTS = ['♡', '♥', '✧', '❀'];
+    function burst() {
+      if (reduce) return;
+      var r = btn.getBoundingClientRect();
+      for (var i = 0; i < 22; i++) {
+        var h = document.createElement('span'), ang = Math.random() * Math.PI * 2, dist = 60 + Math.random() * 160;
+        h.className = 'heart'; h.textContent = HEARTS[i % HEARTS.length];
+        h.style.left = (r.left + r.width / 2) + 'px'; h.style.top = (r.top + r.height / 2) + 'px';
+        h.style.fontSize = (14 + Math.random() * 16) + 'px';
+        h.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
+        h.style.setProperty('--dy', (Math.sin(ang) * dist + 40) + 'px');
+        h.style.setProperty('--rot', (Math.random() * 80 - 40) + 'deg');
+        layer.appendChild(h);
+        h.addEventListener('animationend', function () { this.remove(); });
+      }
+    }
+    function set(on, fromClick) {
+      root.classList.toggle('femboy', on);
+      btn.setAttribute('aria-checked', String(on));
+      if (meta) meta.setAttribute('content', on ? '#170a1f' : '#070b1f');
+      try { localStorage.setItem(KEY, on ? '1' : '0'); } catch (e) {}
+      if (on && fromClick) burst();
+    }
+    set(root.classList.contains('femboy'), false);
+    btn.addEventListener('click', function () { set(!root.classList.contains('femboy'), true); });
+  })();
+
+  /* またね！: tap it to say bye another way, with sakura */
+  (function () {
+    var btn = $('bye'), word = $('byeWord'), en = $('byeEn'), layer = $('hearts');
+    var BYES = [['またね！', 'see you next time'], ['じゃあね！', 'later!'], ['バイバイ！', 'bye bye!'], ['おやすみ！', 'good night!'], ['また明日！', 'see you tomorrow'], ['元気でね！', 'take care!']];
+    var at = 0;
+    function petals() {
+      if (reduce) return;
+      for (var i = 0; i < 26; i++) {
+        var p = document.createElement('span');
+        p.className = 'petal'; p.textContent = i % 3 ? '❀' : '✿';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.fontSize = (12 + Math.random() * 18) + 'px';
+        p.style.animationDelay = Math.random() * 1.2 + 's';
+        p.style.setProperty('--t', (3 + Math.random() * 2.5) + 's');
+        p.style.setProperty('--sway', (20 + Math.random() * 50) * (Math.random() < 0.5 ? -1 : 1) + 'px');
+        layer.appendChild(p);
+        p.addEventListener('animationend', function () { this.remove(); });
+      }
+    }
+    btn.addEventListener('click', function () {
+      at = (at + 1) % BYES.length;
+      word.innerHTML = '';
+      Array.prototype.forEach.call(BYES[at][0], function (ch, n) {
+        var i = document.createElement('i'); i.textContent = ch; i.style.setProperty('--n', n); word.appendChild(i);
+      });
+      en.textContent = BYES[at][1];
+      btn.setAttribute('aria-label', BYES[at][0] + ' ' + BYES[at][1] + '. Tap to say bye another way');
+      btn.classList.remove('wave'); void btn.offsetWidth; btn.classList.add('wave');
+      petals();
+    });
+  })();
+
+  /* header slides back in when you scroll up */
+  (function () {
+    var bar = document.querySelector('.bar'), lastY = window.scrollY;
+    window.addEventListener('scroll', function () {
+      var y = window.scrollY, dy = y - lastY;
+      if (y < 160) { if (!bar.classList.contains('shown') || y < 4) bar.classList.remove('float', 'shown'); lastY = y; return; }
+      bar.classList.add('float');
+      if (Math.abs(dy) < 6) return;
+      bar.classList.toggle('shown', dy < 0);
+      lastY = y;
+    }, { passive: true });
+  })();
+
+  /* entrances: each part rises in once */
+  (function () {
+    if (reduce) return;
+    var waiting = Array.prototype.slice.call(document.querySelectorAll('[data-rise]'));
+    waiting.forEach(function (el) {
+      var i = Array.prototype.filter.call(el.parentNode.children, function (c) { return c.hasAttribute('data-rise'); }).indexOf(el);
+      el.style.setProperty('--d', Math.min(i, 6) * 70 + 'ms');
+    });
+    function check() {
+      var line = window.innerHeight * 0.92;
+      waiting = waiting.filter(function (el) {
+        if (el.getBoundingClientRect().top > line) return true;
+        el.classList.add('risen');
+        return false;
+      });
+      if (!waiting.length) { removeEventListener('scroll', check); removeEventListener('resize', check); }
+    }
+    root.classList.add('rise-on');
+    addEventListener('scroll', check, { passive: true });
+    addEventListener('resize', check);
+    check();
+  })();
+})();
+</script>
 </body>
 </html>
