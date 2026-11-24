@@ -1,11 +1,18 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>NyaFM</title>
+  <meta name="description" content="Music stats, scrobbles and listening history." />
+  <meta property="og:site_name" content="NyaFM" />
+  <meta property="og:title" content="NyaFM" />
+  <meta property="og:description" content="Music stats, scrobbles and listening history." />
+  <meta property="og:image" content="/fm/icon.png" />
+  <meta name="twitter:card" content="summary" />
   <meta name="theme-color" content="#0f0d14" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>" />
+  <link rel="apple-touch-icon" href="/fm/icon.png" />
   <link rel="stylesheet" href="/fm/style.css" />
   <link rel="stylesheet" href="/assets/lyrics.css" />
 </head>
@@ -15,14 +22,21 @@
     <nav id="nav">
       <a href="/fm#/" data-r="home">Overview</a>
       <a href="#/stats" data-r="stats">Stats</a>
+      <a href="#/recap" data-r="recap">Recap</a>
       <a href="#/recent" data-r="recent">Scrobbles</a>
       <a href="#/library/artists" data-r="library">Library</a>
+      <a href="#/discover" data-r="discover">Discover</a>
       <a href="#/api" data-r="api">API</a>
       <a href="#/settings" data-r="settings">Settings</a>
+      <a href="#/search" data-r="search" class="m-only">Search</a>
     </nav>
+    <form class="hsearch" id="hsearch" role="search">
+      <input type="search" name="q" placeholder="Search your music…" aria-label="Search your music" autocomplete="off" />
+    </form>
   </header>
   <main id="view"><div class="loading">loading…</div></main>
   <footer class="foot">NyaFM · this was made becasue lsat.fm put apis behind a paywall</footer>
+  <dialog id="dlg"></dialog>
   <script type="module" src="/fm/app.js"></script>
   <script defer src="/fm/fx.js"></script>
   <script defer src="/assets/smooth-scroll.js"></script>

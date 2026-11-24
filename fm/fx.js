@@ -1,7 +1,9 @@
 // NyaFM dashboard: motion + little interactions. Pure progressive enhancement:
 // the dashboard works without this file, and everything is skipped for "reduce motion".
 (() => {
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduceMQ = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // also off when the owner turns effects off in Settings (app.js adds the class)
+  const noFx = () => reduceMQ || document.documentElement.classList.contains('nofx');
   const view = document.getElementById('view');
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
@@ -21,7 +23,7 @@
 
   // ------------------------------------------------------------ paw burst
   function burst(x, y, n = 10, glyph = '🐾') {
-    if (reduce) return;
+    if (noFx()) return;
     for (let i = 0; i < n; i++) {
       const p = document.createElement('span');
       p.className = 'fx-paw';
@@ -70,7 +72,7 @@
   // ------------------------------------------------------------ card tilt
   let tilted = null;
   document.addEventListener('pointermove', (e) => {
-    if (reduce || e.pointerType === 'touch') return;
+    if (noFx() || e.pointerType === 'touch') return;
     const c = e.target.closest?.('.card');
     if (tilted && tilted !== c) { tilted.style.transform = ''; tilted = null; }
     if (!c) return;
@@ -117,7 +119,7 @@
   }, { threshold: 0.12 });
 
   function enhance() {
-    if (reduce) return;
+    if (noFx()) return;
     // touch screens skip the heatmap's pop-in so it can never be left waiting to appear
     const touch = matchMedia('(hover: none)').matches;
     const targets = $$('.tile, .panel, .card, .row, .np, .chart, ' + (touch ? '' : '.heat, .heatkey, ') + '#view > section, #view > h1, #view > .sub, .periods', view);

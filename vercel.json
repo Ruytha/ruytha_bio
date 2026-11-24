@@ -26,7 +26,9 @@
     { "source": "/v1", "destination": "/api/nyafm" },
     { "source": "/v1/:path*", "destination": "/api/nyafm" },
     { "source": "/apis/:path*", "destination": "/api/nyafm" },
-    { "source": "/fm/api/:path*", "destination": "/api/nyafm" }
+    { "source": "/fm/api/:path*", "destination": "/api/nyafm" },
+    { "source": "/fm/s", "destination": "/api/nyafm" },
+    { "source": "/fm/s/:path*", "destination": "/api/nyafm" }
   ],
   "crons": [
     { "path": "/fm/api/spotify/sync", "schedule": "0 0 * * *" }

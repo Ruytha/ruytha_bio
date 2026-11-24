@@ -6,6 +6,20 @@ const PERIODS = [['7day', '7 days'], ['1month', '30 days'], ['3month', '90 days'
 let status = null;
 let period = localStorage.getItem('nyafm.period') || '1month';
 
+// Look-and-feel settings of the profile owner (Settings → Look & feel). Defaults until /status says otherwise.
+let prefs = { accent: '#ff6fae', default_period: '1month', clock: '24h', show_lyrics: true, effects: true, show_milestones: true };
+function applyPrefs(p) {
+  prefs = { ...prefs, ...(p || {}) };
+  document.documentElement.style.setProperty('--accent', prefs.accent);
+  document.documentElement.classList.toggle('nofx', !prefs.effects);
+  if (!localStorage.getItem('nyafm.period')) period = prefs.default_period;
+}
+async function loadStatus() {
+  status = await api('/status');
+  applyPrefs(status.prefs);
+  return status;
+}
+
 // ---------------------------------------------------------------- utils
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const enc = encodeURIComponent;
@@ -44,6 +58,73 @@ document.head.insertAdjacentHTML('beforeend', '<style>.cover{position:relative}.
 const artistLink = (a) => `<a href="#/artist/${enc(a)}">${esc(a)}</a>`;
 const trackHref = (a, t) => `#/track/${enc(a)}/${enc(t)}`;
 const trackLink = (a, t) => `<a href="${trackHref(a, t)}">${esc(t)}</a>`;
+const albumHref = (a, al) => `#/album/${enc(a)}/${enc(al)}`;
+const albumLink = (a, al) => `<a href="${albumHref(a, al)}">${esc(al)}</a>`;
+
+// hours on the listening clock, 24h or 12h depending on Settings
+const clockChart = (hrs) => barChart(hrs.map((v, i) => ({ k: prefs.clock === '12h' ? `${i % 12 || 12}${i < 12 ? 'am' : 'pm'}` : `${String(i).padStart(2, '0')}:00`, v })),
+  { labelEvery: 3, fmtLabel: (k) => (prefs.clock === '12h' ? k.replace(/m$/, '') : k.slice(0, 2)) });
+const hourName = (h) => (prefs.clock === '12h' ? `${h % 12 || 12}${h < 12 ? 'am' : 'pm'}` : `${String(h).padStart(2, '0')}:00`);
+
+const say = (msg) => (window.FX?.say ? window.FX.say(msg) : console.log(msg));
+
+// Share links: /fm/s/... pages carry link previews for Discord, iMessage etc. and then open the dashboard page.
+const shareBtn = (path, label = 'Share') => `<button type="button" class="btn" data-share="${esc(path)}">↗ ${esc(label)}</button>`;
+document.addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-share]');
+  if (!b) return;
+  const u = user();
+  const url = location.origin + b.dataset.share + (u && status && u.toLowerCase() !== String(status.default_user).toLowerCase() ? `?u=${enc(u)}` : '');
+  if (navigator.share && matchMedia('(pointer: coarse)').matches) {
+    try { await navigator.share({ url }); } catch {}
+    return;
+  }
+  try { await navigator.clipboard.writeText(url); say('🔗 Link copied, paste it anywhere'); } catch { prompt('Copy this link:', url); }
+});
+
+// A small form in a dialog. fields: [{name, label, value, type: 'text'|'check', required}] -> values or null
+function ask({ title, fields, ok = 'Save', note = '' }) {
+  return new Promise((resolve) => {
+    const d = $('#dlg');
+    let done = false;
+    const finish = (v) => { if (!done) { done = true; resolve(v); } };
+    d.innerHTML = `<form class="dlgf"><h2>${esc(title)}</h2>${note ? `<p class="hint">${note}</p>` : ''}
+      ${fields.map((f) => (f.type === 'check'
+        ? `<label class="chk"><input type="checkbox" name="${f.name}" ${f.value ? 'checked' : ''}/> ${esc(f.label)}</label>`
+        : `<label>${esc(f.label)}</label><input type="text" name="${f.name}" value="${esc(f.value || '')}" ${f.required ? 'required' : ''}/>`)).join('')}
+      <div class="dlgb"><button type="button" class="btn" id="dlgc">Cancel</button><button class="btn pri">${esc(ok)}</button></div></form>`;
+    const form = d.querySelector('form');
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const out = {};
+      for (const f of fields) out[f.name] = f.type === 'check' ? fd.get(f.name) === 'on' : String(fd.get(f.name) || '').trim();
+      finish(out);
+      d.close();
+    };
+    $('#dlgc').onclick = () => d.close();
+    d.onclose = () => finish(null);
+    d.showModal();
+    form.querySelector('input[type=text]')?.select();
+  });
+}
+
+// Rename an artist / song / album everywhere (owner only). Returns the new name, or null.
+async function renameFlow(kind, { artist = '', from }) {
+  const what = { artist: 'artist', track: 'song', album: 'album' }[kind];
+  const v = await ask({
+    title: `Rename ${what}`,
+    note: `Changes every scrobble of <b>${esc(from)}</b>${kind !== 'artist' ? ` by ${esc(artist)}` : ''}. If the new name already exists, they're merged.`,
+    fields: [{ name: 'to', label: 'New name', value: from, required: true }, { name: 'remember', label: 'Also rename it in future scrobbles', type: 'check', value: true }],
+    ok: 'Rename',
+  });
+  if (!v || !v.to || v.to === from) return null;
+  try {
+    const r = await api('/edit/rename', { method: 'POST', body: { kind, artist, from, to: v.to, remember: v.remember } });
+    say(`✎ Renamed ${fmtN(r.changed)} scrobble${r.changed === 1 ? '' : 's'}`);
+    return v.to;
+  } catch (err) { say(err.message); return null; }
+}
 const compact = (n) => new Intl.NumberFormat(undefined, { notation: 'compact', maximumFractionDigits: 1 }).format(n);
 const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
 const flag = (cc) => (/^[A-Z]{2}$/.test(cc || '') ? String.fromCodePoint(...[...cc].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65)) : '');
@@ -118,10 +199,10 @@ function rowsList(items, { rank = true, max } = {}) {
   if (!items.length) return '<div class="empty">nothing here yet… go listen to something 🎧</div>';
   const top = max ?? Math.max(...items.map((i) => i.plays || 0), 1);
   return `<div class="rows">${items.map((it) => `
-    <div class="row" data-go="${esc(it.track ? trackHref(it.artist, it.track) : `#/artist/${enc(it.artist)}`)}">
+    <div class="row" data-go="${esc(it.track ? trackHref(it.artist, it.track) : it.album ? albumHref(it.artist, it.album) : `#/artist/${enc(it.artist)}`)}">
       ${rank ? `<div class="rk">${it.rank}</div>` : ''}
       ${cover(it.track ? it : { ...it, kind: it.album ? 'album' : 'artist' })}
-      <div class="main"><div class="t">${it.track ? trackLink(it.artist, it.track) : it.album ? esc(it.album) : artistLink(it.artist)}</div>
+      <div class="main"><div class="t">${it.track ? trackLink(it.artist, it.track) : it.album ? albumLink(it.artist, it.album) : artistLink(it.artist)}</div>
         ${it.track || it.album ? `<div class="s">${artistLink(it.artist)}</div>` : ''}</div>
       <div class="bar"><i style="width:${(100 * (it.plays || 0)) / top}%"></i><span>${fmtN(it.plays)} plays</span></div>
     </div>`).join('')}</div>`;
@@ -130,26 +211,47 @@ function rowsList(items, { rank = true, max } = {}) {
 function scrobbleList(items, { canDelete = false } = {}) {
   if (!items.length) return '<div class="empty">no scrobbles yet… 🐾</div>';
   return `<div class="rows">${items.map((s) => `
-    <div class="row" data-id="${s.id}" data-go="${esc(trackHref(s.artist, s.track))}">
+    <div class="row" data-id="${s.id}" data-go="${esc(trackHref(s.artist, s.track))}"${canDelete ? ` data-artist="${esc(s.artist)}" data-track="${esc(s.track)}" data-album="${esc(s.album || '')}"` : ''}>
       ${cover(s)}
-      <div class="main"><div class="t">${trackLink(s.artist, s.track)}</div><div class="s">${artistLink(s.artist)}${s.album ? ` · ${esc(s.album)}` : ''}</div></div>
-      <div class="when" title="${new Date(s.ts * 1000).toLocaleString()}">${ago(s.ts)}</div>
-      ${canDelete ? '<button class="x" title="Delete scrobble">✕</button>' : ''}
+      <div class="main"><div class="t">${trackLink(s.artist, s.track)}</div><div class="s">${artistLink(s.artist)}${s.album ? ` · ${albumLink(s.album_artist || s.artist, s.album)}` : ''}</div></div>
+      <div class="when" title="${new Date(s.ts * 1000).toLocaleString()}${s.source ? ` · via ${esc(sourceName(s.source))}` : ''}">${ago(s.ts)}</div>
+      ${canDelete ? '<button class="ed" title="Edit scrobble" aria-label="Edit scrobble">✎</button><button class="x" title="Delete scrobble" aria-label="Delete scrobble">✕</button>' : ''}
     </div>`).join('')}</div>`;
 }
 
+const SOURCES = {
+  'spotify-sync': 'Spotify sync', 'apple-music': 'Apple Music', 'lastfm-api': 'Last.fm-style apps', 'listenbrainz-api': 'ListenBrainz-style apps',
+  'api-v1': 'NyaFM API', import: 'Imported files', 'spotify-history': 'Spotify history import', 'listenbrainz-import': 'ListenBrainz import', unknown: 'Unknown',
+};
+const sourceName = (s) => SOURCES[s] || s;
+
 function bindDelete(root, after) {
+  if (!root) return;
   root.addEventListener('click', async (e) => {
-    if (!e.target.classList.contains('x')) return;
     const row = e.target.closest('.row');
-    try { await api(`/scrobble/${row.dataset.id}`, { method: 'DELETE' }); row.remove(); after?.(); } catch (err) { console.error(err); }
+    if (e.target.classList.contains('x')) {
+      try { await api(`/scrobble/${row.dataset.id}`, { method: 'DELETE' }); row.remove(); after?.(); } catch (err) { say(err.message); }
+    }
+    if (e.target.classList.contains('ed')) {
+      const v = await ask({
+        title: 'Edit scrobble',
+        fields: [
+          { name: 'artist', label: 'Artist', value: row.dataset.artist, required: true },
+          { name: 'track', label: 'Song', value: row.dataset.track, required: true },
+          { name: 'album', label: 'Album', value: row.dataset.album },
+        ],
+        note: 'Fixes just this one play. To fix every play of a song, use ✎ Rename on its page.',
+      });
+      if (!v) return;
+      try { await api(`/scrobble/${row.dataset.id}`, { method: 'PATCH', body: v }); say('✎ Scrobble updated'); route(); } catch (err) { say(err.message); }
+    }
   });
 }
 
 function cards(items, kind) {
   if (!items.length) return '<div class="empty">nothing yet</div>';
   return `<div class="cards">${items.map((it) => `
-    <a class="card" href="#/artist/${enc(it.artist)}">
+    <a class="card" href="${kind === 'albums' ? albumHref(it.artist, it.album) : `#/artist/${enc(it.artist)}`}">
       ${cover(kind === 'artists' ? { artist: it.artist, kind: 'artist' } : it)}
       <span class="rk">#${it.rank}</span>
       <div class="meta"><div class="t">${esc(kind === 'artists' ? it.artist : it.album)}</div>
@@ -168,7 +270,7 @@ async function nowPlaying(u) {
       <div style="font-size:18px;font-weight:600">${trackLink(last.artist, last.track)}</div><div class="s">${artistLink(last.artist)} · last played ${ago(last.ts)}</div></div></div>`;
   }
   return `<div class="np">${cover(np)}<div><div class="lbl"><span class="eq"><i></i><i></i><i></i></span> Now playing</div>
-    <div style="font-size:18px;font-weight:600">${trackLink(np.artist, np.track)}</div><div class="s">${artistLink(np.artist)}${np.album ? ` · ${esc(np.album)}` : ''}</div></div></div>`;
+    <div style="font-size:18px;font-weight:600">${trackLink(np.artist, np.track)}</div><div class="s">${artistLink(np.artist)}${np.album ? ` · ${albumLink(np.artist, np.album)}` : ''}</div></div></div>`;
 }
 
 async function pageHome() {
@@ -186,8 +288,9 @@ async function pageHome() {
   ]);
   const series = days && days <= 400 ? fillDays(tl, days) : tl.map((r) => ({ k: r.bucket, v: r.plays }));
   view.innerHTML = `
-    <h1>${esc(u)}</h1>
-    <p class="sub">${sum.first_scrobble ? `scrobbling since ${new Date(sum.first_scrobble * 1000).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}` : 'no scrobbles yet — set up a scrobbler in Settings'}</p>
+    <div class="pagehead"><div><h1>${esc(u)}</h1>
+    <p class="sub">${sum.first_scrobble ? `scrobbling since ${new Date(sum.first_scrobble * 1000).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}` : 'no scrobbles yet — set up a scrobbler in Settings'}</p></div>
+    <div class="acts">${shareBtn('/fm/s', 'Share profile')}<a class="btn" href="#/recap">✨ ${new Date().toLocaleDateString(undefined, { month: 'long' })} recap</a></div></div>
     <div id="np">${np}</div>
     <div id="lyrics"></div>
     <div id="periods"></div>
@@ -206,7 +309,7 @@ async function pageHome() {
       <section class="panel"><h2>Recent <a class="more" href="#/recent">see all →</a></h2><div id="rec">${scrobbleList(rec.rows, { canDelete: isOwner() })}</div></section>
     </div>
     <div class="grid2">
-      <section class="panel"><h2>Listening clock</h2>${barChart(sum.hours.map((v, i) => ({ k: `${String(i).padStart(2, '0')}:00`, v })), { labelEvery: 3, fmtLabel: (k) => k.slice(0, 2) })}</section>
+      <section class="panel"><h2>Listening clock</h2>${clockChart(sum.hours)}</section>
       <section class="panel"><h2>By weekday</h2>${barChart(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((k, i) => ({ k, v: sum.weekdays[i] })))}</section>
     </div>`;
   $('#periods').replaceWith(periodChips(route));
@@ -313,11 +416,12 @@ async function pageStats() {
   const heatTotal = narrow ? heatSeries.reduce((n, d) => n + d.v, 0) : yearTotal;
   const heatActive = narrow ? heatSeries.filter((d) => d.v > 0).length : st.active;
   const monthSeries = monthly.map((r) => ({ k: r.bucket, v: r.plays }));
-  const hh = (h) => `${h % 12 || 12}${h < 12 ? 'am' : 'pm'}`;
+  const hh = hourName;
 
   view.innerHTML = `
-    <h1>Stats</h1>
-    <p class="sub">${esc(u)} · every number, sliced a few ways</p>
+    <div class="pagehead"><div><h1>Stats</h1>
+    <p class="sub">${esc(u)} · every number, sliced a few ways</p></div>
+    <div class="acts"><a class="btn" href="#/recap/${new Date().getFullYear()}">✨ Your ${new Date().getFullYear()} recap</a></div></div>
     <div id="periods"></div>
     <div class="tiles">
       <div class="tile"><div class="n">${fmtN(sum.scrobbles)}</div><div class="l">scrobbles</div></div>
@@ -340,10 +444,12 @@ async function pageStats() {
       <div class="tile"><div class="n">${sum.scrobbles ? wdNames[busyWd].slice(0, 3) : '—'}</div><div class="l">favourite day of the week</div></div>
     </div>
 
+    <div id="ms"></div>
+
     <section class="panel"><h2>Month by month <span class="more">all time</span></h2>${barChart(monthSeries, { labelEvery: Math.ceil(monthSeries.length / 12), fmtLabel: (k) => k.slice(2) })}</section>
 
     <div class="grid2">
-      <section class="panel"><h2>Listening clock</h2>${barChart(sum.hours.map((v, i) => ({ k: `${String(i).padStart(2, '0')}:00`, v })), { labelEvery: 3, fmtLabel: (k) => k.slice(0, 2) })}</section>
+      <section class="panel"><h2>Listening clock</h2>${clockChart(sum.hours)}</section>
       <section class="panel"><h2>By weekday</h2>${barChart(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((k, i) => ({ k, v: sum.weekdays[i] })))}</section>
     </div>
 
@@ -353,6 +459,24 @@ async function pageStats() {
     </div>
     <section><h2>Top albums <a class="more" href="#/library/albums">see all →</a></h2>${cards(tal.rows, 'albums')}</section>`;
   $('#periods').replaceWith(periodChips(route));
+  if (prefs.show_milestones) loadMilestones(u);
+}
+
+async function loadMilestones(u) {
+  const m = await api(`/u/${enc(u)}/milestones`).catch(() => null);
+  const box = $('#ms');
+  if (!m || !box || !m.total) return;
+  const eta = m.next_eta ? new Date(m.next_eta * 1000).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) : null;
+  const left = m.next - m.total;
+  box.innerHTML = `<section class="panel"><h2>Milestones <span class="more">${fmtN(m.total)} scrobbles so far</span></h2>
+    <div class="nextms"><div class="bar"><i style="width:${Math.min(100, (100 * m.total) / m.next)}%"></i></div>
+      <div><b>${fmtN(left)}</b> to go until your <b>${fmtN(m.next)}th</b> scrobble${eta ? ` · about <b>${eta}</b> at your pace (${m.per_day >= 10 ? Math.round(m.per_day) : m.per_day.toFixed(1)} a day)` : ''}</div></div>
+    <div class="rows">${m.reached.map((x) => `
+      <div class="row" data-go="${esc(trackHref(x.scrobble.artist, x.scrobble.track))}">
+        <div class="msn">${x.n === 1 ? 'first' : `#${compact(x.n)}`}</div>${cover(x.scrobble)}
+        <div class="main"><div class="t">${trackLink(x.scrobble.artist, x.scrobble.track)}</div><div class="s">${artistLink(x.scrobble.artist)}</div></div>
+        <div class="when">${dateOf(x.scrobble.ts)}</div>
+      </div>`).join('')}</div></section>`;
 }
 
 async function pageRecent(params) {
@@ -407,7 +531,8 @@ async function pageArtist(name) {
     <div class="hero">${cover({ artist: info.artist, kind: 'artist' })}
       <div class="grow"><h1>${esc(info.artist)}</h1>
       <p class="sub">${info.plays ? `${fmtN(info.plays)} plays${info.rank ? ` · #${info.rank} all-time` : ''}` : 'not in your library yet'}</p>
-      <div class="facts" id="xf"></div></div></div>
+      <div class="facts" id="xf"></div>
+      <div class="acts">${shareBtn(`/fm/s/artist/${enc(info.artist)}`)}${isOwner() && info.plays ? '<button type="button" class="btn" id="ren">✎ Rename</button>' : ''}</div></div></div>
     ${info.plays ? `<div class="tiles">
       <div class="tile"><div class="n">${fmtN(info.plays)}</div><div class="l">plays</div></div>
       <div class="tile"><div class="n">${info.rank ? `#${info.rank}` : '—'}</div><div class="l">all-time rank</div></div>
@@ -423,6 +548,8 @@ async function pageArtist(name) {
       <section class="panel"><h2>Top tracks</h2>${rowsList(tracks.rows)}</section>
       <section class="panel"><h2>Recent</h2>${scrobbleList(rec.rows)}</section>
     </div>` : ''}`;
+  const ren = $('#ren');
+  if (ren) ren.onclick = async () => { const to = await renameFlow('artist', { from: info.artist }); if (to) location.hash = `#/artist/${enc(to)}`; };
   loadArtistExtra(info.artist);
 }
 
@@ -477,9 +604,9 @@ async function pageTrack(artist, track) {
   view.innerHTML = `
     <div class="hero">${cover({ artist, album: info.album, track }, 'cover sq')}
       <div class="grow"><h1>${esc(track)}</h1>
-      <p class="sub">${artistLink(artist)}${info.album ? ` · ${esc(info.album)}` : ''}</p>
+      <p class="sub">${artistLink(artist)}${info.album ? ` · ${albumLink(artist, info.album)}` : ''}</p>
       <div class="facts" id="xf"></div>
-      <div class="acts">${isOwner() && info.plays ? `<button type="button" class="btn" id="love">${info.loved ? '♥ Loved' : '♡ Love'}</button>` : ''}<span id="xp"></span></div></div></div>
+      <div class="acts">${isOwner() && info.plays ? `<button type="button" class="btn" id="love">${info.loved ? '♥ Loved' : '♡ Love'}</button>` : ''}<span id="xp"></span>${shareBtn(`/fm/s/track/${enc(artist)}/${enc(track)}`)}${isOwner() && info.plays ? '<button type="button" class="btn" id="ren">✎ Rename</button>' : ''}</div></div></div>
     ${info.plays ? `<div class="tiles">
       <div class="tile"><div class="n">${fmtN(info.plays)}</div><div class="l">plays</div></div>
       <div class="tile"><div class="n sm">${dateOf(info.first_ts)}</div><div class="l">first heard</div></div>
@@ -495,6 +622,8 @@ async function pageTrack(artist, track) {
       <section class="panel"><h2>More from ${esc(artist)} <a class="more" href="#/artist/${enc(artist)}">artist page →</a></h2>${rowsList(more.rows)}</section>
     </div>`;
   bindDelete($('#plays'));
+  const ren = $('#ren');
+  if (ren) ren.onclick = async () => { const to = await renameFlow('track', { artist, from: track }); if (to) location.hash = trackHref(artist, to); };
   const love = $('#love');
   if (love) {
     let loved = !!info.loved;
@@ -527,6 +656,257 @@ async function loadTrackExtra(artist, track) {
   }
 }
 
+// ---------------------------------------------------------------- album page
+const songKey = (s) => String(s || '').toLowerCase().replace(/\s*[([][^)\]]*[)\]]/g, '').replace(/\s+-\s+.*$/, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+
+function albumTracks(list, max, { numbered = false } = {}) {
+  if (!list.length) return '<div class="empty">no songs yet</div>';
+  return `<div class="rows">${list.map((t) => `
+    <div class="row${t.plays ? '' : ' unplayed'}" data-go="${esc(trackHref(t.artist, t.title))}">
+      ${numbered ? `<div class="rk">${t.n ?? ''}</div>` : ''}
+      <div class="main"><div class="t">${trackLink(t.artist, t.title)}</div>${t.featured ? `<div class="s">${esc(t.featured)}</div>` : ''}</div>
+      ${t.duration ? `<div class="when">${mmss(t.duration)}</div>` : ''}
+      ${playBtn(t.preview)}
+      <div class="bar">${t.plays ? `<i style="width:${(100 * t.plays) / max}%"></i>` : ''}<span>${t.plays ? `${fmtN(t.plays)} plays` : 'not played'}</span></div>
+    </div>`).join('')}</div>`;
+}
+
+async function pageAlbum(artist, album) {
+  const u = user();
+  const [info, more] = await Promise.all([
+    api(`/u/${enc(u)}/album?artist=${enc(artist)}&album=${enc(album)}&tz=${TZ}`),
+    api(`/u/${enc(u)}/top/albums?artist=${enc(artist)}&limit=13`),
+  ]);
+  artist = info.artist; album = info.album;
+  const secs = info.listening_seconds;
+  const mine = info.tracks.map((t) => ({ artist: t.artist, title: t.track, plays: t.plays, duration: t.duration }));
+  const others = more.rows.filter((r) => r.album.toLowerCase() !== album.toLowerCase()).slice(0, 12);
+  view.innerHTML = `
+    <div class="hero">${cover({ artist, album }, 'cover sq')}
+      <div class="grow"><h1>${esc(album)}</h1>
+      <p class="sub">${artistLink(artist)}</p>
+      <div class="facts" id="xf"></div>
+      <div class="acts"><span id="xp"></span>${shareBtn(`/fm/s/album/${enc(artist)}/${enc(album)}`)}${isOwner() && info.plays ? '<button type="button" class="btn" id="ren">✎ Rename</button>' : ''}</div></div></div>
+    ${info.plays ? `<div class="tiles">
+      <div class="tile"><div class="n">${fmtN(info.plays)}</div><div class="l">plays</div></div>
+      <div class="tile"><div class="n" id="heard">${fmtN(info.tracks.length)}</div><div class="l" id="heardl">songs played</div></div>
+      <div class="tile"><div class="n">${secs >= 3600 ? `${hours(secs)}<small> h</small>` : `${Math.round(secs / 60)}<small> min</small>`}</div><div class="l">time spent on it</div></div>
+      <div class="tile"><div class="n sm">${dateOf(info.first_ts)}</div><div class="l">first heard</div></div>
+      <div class="tile"><div class="n sm">${info.last_ts ? ago(info.last_ts) : '—'}</div><div class="l">last heard</div></div>
+    </div>
+    <section class="panel"><h2>Plays per month</h2>${barChart(info.months.map((r) => ({ k: r.bucket, v: r.plays })), { labelEvery: Math.ceil(info.months.length / 10) })}</section>`
+    : `<div class="empty">You haven't played this album yet 🎧</div>`}
+    <section class="panel"><h2>Songs <span class="more" id="tlh">${info.plays ? 'your plays' : ''}</span></h2><div id="tracks">${albumTracks(mine, Math.max(1, ...mine.map((t) => t.plays)))}</div></section>
+    <div class="grid2">
+      ${info.plays ? `<section class="panel"><h2>Recent plays</h2><div id="plays">${scrobbleList(info.recent, { canDelete: isOwner() })}</div></section>` : ''}
+      ${others.length ? `<section class="panel"><h2>More from ${esc(artist)} <a class="more" href="#/artist/${enc(artist)}">artist page →</a></h2>${rowsList(others, { rank: false })}</section>` : ''}
+    </div>`;
+  bindDelete($('#plays'));
+  const ren = $('#ren');
+  if (ren) ren.onclick = async () => { const to = await renameFlow('album', { artist, from: album }); if (to) location.hash = albumHref(artist, to); };
+  loadAlbumExtra(artist, album, mine);
+}
+
+async function loadAlbumExtra(artist, album, mine) {
+  const x = await extJSON(`/album-info?artist=${enc(artist)}&album=${enc(album)}`);
+  const facts = $('#xf'), box = $('#tracks');
+  if (!x || !facts || !box || !x.title) return;
+  const chips = [];
+  if (x.record_type && x.record_type !== 'album') chips.push(`<span class="fact">${esc(x.record_type[0].toUpperCase() + x.record_type.slice(1))}</span>`);
+  if (x.release_date) chips.push(`<span class="fact">Released ${esc(new Date(x.release_date + 'T00:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }))}</span>`);
+  if (x.nb_tracks) chips.push(`<span class="fact">${x.nb_tracks} song${x.nb_tracks === 1 ? '' : 's'}${x.duration ? ` · ${Math.round(x.duration / 60)} min` : ''}</span>`);
+  if (x.label) chips.push(`<span class="fact">${esc(x.label)}</span>`);
+  if (x.fans) chips.push(`<span class="fact">${compact(x.fans)} fans on Deezer</span>`);
+  for (const g of x.genres || []) chips.push(`<span class="fact tag">${esc(g)}</span>`);
+  facts.innerHTML = chips.join('');
+  if (x.deezer_url && $('#xp')) $('#xp').innerHTML = `<a class="btn" href="${esc(x.deezer_url)}" target="_blank" rel="noopener noreferrer">Deezer ↗</a>`;
+  if (!x.tracks?.length) return;
+
+  // the real tracklist, with your plays matched onto it; songs you played that aren't on it go at the end
+  const byKey = new Map(mine.map((t) => [songKey(t.title), t]));
+  const used = new Set();
+  const list = x.tracks.map((t) => {
+    const k = songKey(t.title);
+    const m = byKey.get(k);
+    if (m) used.add(k);
+    const feat = t.artist && t.artist.toLowerCase() !== artist.toLowerCase() ? t.artist : '';
+    return { n: t.n, artist: m?.artist || artist, title: m?.title || t.title, plays: m?.plays || 0, duration: t.duration, preview: t.preview, featured: feat };
+  });
+  const extra = mine.filter((t) => !used.has(songKey(t.title)));
+  const heard = list.filter((t) => t.plays).length;
+  const max = Math.max(1, ...list.map((t) => t.plays), ...extra.map((t) => t.plays));
+  box.innerHTML = albumTracks(list, max, { numbered: true }) + (extra.length ? `<h3 class="subh">Also played</h3>${albumTracks(extra, max)}` : '');
+  $('#tlh').textContent = '▶ plays a 30s preview';
+  if ($('#heard')) { $('#heard').innerHTML = `${heard}<small> / ${x.tracks.length}</small>`; $('#heardl').textContent = `songs heard · ${Math.round((100 * heard) / x.tracks.length)}% of the album`; }
+}
+
+// ---------------------------------------------------------------- search
+async function pageSearch(params) {
+  const q = (params.get('q') || '').trim();
+  const u = user();
+  const hs = $('#hsearch input');
+  if (hs) hs.value = q;
+  view.innerHTML = `<h1>Search</h1><p class="sub">Your whole library, all time</p>
+    <form class="toolbar" id="sf2"><input type="search" name="q" value="${esc(q)}" placeholder="Artist, song or album…" /><button class="btn pri">Search</button></form>
+    <div id="sr">${q ? '<div class="loading">searching…</div>' : '<div class="empty">Type an artist, song or album 🔎</div>'}</div>`;
+  $('#sf2').onsubmit = (e) => { e.preventDefault(); location.hash = `#/search?q=${enc(new FormData(e.target).get('q'))}`; };
+  if (!q) { $('#sf2 input').focus(); return; }
+  const r = await api(`/u/${enc(u)}/search?q=${enc(q)}`);
+  const sec = (title, items, total) => (items.length ? `<section class="panel"><h2>${title} <span class="more">${fmtN(total)} found</span></h2>${rowsList(items, { rank: false })}</section>` : '');
+  const nothing = !r.artists.length && !r.albums.length && !r.tracks.length;
+  $('#sr').innerHTML = `
+    ${nothing ? `<div class="empty">Nothing in your library matches “${esc(q)}”.</div>` : ''}
+    <div class="grid2">${sec('Artists', r.artists, r.totals.artists)}${sec('Albums', r.albums, r.totals.albums)}</div>
+    ${sec('Songs', r.tracks, r.totals.tracks)}
+    ${r.web.length ? `<section><h2>Not in your library yet</h2><div class="cards">${r.web.map((a) => `
+      <a class="card" href="#/artist/${enc(a.name)}">${a.picture ? imgCover(a.picture, a.name) : cover({ artist: a.name, kind: 'artist' })}
+        <div class="meta"><div class="t">${esc(a.name)}</div>${a.fans ? `<div class="s">${compact(a.fans)} fans</div>` : ''}</div></a>`).join('')}</div></section>` : ''}`;
+}
+
+// ---------------------------------------------------------------- recap
+function recapRange(key) {
+  const m = /^(\d{4})(?:-(\d{2}))?$/.exec(key || '');
+  if (!m) return null;
+  const y = Number(m[1]), mo = m[2] ? Number(m[2]) - 1 : null;
+  const from = new Date(y, mo ?? 0, 1), to = mo === null ? new Date(y + 1, 0, 1) : new Date(y, mo + 1, 1);
+  const label = mo === null ? String(y) : from.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+  return { from: from.getTime() / 1000, to: to.getTime() / 1000, label, month: mo !== null, year: y };
+}
+const ym = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+
+async function pageRecap(key) {
+  const u = user();
+  const today = new Date();
+  if (!recapRange(key)) key = ym(today);
+  const R = recapRange(key);
+  const all = await api(`/u/${enc(u)}/summary?period=overall`);
+  const firstYear = all.first_scrobble ? new Date(all.first_scrobble * 1000).getFullYear() : today.getFullYear();
+  const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+  const picks = [[ym(today), 'This month'], [ym(lastMonth), 'Last month']];
+  for (let y = today.getFullYear(); y >= firstYear; y--) picks.push([String(y), y === today.getFullYear() ? `${y} so far` : String(y)]);
+  view.innerHTML = `<h1>Recap</h1><p class="sub">${esc(u)}'s listening, wrapped up</p>
+    <div class="periods">${picks.map(([k, l]) => `<a class="chip ${k === key ? 'on' : ''}" href="#/recap/${k}">${esc(l)}</a>`).join('')}</div>
+    <div id="rc"><div class="loading">wrapping it up…</div></div>`;
+  const r = await api(`/u/${enc(u)}/recap?from=${R.from}&to=${R.to}&tz=${TZ}`);
+  const box = $('#rc');
+  if (!box) return;
+  if (!r.scrobbles) { box.innerHTML = `<div class="empty">No scrobbles in ${esc(R.label)} 🐾</div>`; return; }
+  const hrs = r.listening_seconds / 3600;
+  const change = r.previous_scrobbles ? Math.round((100 * (r.scrobbles - r.previous_scrobbles)) / r.previous_scrobbles) : null;
+  const ta = r.top_artists[0], tt = r.top_tracks[0];
+  const share = ta ? Math.round((100 * ta.plays) / r.scrobbles) : 0;
+  const busyHour = r.hours.indexOf(Math.max(...r.hours));
+  const wd = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][r.weekdays.indexOf(Math.max(...r.weekdays))];
+  const ongoing = R.to * 1000 > Date.now();
+  box.innerHTML = `
+    <div class="recap-hero">
+      <div class="rlabel">${esc(R.label)}${ongoing ? ' · so far' : ''}</div>
+      <div class="rbig">${hrs >= 10 ? fmtN(Math.round(hrs)) : hrs.toFixed(1)}<small> hours</small></div>
+      <div class="rline">${fmtN(r.scrobbles)} plays · ${fmtN(r.artists_count)} artists · ${fmtN(r.tracks_count)} songs${change !== null ? ` · <b>${change >= 0 ? '+' : ''}${change}%</b> vs the ${R.month ? 'month' : 'year'} before` : ''}</div>
+      <div class="acts">${shareBtn(`/fm/s/recap/${key}`, 'Share link')}<button type="button" class="btn" id="rimg">⬇ Save as image</button></div>
+    </div>
+    ${ta ? `<a class="recap-top" href="#/artist/${enc(ta.artist)}">${cover({ artist: ta.artist, kind: 'artist' })}
+      <div><div class="lbl">Top artist</div><div class="rname">${esc(ta.artist)}</div><div class="s">${fmtN(ta.plays)} plays · ${share}% of everything you played</div></div></a>` : ''}
+    <div class="grid2">
+      <section class="panel"><h2>Top artists</h2>${rowsList(r.top_artists.map((a, i) => ({ ...a, rank: i + 1 })))}</section>
+      <section class="panel"><h2>Top songs</h2>${rowsList(r.top_tracks.map((a, i) => ({ ...a, rank: i + 1 })))}</section>
+    </div>
+    ${r.top_albums.length ? `<section><h2>Top albums</h2>${cards(r.top_albums.map((a, i) => ({ ...a, rank: i + 1 })), 'albums')}</section>` : ''}
+    <div class="tiles">
+      <div class="tile"><div class="n">${fmtN(r.new_artists_count)}</div><div class="l">new artists discovered</div></div>
+      <div class="tile"><div class="n">${r.longest_streak}<small> day${r.longest_streak === 1 ? '' : 's'}</small></div><div class="l">longest streak</div></div>
+      <div class="tile"><div class="n">${fmtN(r.active_days)}</div><div class="l">days with music</div></div>
+      <div class="tile"><div class="n">${r.busiest_day ? fmtN(r.busiest_day.plays) : '—'}</div><div class="l">biggest day${r.busiest_day ? ` · ${fmtDay(r.busiest_day.day)}` : ''}</div></div>
+      <div class="tile"><div class="n">${hourName(busyHour)}</div><div class="l">favourite hour</div></div>
+      <div class="tile"><div class="n">${wd.slice(0, 3)}</div><div class="l">favourite day</div></div>
+    </div>
+    ${r.new_artists.length ? `<section><h2>New to you</h2><div class="cards">${r.new_artists.map((a) => `
+      <a class="card" href="#/artist/${enc(a.artist)}">${cover({ artist: a.artist, kind: 'artist' })}<div class="meta"><div class="t">${esc(a.artist)}</div><div class="s">${fmtN(a.plays)} plays</div></div></a>`).join('')}</div></section>` : ''}
+    <div class="grid2">
+      ${!R.month && r.months.length > 1 ? `<section class="panel"><h2>Month by month</h2>${barChart(r.months.map((m) => ({ k: m.bucket, v: m.plays })), { fmtLabel: (k) => new Date(k + '-01T00:00:00').toLocaleDateString(undefined, { month: 'short' }) })}</section>` : ''}
+      <section class="panel"><h2>When you listened</h2>${clockChart(r.hours)}</section>
+    </div>
+    ${r.first ? `<p class="sub" style="text-align:center">The first song of ${esc(R.label)}: ${trackLink(r.first.artist, r.first.track)} by ${artistLink(r.first.artist)}, ${new Date(r.first.ts * 1000).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })}</p>` : ''}`;
+  $('#rimg').onclick = () => recapImage(u, R, r).catch((e) => say(e.message));
+}
+
+// A 1080x1350 picture of the recap, for stories and group chats.
+async function recapImage(u, R, r) {
+  const W = 1080, H = 1350;
+  const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#ff6fae';
+  const loadImg = (src) => new Promise((res) => { const i = new Image(); i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
+  const ta = r.top_artists[0];
+  const pic = ta ? await loadImg(`/fm/api/art?kind=artist&artist=${enc(ta.artist)}`) : null;
+  const draw = (withPic) => {
+    const c = document.createElement('canvas'); c.width = W; c.height = H;
+    const g = c.getContext('2d');
+    const bg = g.createLinearGradient(0, 0, W, H); bg.addColorStop(0, accent); bg.addColorStop(1, '#b58cff');
+    g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    g.fillStyle = 'rgba(15,13,20,.78)'; g.fillRect(40, 40, W - 80, H - 80);
+    const F = (w, s) => `${w} ${s}px system-ui, -apple-system, "Segoe UI", sans-serif`;
+    const clip = (t, max, font) => { g.font = font; let s = String(t); while (g.measureText(s).width > max && s.length > 1) s = s.slice(0, -2) + '…'; return s; };
+    g.fillStyle = '#fff';
+    g.font = F(600, 40); g.fillText(`${u}'s ${R.label}`, 90, 140);
+    g.fillStyle = accent; g.font = F(800, 150);
+    const hrs = r.listening_seconds / 3600;
+    g.fillText(hrs >= 10 ? fmtN(Math.round(hrs)) : hrs.toFixed(1), 90, 310);
+    g.fillStyle = '#ece8f4'; g.font = F(500, 40); g.fillText(`hours · ${fmtN(r.scrobbles)} plays · ${fmtN(r.artists_count)} artists`, 90, 375);
+    let y = 470;
+    if (ta) {
+      if (withPic && pic) { g.save(); g.beginPath(); g.arc(170, y + 80, 80, 0, Math.PI * 2); g.clip(); g.drawImage(pic, 90, y, 160, 160); g.restore(); }
+      const x = withPic && pic ? 290 : 90;
+      g.fillStyle = '#9a93aa'; g.font = F(500, 30); g.fillText('TOP ARTIST', x, y + 55);
+      g.fillStyle = '#fff'; g.fillText(clip(ta.artist, W - x - 90, F(700, 56)), x, y + 120);
+      g.fillStyle = '#9a93aa'; g.font = F(500, 30); g.fillText(`${fmtN(ta.plays)} plays`, x, y + 162);
+      y += 230;
+    }
+    const col = (title, items, x) => {
+      g.fillStyle = '#9a93aa'; g.font = F(500, 30); g.fillText(title, x, y);
+      items.slice(0, 5).forEach((it, i) => {
+        g.fillStyle = accent; g.font = F(700, 34); g.fillText(String(i + 1), x, y + 62 + i * 64);
+        g.fillStyle = '#fff'; g.fillText(clip(it, 400, F(600, 34)), x + 44, y + 62 + i * 64);
+      });
+    };
+    col('TOP ARTISTS', r.top_artists.map((a) => a.artist), 90);
+    col('TOP SONGS', r.top_tracks.map((t) => t.track), 570);
+    g.fillStyle = '#9a93aa'; g.font = F(500, 30);
+    g.fillText(`${r.new_artists_count} new artists · ${r.longest_streak}-day streak`, 90, H - 110);
+    g.fillStyle = '#fff'; g.font = F(700, 34); g.textAlign = 'right'; g.fillText('🐾 NyaFM', W - 90, H - 110);
+    return new Promise((res, rej) => { try { c.toBlob((b) => (b ? res(b) : rej(new Error('Could not make the image'))), 'image/png'); } catch (e) { rej(e); } });
+  };
+  let blob;
+  try { blob = await draw(true); } catch { blob = await draw(false); }   // a cross-site picture can block saving; then leave it out
+  const file = new File([blob], `nyafm-recap-${R.label.replace(/\s+/g, '-').toLowerCase()}.png`, { type: 'image/png' });
+  if (navigator.canShare?.({ files: [file] }) && matchMedia('(pointer: coarse)').matches) {
+    try { await navigator.share({ files: [file] }); return; } catch { return; }
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = file.name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+
+// ---------------------------------------------------------------- discover
+async function pageDiscover(params) {
+  const u = user();
+  view.innerHTML = `<div class="pagehead"><div><h1>Discover</h1><p class="sub">Artists like the ones you play most, that you've never played</p></div>
+    <div class="acts"><a class="btn" href="#/discover?fresh=${Date.now()}">↻ Refresh</a></div></div>
+    <div id="dsc"><div class="loading">digging through crates… (the first time takes a few seconds)</div></div>`;
+  const r = await api(`/u/${enc(u)}/discover${params.get('fresh') ? '?fresh=1' : ''}`);
+  const box = $('#dsc');
+  if (!box) return;
+  if (!r.artists.length) { box.innerHTML = '<div class="empty">Play a few more artists and suggestions will show up here 🎧</div>'; return; }
+  box.innerHTML = `<p class="hint">Based on ${r.seeds.slice(0, 5).map(artistLink).join(', ')}${r.seeds.length > 5 ? ' and more' : ''}. ▶ plays a 30s preview.</p>
+    <div class="dgrid">${r.artists.map((a) => `
+      <div class="dcard">
+        <a class="dpic" href="#/artist/${enc(a.name)}">${a.picture ? imgCover(a.picture, a.name) : cover({ artist: a.name, kind: 'artist' })}</a>
+        <div class="dmeta">
+          <a class="dname" href="#/artist/${enc(a.name)}">${esc(a.name)}</a>
+          <div class="s">like ${a.because.map(esc).join(', ')}</div>
+          ${a.song ? `<div class="dsong">${playBtn(a.song.preview)}<span>${esc(a.song.title)}</span></div>` : ''}
+        </div>
+      </div>`).join('')}</div>`;
+}
+
 // ---------------------------------------------------------------- auth / settings
 function loginForm(mode) {
   const setup = mode === 'setup';
@@ -544,7 +924,7 @@ function loginForm(mode) {
     e.preventDefault();
     try {
       await api(setup ? '/setup' : '/login', { method: 'POST', body: Object.fromEntries(new FormData(e.target)) });
-      status = await api('/status');
+      await loadStatus();
       route();
     } catch (err) { $('#e').textContent = err.message; }
   };
@@ -554,10 +934,70 @@ const codeBox = (v) => `<div class="code"><code>${esc(v)}</code><button type="bu
 
 async function pageSettings() {
   if (!status.me) return loginForm('login');
-  const meInfo = await api('/me');
+  const [meInfo, S] = await Promise.all([api('/me'), api('/settings')]);
   const base = location.origin;
+  const tog = (k, label, hint = '') => `<label class="setrow"><div><b>${label}</b>${hint ? `<div class="hint">${hint}</div>` : ''}</div><input type="checkbox" class="switch" data-k="${k}" ${S[k] ? 'checked' : ''}/></label>`;
+  const SWATCHES = ['#ff6fae', '#b58cff', '#6fb8ff', '#5fd4d0', '#6fe0a8', '#ffd36f', '#ffa26f', '#ff6f6f'];
   view.innerHTML = `
-    <h1>Settings</h1><p class="sub">Logged in as <b>${esc(meInfo.username)}</b></p>
+    <h1>Settings</h1><p class="sub">Logged in as <b>${esc(meInfo.username)}</b> · changes save by themselves</p>
+    <div class="jump">${[['s-look', 'Look'], ['s-priv', 'Privacy'], ['s-scrob', 'Scrobbling'], ['s-rules', 'Renames'], ['s-clean', 'Clean up'], ['s-conn', 'Connections'], ['s-data', 'Your data'], ['s-acct', 'Account']]
+      .map(([id, l]) => `<a class="chip" href="#/settings" data-jump="${id}">${l}</a>`).join('')}</div>
+
+    <section class="panel" id="s-look">
+      <h2>Look & feel</h2>
+      <div class="setrow"><div><b>Accent colour</b><div class="hint">Used all over your profile, for everyone who visits.</div></div>
+        <div class="swatches">${SWATCHES.map((c) => `<button type="button" class="sw${c === S.accent ? ' on' : ''}" data-c="${c}" style="--c:${c}" aria-label="Accent ${c}"></button>`).join('')}
+          <input type="color" id="accent" value="${esc(S.accent)}" aria-label="Custom accent colour" /></div></div>
+      <div class="setrow"><div><b>Default time range</b><div class="hint">What Overview, Stats and Library open on.</div></div>
+        <select id="defp">${PERIODS.map(([k, l]) => `<option value="${k}" ${k === S.default_period ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+      <div class="setrow"><div><b>Clock</b></div>
+        <select id="clock"><option value="24h" ${S.clock === '24h' ? 'selected' : ''}>24-hour (21:00)</option><option value="12h" ${S.clock === '12h' ? 'selected' : ''}>12-hour (9pm)</option></select></div>
+      ${tog('show_lyrics', 'Synced lyrics', 'Under now playing on the Overview.')}
+      ${tog('effects', 'Animations', 'Paw bursts, tilting cards, counting numbers.')}
+      ${tog('show_milestones', 'Milestones', 'Your 1,000th, 10,000th… scrobble on the Stats page.')}
+    </section>
+
+    <section class="panel" id="s-priv">
+      <h2>Privacy</h2>
+      ${tog('private', 'Private profile', 'Only you can see your stats: logged in here, or with your token in apps. Link previews stop showing numbers too.')}
+      ${tog('hide_now_playing', 'Hide what I’m playing right now', 'Your scrobbles still show up, just not the live “now playing”.')}
+    </section>
+
+    <section class="panel" id="s-scrob">
+      <h2>What gets scrobbled</h2>
+      ${tog('skip_cross_dupes', 'Count a song once when two apps send it', 'E.g. Spotify sync and a browser scrobbler both sending the same play.')}
+      ${tog('block_lofi', 'Skip lofi', 'Anything with lofi / lo-fi in the artist, title or album.')}
+      <div class="setrow col"><div><b>Never scrobble these</b><div class="hint">Words or names, one per line. Matches artist, title or album.</div></div>
+        <textarea id="bwords" rows="3" placeholder="white noise&#10;rain sounds">${esc(S.block_words.join('\n'))}</textarea></div>
+      ${tog('strip_feat', 'Drop “(feat. …)” from song titles', '“Song (feat. X)” becomes “Song”, so versions don’t split your stats.')}
+      ${tog('strip_remaster', 'Drop “Remastered” tags', '“Song - Remastered 2011” becomes “Song”.')}
+      ${tog('strip_edition', 'Drop album editions', '“Album (Deluxe Edition)” becomes “Album”.')}
+      <p class="hint">These apply to new scrobbles. To fix old ones, use Renames below or ✎ Rename on any artist, song or album page.</p>
+    </section>
+
+    <section class="panel" id="s-rules">
+      <h2>Renames</h2>
+      <p class="hint">Fix names that arrive spelled different ways, e.g. <i>Beyonce</i> → <i>Beyoncé</i>. Every new scrobble is renamed on the way in.</p>
+      <div id="rules"></div>
+      <form id="addrule" class="ruleform">
+        <select name="kind"><option value="artist">Artist</option><option value="track">Song</option><option value="album">Album</option></select>
+        <input type="text" name="artist" placeholder="by artist" />
+        <input type="text" name="from" placeholder="Rename this" required />
+        <input type="text" name="to" placeholder="to this" required />
+        <label class="chk"><input type="checkbox" name="apply" checked /> fix my existing scrobbles too</label>
+        <button class="btn pri">Add</button>
+      </form>
+    </section>
+
+    <section class="panel" id="s-clean">
+      <h2>Clean up</h2>
+      <div class="setrow"><div><b>Duplicate plays</b><div class="hint">The same song logged twice in a row, closer together than it could have played.</div></div>
+        <div class="inl"><select id="dupdays"><option value="30">Last 30 days</option><option value="90" selected>Last 90 days</option><option value="365">Last year</option><option value="0">All time</option></select>
+        <button type="button" class="btn" id="dupfind">Find</button></div></div>
+      <div id="dupres"></div>
+    </section>
+
+    <div id="s-conn"></div>
     <section class="panel">
       <h2>Your scrobble token</h2>
       <p class="hint">Works as the ListenBrainz token and as the Last.fm session key. Keep it secret.</p>
@@ -567,6 +1007,30 @@ async function pageSettings() {
     <section class="panel" id="spotpanel">
       <h2>Spotify (automatic)</h2>
       <div id="spot" class="hint">checking…</div>
+    </section>
+    <section class="panel" id="applepanel">
+      <h2>Apple Music (iPhone)</h2>
+      <p class="hint">Apple doesn't share what you play live, but your iPhone's Music library keeps a play count and a last-played date for every song.
+      The NyaFM iPhone app (or a Shortcut) sends those here, and every play since the last sync becomes a scrobble.
+      Only songs in your library count (add the ones you stream). The latest play of each song gets its real time; earlier ones since the last sync are placed just before it.</p>
+      <p class="hint"><b>iPhone app:</b> with it installed, open this page on the iPhone and tap:</p>
+      <p><a class="btn" href="nyafm://setup?server=${encodeURIComponent(base)}&amp;token=${encodeURIComponent(meInfo.token)}">Connect the iPhone app</a></p>
+      <details class="steps"><summary>No app? Build a Shortcut instead (about 2 minutes)</summary>
+      <label>URL</label>${codeBox(base + '/v1/apple-music?text=1')}
+      <label>Header: Authorization</label>${codeBox('Bearer ' + meInfo.token)}
+      <ol>
+        <li>Open <b>Shortcuts</b>, tap <b>+</b>, name it <i>Scrobble Apple Music</i>.</li>
+        <li>Add <b>Find Music</b>. Tap <i>Add Filter</i> → <b>Last Played Date</b> → <b>is in the last</b> <b>3 days</b>. Turn on <i>Limit</i> and set it to <b>500</b>.</li>
+        <li>Add <b>Repeat with Each</b> (it picks up the Music from step 2).</li>
+        <li>Inside the repeat add <b>Text</b> and fill it with these, tapping each blue <i>Repeat Item</i> to pick the property, with <code>|||</code> between them:<br>
+          <code>Artist|||Title|||Album|||Play Count|||Last Played Date|||Duration</code><br>
+          Tap <i>Last Played Date</i> once more and set <b>Date Format → ISO 8601</b>.</li>
+        <li>After <i>End Repeat</i>, add <b>Combine Text</b> → combine <i>Repeat Results</i> with <b>New Lines</b>.</li>
+        <li>Add <b>Get Contents of URL</b> with the URL above. Show more: <b>Method POST</b>, add a header <code>Authorization</code> with the value above, <b>Request Body: File</b>, file = <i>Combined Text</i>.</li>
+        <li>Add <b>Show Notification</b> with <i>Contents of URL</i>.</li>
+        <li>Run it once. The first run only remembers your play counts. After that, each run scrobbles what you've played since.</li>
+        <li>Automatic: <b>Automation</b> tab → <b>+</b> → <b>App</b> → Music, <b>Is Closed</b> → <b>Run Immediately</b> → pick the Shortcut. Add it to your Home Screen for a one-tap button too.</li>
+      </ol></details>
     </section>
     <section class="panel">
       <h2>Connect scrobblers</h2>
@@ -580,7 +1044,7 @@ async function pageSettings() {
       <p class="hint" style="margin-top:14px"><b>Read your stats from other apps</b> (Discord status, widgets…) with Last.fm-style calls, e.g.</p>
       ${codeBox(`${base}/2.0/?method=user.getRecentTracks&user=${meInfo.username}&format=json&limit=1`)}
     </section>
-    <section class="panel">
+    <section class="panel" id="s-data">
       <h2>Import history</h2>
       <p class="hint">Drop any of: a Last.fm CSV export (lastfm.ghan.nl / benjaminbenben style), Spotify <code>Streaming_History_Audio_*.json</code> or <code>StreamingHistory*.json</code>,
       a ListenBrainz export (.json / .jsonl), or a NyaFM export. Duplicates are skipped, so importing twice is safe.</p>
@@ -593,7 +1057,15 @@ async function pageSettings() {
       <button class="btn" id="exj">Download JSON</button> <button class="btn" id="exc">Download CSV</button>
       <div id="exst" class="hint" style="margin-top:10px"></div>
     </section>
-    <section class="panel">
+    <section class="panel danger">
+      <h2>Delete scrobbles</h2>
+      <p class="hint">Undo a bad import or a misbehaving app. This can't be undone, so maybe download an export first.</p>
+      <div class="setrow"><div><b>By app</b><div class="hint">See where your scrobbles come from and remove everything from one.</div></div><button type="button" class="btn" id="srcload">Show apps</button></div>
+      <div id="srclist"></div>
+      <div class="setrow col"><div><b>By date</b><div class="hint">Everything between two days (inclusive), in your time zone.</div></div>
+        <div class="inl"><input type="date" id="delfrom" /> to <input type="date" id="delto" /><button type="button" class="btn bad" id="deldates">Delete</button></div></div>
+    </section>
+    <section class="panel" id="s-acct">
       <h2>Account</h2>
       <form id="pw" style="max-width:380px">
         <label>Current password</label><input type="password" name="current" required />
@@ -604,7 +1076,8 @@ async function pageSettings() {
     </section>`;
   view.querySelectorAll('section').forEach((s) => (s.style.marginBottom = '18px'));
   $('#regen').onclick = async () => { if (confirm('Regenerate? Every scrobbler will need the new token.')) { await api('/token/regenerate', { method: 'POST' }); route(); } };
-  $('#logout').onclick = async () => { await api('/logout', { method: 'POST' }); status = await api('/status'); location.hash = '#/'; };
+  $('#logout').onclick = async () => { await api('/logout', { method: 'POST' }); await loadStatus(); location.hash = '#/'; };
+  bindSettings(S);
   $('#pw').onsubmit = async (e) => {
     e.preventDefault();
     try { await api('/password', { method: 'POST', body: Object.fromEntries(new FormData(e.target)) }); $('#pwe').innerHTML = '<span class="okmsg">Password changed ✓</span>'; e.target.reset(); }
@@ -614,6 +1087,103 @@ async function pageSettings() {
   $('#imp').onchange = (e) => importFiles([...e.target.files]);
   $('#exj').onclick = () => exportAll('json');
   $('#exc').onclick = () => exportAll('csv');
+}
+
+function bindSettings(S) {
+  const save = async (patch, msg = 'Saved ✓') => {
+    try {
+      Object.assign(S, await api('/settings', { method: 'PUT', body: patch }));
+      applyPrefs(S);
+      say(msg);
+    } catch (err) { say(err.message); }
+  };
+  view.querySelectorAll('[data-jump]').forEach((a) => (a.onclick = (e) => { e.preventDefault(); $(`#${a.dataset.jump}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
+  view.querySelectorAll('input.switch[data-k]').forEach((el) => (el.onchange = () => save({ [el.dataset.k]: el.checked })));
+  const pickAccent = (c) => { view.querySelectorAll('.sw').forEach((b) => b.classList.toggle('on', b.dataset.c === c)); $('#accent').value = c; save({ accent: c }); };
+  view.querySelectorAll('.sw').forEach((b) => (b.onclick = () => pickAccent(b.dataset.c)));
+  $('#accent').onchange = (e) => pickAccent(e.target.value);
+  $('#defp').onchange = (e) => { period = e.target.value; localStorage.setItem('nyafm.period', period); save({ default_period: period }); };
+  $('#clock').onchange = (e) => save({ clock: e.target.value });
+  $('#bwords').onchange = (e) => save({ block_words: e.target.value.split('\n') });
+
+  // renames
+  const KIND = { artist: 'Artist', track: 'Song', album: 'Album' };
+  const drawRules = () => {
+    $('#rules').innerHTML = S.rules.length ? `<div class="rows">${S.rules.map((r, i) => `
+      <div class="row rule"><span class="fact">${KIND[r.kind]}</span>
+        <div class="main"><div class="t">${esc(r.from)} → <b>${esc(r.to)}</b></div>${r.artist ? `<div class="s">by ${esc(r.artist)}</div>` : ''}</div>
+        <button type="button" class="x" data-i="${i}" title="Remove rule" aria-label="Remove rule">✕</button></div>`).join('')}</div>` : '<p class="hint">No renames yet.</p>';
+    $('#rules').querySelectorAll('.x').forEach((b) => (b.onclick = () => { S.rules.splice(Number(b.dataset.i), 1); save({ rules: S.rules }, 'Rename removed').then(drawRules); }));
+  };
+  drawRules();
+  const rf = $('#addrule');
+  const syncKind = () => { rf.artist.style.display = rf.kind.value === 'artist' ? 'none' : ''; rf.artist.required = rf.kind.value !== 'artist'; };
+  rf.kind.onchange = syncKind; syncKind();
+  rf.onsubmit = async (e) => {
+    e.preventDefault();
+    const v = Object.fromEntries(new FormData(rf));
+    const rule = { kind: v.kind, artist: v.kind === 'artist' ? '' : v.artist.trim(), from: v.from.trim(), to: v.to.trim() };
+    const btn = rf.querySelector('button'); btn.disabled = true;
+    try {
+      if (v.apply) {
+        const r = await api('/edit/rename', { method: 'POST', body: { ...rule, remember: true } });
+        S.rules = (await api('/settings')).rules;
+        say(`✎ Added, and renamed ${fmtN(r.changed)} existing scrobble${r.changed === 1 ? '' : 's'}`);
+      } else await save({ rules: [...S.rules, rule] }, 'Rename added');
+      rf.from.value = ''; rf.to.value = '';
+      drawRules();
+    } catch (err) { say(err.message); }
+    btn.disabled = false;
+  };
+
+  // duplicates
+  $('#dupfind').onclick = async () => {
+    const box = $('#dupres');
+    box.innerHTML = '<div class="hint">looking…</div>';
+    try {
+      const d = await api(`/duplicates?days=${$('#dupdays').value}`);
+      if (!d.total_dupes) { box.innerHTML = '<p class="okmsg">No duplicates found ✓</p>'; return; }
+      box.innerHTML = `<p><b>${fmtN(d.total_dupes)}</b> extra play${d.total_dupes === 1 ? '' : 's'} in ${fmtN(d.total_groups)} place${d.total_groups === 1 ? '' : 's'}. The first play of each is kept.
+        <button type="button" class="btn pri" id="dupgo">Remove ${fmtN(d.total_dupes)}</button></p>
+        <div class="rows">${d.groups.slice(0, 40).map((g) => `
+          <div class="row"><div class="main"><div class="t">${esc(g.keep.track)} <span class="s">· ${esc(g.keep.artist)}</span></div>
+          <div class="s">${new Date(g.keep.ts * 1000).toLocaleString()} · ${1 + g.dupes.length}× from ${[...new Set([g.keep, ...g.dupes].map((x) => sourceName(x.source || 'unknown')))].map(esc).join(' + ')}</div></div></div>`).join('')}</div>
+        ${d.groups.length > 40 ? `<p class="hint">…and ${fmtN(d.groups.length - 40)} more</p>` : ''}`;
+      $('#dupgo').onclick = async () => {
+        const r = await api('/scrobbles/delete', { method: 'POST', body: { ids: d.ids } });
+        box.innerHTML = `<p class="okmsg">Removed ${fmtN(r.deleted)} duplicate${r.deleted === 1 ? '' : 's'} ✓</p>`;
+      };
+    } catch (err) { box.innerHTML = `<p class="err">${esc(err.message)}</p>`; }
+  };
+
+  // delete by app / by date
+  $('#srcload').onclick = async () => {
+    const box = $('#srclist');
+    box.innerHTML = '<div class="hint">counting…</div>';
+    const list = await api('/sources').catch((err) => { box.textContent = err.message; return null; });
+    if (!list) return;
+    box.innerHTML = `<div class="rows">${list.map((s) => `
+      <div class="row"><div class="main"><div class="t">${esc(sourceName(s.source))}</div><div class="s">${esc(s.source)}</div></div>
+      <div class="when">${fmtN(s.n)}</div><button type="button" class="btn bad" data-src="${esc(s.source)}" data-n="${s.n}">Delete</button></div>`).join('')}</div>`;
+    box.querySelectorAll('[data-src]').forEach((b) => (b.onclick = async () => {
+      if (!confirm(`Delete all ${fmtN(b.dataset.n)} scrobbles from “${sourceName(b.dataset.src)}”? This can't be undone.`)) return;
+      b.disabled = true;
+      const r = await api('/delete-where', { method: 'POST', body: { source: b.dataset.src } });
+      say(`🗑 Deleted ${fmtN(r.deleted)} scrobbles`);
+      $('#srcload').click();
+    }));
+  };
+  $('#deldates').onclick = async () => {
+    const f = $('#delfrom').value, t = $('#delto').value || f;
+    if (!f) return say('Pick a start day first');
+    const from = new Date(`${f}T00:00:00`).getTime() / 1000, to = new Date(`${t}T00:00:00`).getTime() / 1000 + 86400;
+    if (to <= from) return say('The end day is before the start day');
+    const n = (await api(`/u/${enc(status.me)}/recent?from=${from}&to=${to}&limit=1`)).total;
+    if (!n) return say('No scrobbles on those days');
+    if (!confirm(`Delete ${fmtN(n)} scrobbles from ${fmtDay(f)} to ${fmtDay(t)}? This can't be undone.`)) return;
+    const r = await api('/delete-where', { method: 'POST', body: { from, to } });
+    say(`🗑 Deleted ${fmtN(r.deleted)} scrobbles`);
+  };
 }
 
 async function spotifyPanel() {
@@ -856,7 +1426,7 @@ async function route() {
   const parts = (path || '/').split('/').filter(Boolean);
   document.querySelectorAll('#nav a').forEach((a) => a.classList.toggle('on', a.dataset.r === (parts[0] || 'home')));
   try {
-    if (!status) status = await api('/status');
+    if (!status) await loadStatus();
     if (status.setup_needed) return loginForm('setup');
     if (parts[0] === 'settings') return await pageSettings();
     if (parts[0] === 'api') { if (status.private && !status.me) return loginForm('login'); return pageApi(); }
@@ -867,6 +1437,10 @@ async function route() {
     if (parts[0] === 'library') return await pageLibrary(parts[1] || 'artists', params);
     if (parts[0] === 'artist') return await pageArtist(decodeURIComponent(parts.slice(1).join('/')));
     if (parts[0] === 'track') return await pageTrack(decodeURIComponent(parts[1] || ''), decodeURIComponent(parts.slice(2).join('/')));
+    if (parts[0] === 'album') return await pageAlbum(decodeURIComponent(parts[1] || ''), decodeURIComponent(parts.slice(2).join('/')));
+    if (parts[0] === 'search') return await pageSearch(params);
+    if (parts[0] === 'recap') return await pageRecap(parts[1] || '');
+    if (parts[0] === 'discover') return await pageDiscover(params);
     return await pageHome();
   } catch (e) {
     view.innerHTML = `<div class="empty">Something went wrong 😿<br><small>${esc(e.message)}</small></div>`;
@@ -877,7 +1451,7 @@ async function route() {
 let lyricsPlayer = null;
 async function syncLyrics() {
   const host = $('#lyrics');
-  if (!host || !user()) { lyricsPlayer?.destroy(); lyricsPlayer = null; return; }
+  if (!host || !user() || !prefs.show_lyrics) { lyricsPlayer?.destroy(); lyricsPlayer = null; return; }
   const np = await fetch(`/v1/users/${enc(user())}/now-playing`).then((r) => r.json()).catch(() => null);
   const track = np?.playing ? np.track : null;
   if (lyricsPlayer && lyricsPlayer.host !== host) { lyricsPlayer.destroy(); lyricsPlayer = null; }   // the page was redrawn
@@ -890,6 +1464,12 @@ async function syncLyrics() {
   lyricsPlayer.update(track);
 }
 
+$('#hsearch')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const q = new FormData(e.target).get('q').trim();
+  if (q) location.hash = `#/search?q=${enc(q)}`;
+  e.target.querySelector('input').blur();
+});
 window.addEventListener('hashchange', () => { route().then(syncLyrics); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 route().then(syncLyrics);
 // refresh now-playing every 30s on the overview
