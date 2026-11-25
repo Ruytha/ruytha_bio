@@ -28,7 +28,21 @@
 <script>try { if (localStorage.getItem('ruytha-femboy') === '1') document.documentElement.classList.add('femboy'); } catch (e) {}</script>
 <style>
   /* the links page: the home page's look, in one narrow column */
-  .lk { max-width: 680px; margin: 0 auto; padding: 88px var(--pad) 0; }
+  .lk { max-width: 1180px; margin: 0 auto; padding: 84px var(--pad) 0; }
+  .lk-grid { display: grid; grid-template-columns: 1fr minmax(0, 400px) 1fr; gap: 32px; align-items: center; min-height: calc(100svh - 150px); }
+  .lk-col { display: grid; gap: 22px; align-content: center; }
+  .lk-col .lk-feature { margin-top: 0; }
+  .lk-col .lk-group { margin-top: 0; }
+  .rows { grid-template-columns: 1fr; }
+  .lk-foot { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 18px; padding: 18px var(--pad) 22px; font-size: 13.5px; color: var(--muted); }
+  .lk-foot a { color: var(--muted); text-decoration: none; }
+  .lk-foot a:hover { color: var(--ink); }
+  @media (max-width: 1000px) {
+    .lk { max-width: 560px; }
+    .lk-grid { display: flex; flex-direction: column; align-items: stretch; min-height: 0; gap: 24px; }
+    .lk-hero { order: -1; }
+    .rows { grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+  }
 
   /* hero: photo, now playing, then the name */
   .lk-hero { display: grid; justify-items: center; text-align: center; }
@@ -87,7 +101,7 @@
   .lk-group .h2 { font-size: clamp(28px, 7vw, 36px); margin-bottom: 10px; }
   .lk-group .h2 .ja { font-size: 12px; }
 
-  .rows { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 8px; }
+  .rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
   .rows a {
     display: flex; align-items: center; gap: 12px;
     padding: 8px 16px 8px 8px; border-radius: 18px; text-decoration: none;
@@ -168,18 +182,33 @@
 
 <header class="bar">
   <a class="mark" href="/"><img src="assets/img/avatar-96.jpg" alt="" width="30" height="30">Ruytha</a>
-  <nav class="bar-links" aria-label="Pages">
-    <a href="/" data-ja="ホーム">Home</a>
-    <a href="/fm" data-ja="音楽">NyaFM</a>
-    <a href="/blog" data-ja="ブログ">Blog</a>
-  </nav>
-  <button class="fem" id="femBtn" type="button" role="switch" aria-checked="false">
-    <span class="fem-track" aria-hidden="true"><span class="fem-knob">♡</span></span>femboy mode
-  </button>
 </header>
 
 <main id="main" class="lk">
+  <div class="lk-grid">
+<div class="lk-col lk-l">
+  <a class="lk-feature" href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener" data-rise>
+    <span class="ja-tag" lang="ja">いちばん活発！</span>
+    <span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M19.3 5.6A16 16 0 0 0 15.4 4.4l-.3.5a12 12 0 0 0-6.2 0l-.3-.5a16 16 0 0 0-3.9 1.2C2.3 9.2 1.6 12.7 2 16.1a16 16 0 0 0 4.8 2.4l.9-1.4a10 10 0 0 1-1.6-.8l.4-.3a11.4 11.4 0 0 0 9.8 0l.4.3a10 10 0 0 1-1.6.8l.9 1.4a16 16 0 0 0 4.8-2.4c.5-4-.7-7.4-2.5-10.5ZM8.9 14.1c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Zm6.2 0c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Z"/></svg></span>
+    <span><b>Join the Discord server</b><span class="sub">I'm most active here. Come say something</span></span>
+  </a>
 
+  <section class="lk-group" aria-labelledby="g-mail">
+    <h2 class="h2" id="g-mail" data-rise>Email <span class="ja" lang="ja">メール</span></h2>
+    <ul class="rows" data-rise>
+      <li><a class="glass" href="mailto:business@ruytha.dev">
+        <span class="tile c-lemon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="s" x="3" y="7" width="18" height="13" rx="3"/><path class="s" d="M9 7V5.6A1.6 1.6 0 0 1 10.6 4h2.8A1.6 1.6 0 0 1 15 5.6V7M3 12.5h18"/></svg></span>
+        <span class="txt"><b>Business</b><span>business@ruytha.dev</span></span></a></li>
+      <li><a class="glass" href="mailto:studios@ruytha.dev">
+        <span class="tile c-mint"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="s" x="3" y="9" width="18" height="11" rx="2.4"/><path class="s" d="m3.4 9 2.8-4.6 3.4 1.2L6.8 9M9.6 9l2.8-4.4 3.4 1.2L13 9M15.8 9l2.8-4.2 2.2.8"/></svg></span>
+        <span class="txt"><b>Studios</b><span>studios@ruytha.dev</span></span></a></li>
+      <li><a class="glass" href="mailto:ruytha@ruytha.dev">
+        <span class="tile c-pink"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="s" x="3" y="5" width="18" height="14" rx="3"/><path class="s" d="m4 7 8 6 8-6"/></svg></span>
+        <span class="txt"><b>Personal</b><span>ruytha@ruytha.dev</span></span></a></li>
+    </ul>
+  </section>
+
+</div>
   <section class="lk-hero" aria-label="Introduction">
     <div class="me" data-rise>
       <img src="assets/img/avatar-720.jpg" alt="Ruytha's avatar: an anime-style character with dark blue hair" width="220" height="220" decoding="async" fetchpriority="high">
@@ -212,27 +241,7 @@
     </ul>
   </section>
 
-  <a class="lk-feature" href="https://discord.gg/m9veFRXxDF" target="_blank" rel="noopener" data-rise>
-    <span class="ja-tag" lang="ja">いちばん活発！</span>
-    <span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M19.3 5.6A16 16 0 0 0 15.4 4.4l-.3.5a12 12 0 0 0-6.2 0l-.3-.5a16 16 0 0 0-3.9 1.2C2.3 9.2 1.6 12.7 2 16.1a16 16 0 0 0 4.8 2.4l.9-1.4a10 10 0 0 1-1.6-.8l.4-.3a11.4 11.4 0 0 0 9.8 0l.4.3a10 10 0 0 1-1.6.8l.9 1.4a16 16 0 0 0 4.8-2.4c.5-4-.7-7.4-2.5-10.5ZM8.9 14.1c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Zm6.2 0c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Z"/></svg></span>
-    <span><b>Join the Discord server</b><span class="sub">I'm most active here. Come say something</span></span>
-  </a>
-
-  <section class="lk-group" aria-labelledby="g-mail">
-    <h2 class="h2" id="g-mail" data-rise>Email <span class="ja" lang="ja">メール</span></h2>
-    <ul class="rows" data-rise>
-      <li><a class="glass" href="mailto:business@ruytha.dev">
-        <span class="tile c-lemon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="s" x="3" y="7" width="18" height="13" rx="3"/><path class="s" d="M9 7V5.6A1.6 1.6 0 0 1 10.6 4h2.8A1.6 1.6 0 0 1 15 5.6V7M3 12.5h18"/></svg></span>
-        <span class="txt"><b>Business</b><span>business@ruytha.dev</span></span></a></li>
-      <li><a class="glass" href="mailto:studios@ruytha.dev">
-        <span class="tile c-mint"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="s" x="3" y="9" width="18" height="11" rx="2.4"/><path class="s" d="m3.4 9 2.8-4.6 3.4 1.2L6.8 9M9.6 9l2.8-4.4 3.4 1.2L13 9M15.8 9l2.8-4.2 2.2.8"/></svg></span>
-        <span class="txt"><b>Studios</b><span>studios@ruytha.dev</span></span></a></li>
-      <li><a class="glass" href="mailto:ruytha@ruytha.dev">
-        <span class="tile c-pink"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="s" x="3" y="5" width="18" height="14" rx="3"/><path class="s" d="m4 7 8 6 8-6"/></svg></span>
-        <span class="txt"><b>Personal</b><span>ruytha@ruytha.dev</span></span></a></li>
-    </ul>
-  </section>
-
+<div class="lk-col lk-r">
   <section class="lk-group" aria-labelledby="g-music">
     <h2 class="h2" id="g-music" data-rise>Music <span class="ja" lang="ja">音楽</span></h2>
     <ul class="rows" data-rise>
@@ -263,26 +272,12 @@
     </ul>
   </section>
 
-  <div class="lk-actions" data-rise>
-    <button class="btn btn-pop" id="shareBtn" type="button">Share this page</button>
-    <button class="btn btn-glass" id="copyTag" type="button">Copy my Discord @</button>
+</div>
   </div>
 
 </main>
 
-<footer class="end lk-end">
-  <button class="bye" id="bye" type="button" lang="ja" aria-label="またね！ Tap to say bye another way"><span id="byeWord"><i>ま</i><i>た</i><i>ね</i><i>！</i></span></button>
-  <p class="bye-en"><span id="byeEn">see you next time</span> · <span lang="ja">見てくれてありがとう</span> thanks for stopping by</p>
-  <div class="end-row">
-    <nav class="end-links" aria-label="More pages">
-      <a href="/">Main site</a>
-      <a href="/fm">NyaFM scrobbles</a>
-      <a href="/blog">Blog</a>
-      <a href="https://ko-fi.com/ruytha" target="_blank" rel="noopener">Support this website</a>
-    </nav>
-    <p class="end-copy">© <span id="year">2026</span> Ruytha</p>
-  </div>
-</footer>
+<footer class="lk-foot"><a href="/">Main site</a><a href="/fm">NyaFM</a><a href="/blog">Blog</a><a href="https://ko-fi.com/ruytha" target="_blank" rel="noopener">Support this website</a><span>© <span id="year">2026</span> Ruytha</span></footer>
 
 <div class="lk-toast" id="toast" role="status" aria-live="polite"></div>
 <div class="hearts" id="hearts" aria-hidden="true"></div>
@@ -386,89 +381,6 @@
   }
   loadNow();
   setInterval(function () { if (!document.hidden) loadNow(); }, 30000);
-
-  /* copy my Discord, share the page */
-  function copy(text) {
-    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
-    return Promise.reject(new Error('no clipboard'));
-  }
-  function done(btn, label) {
-    var old = btn.textContent;
-    btn.classList.add('is-done'); btn.textContent = label;
-    setTimeout(function () { btn.classList.remove('is-done'); btn.textContent = old; }, 1800);
-  }
-  var tag = $('copyTag');
-  tag.addEventListener('click', function () {
-    copy('ruytha').then(function () { done(tag, 'Copied!'); say('Copied @ruytha. Add me on Discord ♡'); },
-      function () { say('My Discord is @ruytha'); });
-  });
-  var share = $('shareBtn'), url = location.origin + '/links';
-  share.addEventListener('click', function () {
-    if (navigator.share) { navigator.share({ title: 'Ruytha', text: 'All of Ruytha’s links', url: url }).catch(function () {}); return; }
-    copy(url).then(function () { done(share, 'Link copied!'); say('Link copied'); }, function () { say(url); });
-  });
-
-  /* femboy mode (same switch and key as the home page) */
-  (function () {
-    var btn = $('femBtn'), layer = $('hearts'), meta = document.querySelector('meta[name="theme-color"]');
-    var KEY = 'ruytha-femboy', HEARTS = ['♡', '♥', '✧', '❀'];
-    function burst() {
-      if (reduce) return;
-      var r = btn.getBoundingClientRect();
-      for (var i = 0; i < 22; i++) {
-        var h = document.createElement('span'), ang = Math.random() * Math.PI * 2, dist = 60 + Math.random() * 160;
-        h.className = 'heart'; h.textContent = HEARTS[i % HEARTS.length];
-        h.style.left = (r.left + r.width / 2) + 'px'; h.style.top = (r.top + r.height / 2) + 'px';
-        h.style.fontSize = (14 + Math.random() * 16) + 'px';
-        h.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
-        h.style.setProperty('--dy', (Math.sin(ang) * dist + 40) + 'px');
-        h.style.setProperty('--rot', (Math.random() * 80 - 40) + 'deg');
-        layer.appendChild(h);
-        h.addEventListener('animationend', function () { this.remove(); });
-      }
-    }
-    function set(on, fromClick) {
-      root.classList.toggle('femboy', on);
-      btn.setAttribute('aria-checked', String(on));
-      if (meta) meta.setAttribute('content', on ? '#170a1f' : '#070b1f');
-      try { localStorage.setItem(KEY, on ? '1' : '0'); } catch (e) {}
-      if (on && fromClick) burst();
-    }
-    set(root.classList.contains('femboy'), false);
-    btn.addEventListener('click', function () { set(!root.classList.contains('femboy'), true); });
-  })();
-
-  /* またね！: tap it to say bye another way, with sakura */
-  (function () {
-    var btn = $('bye'), word = $('byeWord'), en = $('byeEn'), layer = $('hearts');
-    var BYES = [['またね！', 'see you next time'], ['じゃあね！', 'later!'], ['バイバイ！', 'bye bye!'], ['おやすみ！', 'good night!'], ['また明日！', 'see you tomorrow'], ['元気でね！', 'take care!']];
-    var at = 0;
-    function petals() {
-      if (reduce) return;
-      for (var i = 0; i < 26; i++) {
-        var p = document.createElement('span');
-        p.className = 'petal'; p.textContent = i % 3 ? '❀' : '✿';
-        p.style.left = Math.random() * 100 + 'vw';
-        p.style.fontSize = (12 + Math.random() * 18) + 'px';
-        p.style.animationDelay = Math.random() * 1.2 + 's';
-        p.style.setProperty('--t', (3 + Math.random() * 2.5) + 's');
-        p.style.setProperty('--sway', (20 + Math.random() * 50) * (Math.random() < 0.5 ? -1 : 1) + 'px');
-        layer.appendChild(p);
-        p.addEventListener('animationend', function () { this.remove(); });
-      }
-    }
-    btn.addEventListener('click', function () {
-      at = (at + 1) % BYES.length;
-      word.innerHTML = '';
-      Array.prototype.forEach.call(BYES[at][0], function (ch, n) {
-        var i = document.createElement('i'); i.textContent = ch; i.style.setProperty('--n', n); word.appendChild(i);
-      });
-      en.textContent = BYES[at][1];
-      btn.setAttribute('aria-label', BYES[at][0] + ' ' + BYES[at][1] + '. Tap to say bye another way');
-      btn.classList.remove('wave'); void btn.offsetWidth; btn.classList.add('wave');
-      petals();
-    });
-  })();
 
   /* header slides back in when you scroll up */
   (function () {
