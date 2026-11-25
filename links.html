@@ -38,7 +38,8 @@
   .lk-foot a { color: var(--muted); text-decoration: none; }
   .lk-foot a:hover { color: var(--ink); }
   @media (min-width: 1001px) {
-    .lk-r { order: 1; } .lk-hero { order: 2; } .lk-l { order: 3; }
+    .lk-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1fr); gap: 40px; }
+    .lk-hero { order: 1; } .lk-l { order: 2; } .lk-r { order: 3; }
     .lk-foot { justify-content: flex-end; padding-right: 40px; }
   }
   @media (max-width: 1000px) {
