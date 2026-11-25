@@ -37,6 +37,10 @@
   .lk-foot { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 18px; padding: 18px var(--pad) 22px; font-size: 13.5px; color: var(--muted); }
   .lk-foot a { color: var(--muted); text-decoration: none; }
   .lk-foot a:hover { color: var(--ink); }
+  @media (min-width: 1001px) {
+    .lk-r { order: 1; } .lk-hero { order: 2; } .lk-l { order: 3; }
+    .lk-foot { justify-content: flex-end; padding-right: 40px; }
+  }
   @media (max-width: 1000px) {
     .lk { max-width: 560px; }
     .lk-grid { display: flex; flex-direction: column; align-items: stretch; min-height: 0; gap: 24px; }
@@ -47,24 +51,19 @@
   /* hero: photo, now playing, then the name */
   .lk-hero { display: grid; justify-items: center; text-align: center; }
   .lk-hero .me { width: clamp(120px, 30vw, 150px); }
-  .lk-hero .np { margin-top: -16px; width: min(100%, 340px); text-align: left; }
-  .lk-hero .np-art { width: 44px; height: 44px; }
   .lk-hero .hi { margin: 14px 0 0; }
   .lk-hero .name { font-size: clamp(56px, 14vw, 84px); }
-  .lk-hero .meta { justify-content: center; margin-top: 8px; }
-  .lk-bio { margin: 10px 0 0; max-width: 38ch; font-size: 15.5px; color: var(--muted); text-wrap: balance; }
-  .lk-bio strong { color: var(--ink); font-weight: 700; }
   .lk-hero .tate { position: absolute; top: 12px; right: -8px; }
 
   /* round icon row */
-  .lk-icons { list-style: none; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 18px 0 0; padding: 0; }
+  .lk-icons { list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; width: 100%; margin: 22px 0 0; padding: 0; }
   .ic {
     position: relative; display: grid; place-items: center;
-    width: 46px; height: 46px; border-radius: 50%;
+    height: 58px; border-radius: 18px;
     color: var(--ink); text-decoration: none;
     transition: transform 0.4s var(--boing), background 0.25s, color 0.25s;
   }
-  .ic svg { width: 20px; height: 20px; }
+  .ic svg { width: 22px; height: 22px; }
   .ic:hover, .ic:focus-visible { transform: translateY(-4px) rotate(-6deg); background: var(--c); color: var(--on-pastel); border-color: transparent; }
   .ic .tip {
     position: absolute; bottom: calc(100% + 8px); left: 50%; translate: -50% 4px;
@@ -156,9 +155,8 @@
   .lk-toast.on { opacity: 1; translate: -50% 0; }
 
   /* the home page reorders its hero on smaller screens; this page keeps photo → now playing → name */
-  .lk-hero .me, .lk-hero .np { order: 0; }
+  .lk-hero .me { order: 0; }
   @media (max-width: 900px) {
-    .lk-hero .np { margin-top: -16px; width: min(100%, 340px); }
     .bar { flex-wrap: nowrap; }
     .bar .bar-links { order: 0; width: auto; margin: 0; padding: 0; overflow: visible; }
   }
@@ -168,8 +166,8 @@
     .bar { justify-content: space-between; }
     .mark { font-size: 20px; gap: 10px; }
     .mark img { width: 32px; height: 32px; }
-    .ic { width: 44px; height: 44px; }
-    .lk-icons { gap: 9px; }
+    .ic { height: 54px; }
+    .lk-icons { gap: 7px; }
     .rows a { padding: 7px 14px 7px 7px; gap: 12px; }
     .tile { width: 38px; height: 38px; border-radius: 12px; }
     .lk-feature { padding: 12px 16px 12px 12px; gap: 12px; }
@@ -214,19 +212,8 @@
       <img src="assets/img/avatar-720.jpg" alt="Ruytha's avatar: an anime-style character with dark blue hair" width="220" height="220" decoding="async" fetchpriority="high">
       <span class="spark s1" aria-hidden="true"></span><span class="spark s2" aria-hidden="true"></span><span class="spark s3" aria-hidden="true"></span>
     </div>
-    <a class="np glass" id="np" href="/fm" data-state="loading" data-rise>
-      <span class="np-art" id="npArt" aria-hidden="true"></span>
-      <span class="np-text">
-        <span class="np-label" id="npLabel">Checking what's playing</span>
-        <span class="np-track" id="npTrack">one sec…</span>
-      </span>
-      <span class="np-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-    </a>
     <p class="hi" data-rise><span class="ja" lang="ja">こんにちは</span> hi, i'm</p>
     <h1 class="name" data-rise>Ruytha</h1>
-    <p class="meta" data-rise><span class="live-dot" aria-hidden="true"></span>Australia · <span id="clock">my time</span></p>
-    <p class="lk-bio" data-rise>Director, editor and lighting artist. I make <strong>short films</strong>, mess around in <strong>Blender</strong>, and sync songs for <strong>Spicy Lyrics</strong>.</p>
-
     <ul class="lk-icons" aria-label="Socials" data-rise>
       <li><a class="ic glass c-pink" href="https://www.instagram.com/ruytha.m4a" target="_blank" rel="noopener" aria-label="Instagram">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect class="s" x="3.2" y="3.2" width="17.6" height="17.6" rx="5.2"/><circle class="s" cx="12" cy="12" r="4.1"/><circle class="f" cx="17.3" cy="6.7" r="1.15"/></svg><span class="tip">Instagram</span></a></li>
@@ -292,15 +279,6 @@
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   $('year').textContent = new Date().getFullYear();
 
-  /* my time */
-  (function () {
-    var el = $('clock');
-    function tick() {
-      try { el.textContent = new Date().toLocaleTimeString('en-AU', { hour: 'numeric', minute: '2-digit', timeZone: 'Australia/Perth' }).toLowerCase() + ' my time'; } catch (e) {}
-    }
-    tick(); setInterval(tick, 30000);
-  })();
-
   /* toast */
   var toastT;
   function say(msg) {
@@ -308,79 +286,6 @@
     t.textContent = msg; t.classList.add('on');
     clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, 2400);
   }
-
-  /* album colours: the glow behind me takes the colours of what I'm playing */
-  function hsl(r, g, b) {
-    r /= 255; g /= 255; b /= 255;
-    var max = Math.max(r, g, b), min = Math.min(r, g, b), l = (max + min) / 2, h = 0, s = 0;
-    if (max !== min) {
-      var d = max - min;
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      h = max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
-      h *= 60;
-    }
-    return [h, s, l];
-  }
-  function css(c) { return 'hsl(' + Math.round(c[0]) + ' ' + Math.round(Math.max(c[1], 0.6) * 100) + '% ' + Math.round(Math.min(Math.max(c[2], 0.62), 0.76) * 100) + '%)'; }
-  function albumColours(url) {
-    var img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = function () {
-      try {
-        var c = document.createElement('canvas'); c.width = c.height = 24;
-        var x = c.getContext('2d'); x.drawImage(img, 0, 0, 24, 24);
-        var d = x.getImageData(0, 0, 24, 24).data, px = [];
-        for (var i = 0; i < d.length; i += 4) { var p = hsl(d[i], d[i + 1], d[i + 2]); p.push(p[1] * (1 - Math.abs(p[2] - 0.55) * 1.6)); px.push(p); }
-        px.sort(function (a, b) { return b[3] - a[3]; });
-        var one = px[0], two = null;
-        if (one[1] < 0.15) return;
-        for (var j = 1; j < px.length; j++) { var gap = Math.abs(px[j][0] - one[0]) % 360; if (Math.min(gap, 360 - gap) > 40 && px[j][3] > 0.12) { two = px[j]; break; } }
-        if (!two) two = [(one[0] + 50) % 360, one[1], one[2]];
-        root.style.setProperty('--np1', css(one));
-        root.style.setProperty('--np2', css(two));
-      } catch (e) {}
-    };
-    img.src = url;
-  }
-
-  /* now playing, from my own NyaFM */
-  var CFG = window.RUYTHA_CONFIG || {};
-  var FMUSER = String(CFG.nyafmUser || CFG.lastfmUser || 'Ruytha').trim();
-  function v1(path) {
-    return fetch('/v1/users/' + encodeURIComponent(FMUSER) + path, { headers: { accept: 'application/json' } })
-      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-      .then(function (d) { if (d && d.ok === false) throw new Error(d.error || 'error'); return d; });
-  }
-  function ago(ms) {
-    var m = Math.round((Date.now() - ms) / 60000);
-    if (m < 1) return 'just now';
-    if (m < 60) return m + ' min ago';
-    var h = Math.round(m / 60);
-    if (h < 24) return h + (h === 1 ? ' hour ago' : ' hours ago');
-    var d = Math.round(h / 24);
-    return d + (d === 1 ? ' day ago' : ' days ago');
-  }
-  var lastArt = '';
-  function loadNow() {
-    Promise.all([v1('/now-playing').catch(function () { return { playing: false }; }), v1('/recent?limit=1')])
-      .then(function (r) {
-        var np = r[0], recent = r[1].scrobbles || [];
-        var playing = !!(np && np.playing && np.track);
-        var t = playing ? np.track : recent[0];
-        if (!t) throw new Error('none');
-        $('np').dataset.state = playing ? 'playing' : 'recent';
-        $('npLabel').textContent = playing ? 'Now playing ♪' : 'Not listening right now · ' + ago(t.timestamp * 1000);
-        $('npTrack').textContent = (playing ? '' : 'last: ') + t.track + ' · ' + t.artist;
-        if (t.image && t.image !== lastArt) { lastArt = t.image; $('npArt').style.backgroundImage = 'url("' + t.image + '")'; albumColours(t.image); }
-      })
-      .catch(function () {
-        $('np').dataset.state = 'idle';
-        $('npLabel').textContent = 'Probably listening to';
-        $('npTrack').textContent = 'Tame Impala';
-      });
-  }
-  loadNow();
-  setInterval(function () { if (!document.hidden) loadNow(); }, 30000);
 
   /* header slides back in when you scroll up */
   (function () {
