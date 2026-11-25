@@ -20,7 +20,11 @@ document.querySelectorAll('[data-r]').forEach(function(g){io.observe(g)});
   f.addEventListener('input',upd);upd();
   f.addEventListener('submit',function(e){e.preventDefault();var t=text();
     (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){st.textContent='Copied. Paste it into Discord.'},function(){st.textContent='Copy the message above, then paste it into Discord.'});
-    window.open('https://discord.com/users/690508522395402260','_blank','noopener')})})();
+    window.open('https://discord.com/users/690508522395402260','_blank','noopener')});
+  // or send the same brief by email
+  var mail=document.getElementById('briefMail');
+  if(mail)mail.addEventListener('click',function(){var k=f.querySelector('input[name=kind]:checked').value;
+    mail.href='mailto:studios@ruytha.dev?subject='+encodeURIComponent('Project brief: '+k)+'&body='+encodeURIComponent(text())})})();
 
 // studio reel: plays muted on loop, pauses off screen, never autoplays with reduced motion
 (function(){var v=document.querySelector('.reel-video'),b=document.querySelector('.reel-toggle');if(!v||!b)return;
