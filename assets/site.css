@@ -858,3 +858,45 @@ button, input, textarea { font: inherit; color: inherit; }
 /* the belt is far wider than the page; keep it from stretching the column it sits in */
 .about > * { min-width: 0; }
 .skill-belt { max-width: 100%; }
+
+/* ============================================================
+   Phones: one-row header, and the music section without hover
+   ============================================================ */
+@media (max-width: 640px) {
+  /* avatar, a row of section links you can swipe, and the switch, all on one line (it used to stack on two) */
+  .bar { flex-wrap: nowrap; gap: 6px; padding: 12px var(--pad); }
+  .mark { flex: none; margin-right: 0; gap: 0; font-size: 0; }
+  .mark img { width: 36px; height: 36px; }
+  .bar-links { order: 0; flex: 1 1 auto; width: auto; min-width: 0; margin: 0; padding: 0 20px 0 0;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent); }
+  .bar-links a { padding: 10px 11px; font-size: 14.5px; }
+  .fem { flex: none; }
+  .bar.float { left: 8px; right: 8px; padding: 6px 8px; gap: 4px; border-radius: 20px; }
+  .bar.float .bar-links { margin: 0; padding: 0 20px 0 0; }
+  .hero { padding-top: 96px; }
+  /* the studios cards wait 48px to the right before they slide in, which made the whole page scroll sideways */
+  .rise-on .studios-apps [data-rise]:not(.risen) { translate: 0 18px; }
+
+  /* music */
+  .sheet { gap: 4px; }
+  .sheet a { padding: 6px 0; }
+  .sheet .line { font-size: clamp(22px, 7vw, 30px); }
+  .week { padding: 20px; border-radius: 22px; }
+  .top-songs { gap: 4px; }
+  .top-songs a { grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; padding: 9px 10px 9px 6px; min-height: 52px; }
+  .top-songs a::before { width: 30px; height: 30px; font-size: 14px; }
+  .top-songs .t b { font-size: 15.5px; }
+  .top-songs .t span { font-size: 13px; }
+  .top-songs .n { font-size: 13px; white-space: nowrap; }
+  .stat-stickers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 20px; }
+  .stat-stickers li { padding: 9px 12px 10px; }
+  .stat-stickers b { font-size: 20px; }
+}
+
+/* touch screens can't hover: show who's singing on every line, and don't leave things nudged after a tap */
+@media (hover: none) {
+  .sheet .by { opacity: 1; max-height: 2em; }
+  .sheet a:hover .line { translate: none; }
+  .top-songs a:hover { background: none; transform: none; }
+  .stat-stickers li:hover { rotate: var(--t); scale: 1; }
+}
