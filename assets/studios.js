@@ -12,19 +12,18 @@ document.querySelectorAll('[data-r]').forEach(function(g){io.observe(g)});
   addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden){set(false);b.focus()}});
   matchMedia('(min-width: 721px)').addEventListener('change',function(q){if(q.matches)set(false)})})();
 
-// brief builder: writes a message to paste into Discord, nothing is sent
+// brief builder: writes the email, opens it in the visitor's mail app, nothing is sent from here
 (function(){var f=document.getElementById('brief');if(!f)return;var out=document.getElementById('briefText'),st=document.getElementById('briefStatus');
-  function text(){var k=f.querySelector('input[name=kind]:checked').value,w=f.elements.when.value.trim(),a=f.elements.about.value.trim();
+  function kind(){return f.querySelector('input[name=kind]:checked').value}
+  function text(){var k=kind(),w=f.elements.when.value.trim(),a=f.elements.about.value.trim();
     return 'Hi Ruytha! I\'d like to work with Ruytha Studios on '+k+'.'+(w?'\nTimeline: '+w+'.':'')+(a?'\n\n'+a:'')}
   function upd(){out.textContent=text()}
   f.addEventListener('input',upd);upd();
   f.addEventListener('submit',function(e){e.preventDefault();var t=text();
-    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){st.textContent='Copied. Paste it into Discord.'},function(){st.textContent='Copy the message above, then paste it into Discord.'});
-    window.open('https://discord.com/users/690508522395402260','_blank','noopener')});
-  // or send the same brief by email
-  var mail=document.getElementById('briefMail');
-  if(mail)mail.addEventListener('click',function(){var k=f.querySelector('input[name=kind]:checked').value;
-    mail.href='mailto:studios@ruytha.dev?subject='+encodeURIComponent('Project brief: '+k)+'&body='+encodeURIComponent(text())})})();
+    // also copy it, in case this device has no mail app to open
+    if(navigator.clipboard)navigator.clipboard.writeText(t).catch(function(){});
+    st.textContent='Opening your email app. If nothing opens, the message is copied: paste it into an email to studios@ruytha.dev.';
+    location.href='mailto:studios@ruytha.dev?subject='+encodeURIComponent('Project brief: '+kind())+'&body='+encodeURIComponent(t)})})();
 
 // studio reel: plays muted on loop, pauses off screen, never autoplays with reduced motion
 (function(){var v=document.querySelector('.reel-video'),b=document.querySelector('.reel-toggle');if(!v||!b)return;

@@ -49,13 +49,6 @@ section{padding:120px 0;border-top:1px solid var(--line)}
 @media(max-width:760px){.moves li{grid-template-columns:1fr;gap:8px}}
 
 
-/* toolkit */
-.kit{display:grid;grid-template-columns:repeat(5,1fr);margin-top:64px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.kit div{padding:24px 20px;border-right:1px solid var(--line)}
-.kit div:last-child{border-right:0}
-.kit b{display:block;font:700 20px/1.2 var(--display)}
-.kit .mono{color:var(--t3);margin-top:6px;display:block}
-@media(max-width:900px){.kit{grid-template-columns:repeat(2,1fr)}.kit div{border-bottom:1px solid var(--line)}}
 
 /* closer */
 .closer{text-align:left}
