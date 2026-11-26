@@ -35,3 +35,7 @@ document.querySelectorAll('[data-r]').forEach(function(g){io.observe(g)});
   new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&wanted)play();else if(!e.isIntersecting)v.pause()})},{threshold:.25}).observe(v);
   document.addEventListener('visibilitychange',function(){if(!document.hidden&&wanted&&v.getBoundingClientRect().top<innerHeight)play()});
   sync()})();
+
+// intro clip: plays muted while it's on screen, never with reduced motion
+(function(){var v=document.querySelector('.intro video');if(!v||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var p=v.play();if(p&&p.catch)p.catch(function(){})}else v.pause()})},{threshold:.4}).observe(v)})();
