@@ -54,6 +54,7 @@
   .lk-hero .me { width: clamp(120px, 30vw, 150px); }
   .lk-hero .hi { margin: 14px 0 0; }
   .lk-hero .name { font-size: clamp(56px, 14vw, 84px); }
+  .lk-hero .presence { justify-content: center; margin-top: 12px; }
   .lk-hero .tate { position: absolute; top: 12px; right: -8px; }
 
   /* round icon row */
@@ -215,6 +216,7 @@
     </div>
     <p class="hi" data-rise><span class="ja" lang="ja">こんにちは</span> hi, i'm</p>
     <h1 class="name" data-rise>Ruytha</h1>
+    <ul class="presence" data-presence aria-label="What I'm up to right now" aria-live="polite" hidden></ul>
     <ul class="lk-icons" aria-label="Socials" data-rise>
       <li><a class="ic glass c-pink" href="https://www.instagram.com/ruytha.m4a" target="_blank" rel="noopener" aria-label="Instagram">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect class="s" x="3.2" y="3.2" width="17.6" height="17.6" rx="5.2"/><circle class="s" cx="12" cy="12" r="4.1"/><circle class="f" cx="17.3" cy="6.7" r="1.15"/></svg><span class="tip">Instagram</span></a></li>
@@ -271,6 +273,7 @@
 <div class="hearts" id="hearts" aria-hidden="true"></div>
 
 <script src="assets/config.js"></script>
+<script src="assets/presence.js" defer></script>
 <script>
 /* links page: the same bits as the home page (my time, now playing, album colours, femboy mode, またね, entrances) */
 (function () {

@@ -219,6 +219,18 @@ button, input, textarea { font: inherit; color: inherit; }
 .np-bars i:nth-child(4) { animation-delay: -0.15s !important; }
 @keyframes eq { from { height: 20%; } to { height: 100%; } }
 
+/* live status: game + Adobe app, filled by presence.js, hidden when idle */
+.presence { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; }
+.presence[hidden] { display: none; }
+.ps { display: flex; align-items: center; gap: 10px; min-width: 0; max-width: 100%; padding: 6px 14px 6px 6px; border-radius: 16px; }
+.ps-art { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--glass-2) center / cover no-repeat; font: 800 13px/1 var(--display); }
+.ps-adobe .ps-art:not([style]) { background: #1c1236; color: #ff9ad5; border: 1.5px solid currentColor; }
+.ps-txt { display: grid; min-width: 0; text-align: left; }
+.ps-label { font-size: 12px; color: var(--muted); }
+.ps-game .ps-label { color: var(--mint); }
+.ps-adobe .ps-label { color: var(--pink); }
+.ps-name { font-weight: 600; font-size: 14.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 /* ============================================================
    About
    ============================================================ */
